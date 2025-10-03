@@ -26,13 +26,13 @@ const showOpenFilePicker = async () => {
                 {
                     description: 'Supported Files',
                     accept: {
-                        'application/x.scratch.sb3': ['.pmp', '.pm', '.sb3', '.sb2', '.sb, .arkide']
+                        'application/x.scratch.sb3': ['.pmp', '.pm', '.sb3', '.sb2', '.sb', '.arkide']
                     }
                 },
                 {
                     description: 'ArkIDE Project',
                     accept: {
-                        'application/x.scratch.sb3': ['.pmp', '.pm, .arkide']
+                        'application/x.scratch.sb3': ['.pmp', '.pm', '.arkide']
                     }
                 },
                 {
