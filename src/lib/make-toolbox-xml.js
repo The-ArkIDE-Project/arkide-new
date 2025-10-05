@@ -665,13 +665,13 @@ const control = function (isInitialSetup, isStage) {
             </value>
         </block>
         ${blockSeparator}
-        <block type="control_expandableIf">
+        <block type="control_if">
             <mutation branches="1" ends-in-else="false"></mutation>
             <value name="BOOL1">
                 <shadow type="checkbox"></shadow>
             </value>
         </block>
-        <block type="control_expandableIf">
+        <block type="control_if_else">
             <mutation branches="2" ends-in-else="true"></mutation>
             <value name="BOOL1">
                 <shadow type="checkbox"></shadow>
@@ -1046,7 +1046,7 @@ const operators = function (isInitialSetup) {
                 </shadow>
             </value>
         </block>
-        <block type="operator_expandableMath"></block>
+        
         <block type="operator_advMathExpanded">
             <value name="ONE">
                 <shadow type="math_number">
@@ -1227,19 +1227,7 @@ const operators = function (isInitialSetup) {
                     </shadow>
                 </value>
             </block>
-            <block type="operator_expandablejoininputs">
-                <mutation inputcount="2"></mutation>
-                <value name="INPUT1">
-                    <shadow type="text">
-                        <field name="TEXT">apple</field>
-                    </shadow>
-                </value>
-                <value name="INPUT2">
-                    <shadow type="text">
-                        <field name="TEXT">banana</field>
-                    </shadow>
-                </value>
-            </block>
+
             ${blockSeparator}
             <block type="operator_indexOfTextInText">
                 <value name="TEXT1">
