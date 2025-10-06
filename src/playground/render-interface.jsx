@@ -169,7 +169,7 @@ const Footer = () => (
                         {/* Do not translate */}
                         {'ArkIDE Packager'}
                     </a>
-                    <a href="https://desktop.turbowarp.org/">
+                    <a href="https://github.com/arc360alt/ArkIDE-Desktop">
                         {/* Do not translate */}
                         {'ArkIDE Desktop'}
                     </a>
