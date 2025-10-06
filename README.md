@@ -6,11 +6,11 @@ scratch-gui modified for use in [TurboWarp](https://turbowarp.org/) then modifie
 - Change more instances of "Penguinmod" to "ArkIDE"
 
 ## GIthub Map:
-Editor: https://github.com/arc360alt/arkide-new
-Desktop: https://github.com/arc360alt/ArkIDE-Desktop
-Home: https://github.com/arc360alt/ArkIDE-Home
-Extension Gallery: https://github.com/arc360alt/ArkIDE-ExtensionGallery
-API: Self hosted on a seperate server.
+- Editor: https://github.com/arc360alt/arkide-new
+- Desktop: https://github.com/arc360alt/ArkIDE-Desktop
+- Home: https://github.com/arc360alt/ArkIDE-Home
+- Extension Gallery: https://github.com/arc360alt/ArkIDE-ExtensionGallery
+- API: Self hosted on a seperate server.
 
 
 ## Setup
