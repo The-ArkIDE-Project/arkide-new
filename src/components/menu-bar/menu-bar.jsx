@@ -477,7 +477,7 @@ class MenuBar extends React.Component {
             >
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
-                        {this.props.onClickLogo ? (
+                        {this.props.logo ? (
                             <div className={classNames(styles.menuBarItem)}>
                                 <img
                                     alt="Scratch"
