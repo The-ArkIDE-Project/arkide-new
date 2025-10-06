@@ -228,7 +228,7 @@ class Renderer {
         if (/^\d{6,}$/.test(id)) {
             return (
                 <a
-                    href={`https://studio.penguinmod.com/#${id}`}
+                    href={`https://arkide.arc360hub.com/#${id}`}
                 >
                     {`#${id}`}
                 </a>
@@ -236,7 +236,7 @@ class Renderer {
         }
         return (
             <a
-                href={`https://penguinmod.com/search?q=%23${id}`}
+                href={`https://arkidehome.arc360hub.com/search?q=%23${id}`}
                 target="_blank"
                 rel="noreferrer"
             >
@@ -248,7 +248,7 @@ class Renderer {
     mention (name) {
         return (
             <a
-                href={`https://penguinmod.com/profile?user=${name}`}
+                href={`https://arkidehome.arc360hub.com/profile?user=${name}`}
                 target="_blank"
                 rel="noreferrer"
             >

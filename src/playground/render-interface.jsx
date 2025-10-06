@@ -156,7 +156,7 @@ const Footer = () => (
                             id="tw.footer.credits"
                         />
                     </a>
-                    <a href="https://penguinmod.com/donate">
+                    <a href="https://arkidehome.arc360hub.com/donate">
                         <FormattedMessage
                             defaultMessage="Donate"
                             description="Donation link in footer"
@@ -165,7 +165,7 @@ const Footer = () => (
                     </a>
                 </div>
                 <div className={styles.footerSection}>
-                    <a href="https://studio.penguinmod.com/PenguinMod-Packager">
+                    <a href="https://arkide.arc360hub.com/PenguinMod-Packager">
                         {/* Do not translate */}
                         {'ArkIDE Packager'}
                     </a>
@@ -196,14 +196,14 @@ const Footer = () => (
                     </a>
                 </div>
                 <div className={styles.footerSection}>
-                    <a href="https://penguinmod.com/terms">
+                    <a href="https://arkidehome.arc360hub.com/terms">
                         <FormattedMessage
                             defaultMessage="Terms of Service"
                             description="Link to Terms of Service"
                             id="pm.terms"
                         />
                     </a>
-                    <a href="https://penguinmod.com/privacy">
+                    <a href="https://arkidehome.arc360hub.com/privacy">
                         <FormattedMessage
                             defaultMessage="Privacy Policy"
                             description="Link to privacy policy"
@@ -343,7 +343,7 @@ class Interface extends React.Component {
                     {isHomepage && projectId !== '0' && title && extraProjectInfo && extraProjectInfo.author && <div className={styles.projectDetails}>
                         <a
                             target="_blank"
-                            href={`https://penguinmod.com/profile?user=${extraProjectInfo.author}`}
+                            href={`https://arkidehome.arc360hub.com/profile?user=${extraProjectInfo.author}`}
                             rel="noreferrer"
                         >
                             <img
@@ -357,7 +357,7 @@ class Interface extends React.Component {
                             <h2 dangerouslySetInnerHTML={{__html: formatProjectTitle(title)}} />
                             <p>by <a
                                 target="_blank"
-                                href={`https://penguinmod.com/profile?user=${extraProjectInfo.author}`}
+                                href={`https://arkidehome.arc360hub.com/profile?user=${extraProjectInfo.author}`}
                                 rel="noreferrer"
                             >{extraProjectInfo.author}</a></p>
                         </div>
@@ -403,7 +403,7 @@ class Interface extends React.Component {
                                             Thanks to <b>
                                                 <a
                                                     target="_blank"
-                                                    href={`https://penguinmod.com/profile?user=${remixedProjectInfo.author}`}
+                                                    href={`https://arkidehome.arc360hub.com/profile?user=${remixedProjectInfo.author}`}
                                                     rel="noreferrer"
                                                 >
                                                     {remixedProjectInfo.author}
@@ -459,7 +459,7 @@ class Interface extends React.Component {
                                         <a
                                             target="_blank"
                                             rel="noreferrer"
-                                            href={`https://penguinmod.com/report?type=project&id=${projectId}`}
+                                            href={`https://arkidehome.arc360hub.com/report?type=project&id=${projectId}`}
                                             className={styles.reportLink}
                                         >
                                             <img
@@ -476,7 +476,7 @@ class Interface extends React.Component {
                             </div>
                             <a
                                 target="_blank"
-                                href="https://penguinmod.com/search?q=newest:"
+                                href="https://arkidehome.arc360hub.com/search?q=newest:"
                                 rel="noreferrer"
                             >
                                 See more projects

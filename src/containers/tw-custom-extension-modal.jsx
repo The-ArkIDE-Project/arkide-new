@@ -50,7 +50,7 @@ class CustomExtensionModal extends React.Component {
                 name: 'Extension',
                 description: 'Adds new blocks.',
                 tags: ['myextensions'],
-                rawURL: 'https://penguinmod.com/line_blue.png',
+                rawURL: 'https://arkidehome.arc360hub.com/line_blue.png',
                 featured: true,
                 deletable: true,
                 _id: generateRandomId()
