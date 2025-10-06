@@ -350,7 +350,7 @@ class Interface extends React.Component {
                                 className={styles.projectAuthorImage}
                                 title={extraProjectInfo.author}
                                 alt={extraProjectInfo.author}
-                                src={`http://arkideapis.arc360hub.com/api/v1/users/getpfp?username=${extraProjectInfo.author}`}
+                                src={`http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=${extraProjectInfo.author}`}
                             />
                         </a>
                         <div className={styles.projectMetadata}>
