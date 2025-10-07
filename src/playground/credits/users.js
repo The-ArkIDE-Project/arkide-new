@@ -138,7 +138,7 @@ const arkideDevs = [
         href: "https://studio.penguinmod.com/credits.html#",
     },
     {
-        text: 'Matthew67/battman (Creator of the old mascot)',
+        text: 'battman (Creator of the old mascot)',
         image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=battman`,
         href: "https://studio.penguinmod.com/credits.html#",
     },
