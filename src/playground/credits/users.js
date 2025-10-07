@@ -126,6 +126,24 @@ const pmDevelopers = [
     'showierdata9978'
 ].map(fromHardcodedGithub);
 
+const arkideDevs = [
+    {
+        text: 'Arc360 (Lead Developer, Owner)',
+        image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=ark`,
+        href: "https://studio.penguinmod.com/credits.html#",
+    },
+    {
+        text: 'Insomnia (Co-Owner, Main art lead)',
+        image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=insomnia64`,
+        href: "https://studio.penguinmod.com/credits.html#",
+    },
+    {
+        text: 'Matthew67/battman (Creator of the old mascot)',
+        image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=battman`,
+        href: "https://studio.penguinmod.com/credits.html#",
+    },
+]
+
 const pmPullRequestDevelopers = [ // these people made a PR that got merged, or got a dev to add something they made
     {
         text: 'NexusKitten',
@@ -674,6 +692,7 @@ const pmCodeUsedFrom = [
 export default {
     addonDevelopers: shuffle(addonDevelopers),
     pmDevelopers: shuffle(pmDevelopers),
+    arkideDevs: shuffle(arkideDevs),
     extensionDevelopers: shuffle(extensionDevelopers),
     pmExtensionDevelopers: shuffle(pmExtensionDevelopers),
     pmApiDevelopers: shuffle(pmApiDevelopers),
