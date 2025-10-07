@@ -170,7 +170,7 @@ const downloadLogs = async () => {
     /* actually, this is a bad idea
     // if we can, include the project
     if (vm) {
-        filename = 'pm-error-download.pmp';
+        filename = 'pm-error-download.arkide';
         const archive = vm._saveProjectZip();
         archive.file('logs.json', blob);
         blob = await archive.generateAsync({

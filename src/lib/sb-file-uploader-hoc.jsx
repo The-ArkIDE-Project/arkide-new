@@ -111,7 +111,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 
                 // pm: Some bad mobile devices block any file type (iOS)
                 if (!isMobile()) {
-                    this.inputElement.accept = '.sb,.sb2,.sb3,.pm,.pmp';
+                    this.inputElement.accept = '.sb,.sb2,.sb3,.pm,.pmp,.arkide';
                 }
 
                 this.inputElement.style = 'display: none;';
@@ -231,7 +231,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                     // Don't update file handle until after confirming replace.
                     const handle = thisFileInput.handle;
                     if (handle) {
-                        if (this.fileToUpload.name.endsWith('.pm') || this.fileToUpload.name.endsWith('.pmp')) {
+                        if (this.fileToUpload.name.endsWith('.pm') || this.fileToUpload.name.endsWith('.arkide')) {
                             this.props.onSetFileHandle(handle);
                         } else {
                             this.props.onSetFileHandle(null);
