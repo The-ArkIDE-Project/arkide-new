@@ -340,6 +340,15 @@ const menuItems = [
         featured: true
     },
     {
+        name: 'ArkIDE Aditions',
+        extensionId: 'https://extensions.arc360hub.com/extensions/Ark/arkide-additons.js',
+        iconURL: 'https://extensions.arc360hub.com/images/Ark/banner.svg',
+        tags: ['penguinmod'],
+        description: 'A simple extension that adds some cool new blocks for ArkIDE.',
+        extDeveloper: 'Ark',
+        featured: true
+    },
+    {
         name: 'Files',
         extensionId: 'twFiles',
         twDeveloper: 'GarboMuffin',
