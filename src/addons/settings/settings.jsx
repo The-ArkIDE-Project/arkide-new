@@ -57,7 +57,7 @@ if (locale !== 'en') {
 
 document.title = `${settingsTranslations.title} - ArkIDE`;
 
-const theme = getInitialDarkMode() ? 'dark' : 'light';
+const theme = 'dark';
 document.body.setAttribute('theme', theme);
 
 let _throttleTimeout;
