@@ -281,7 +281,7 @@ const Credits = () => (
     </main>
 );
 
-document.body.setAttribute('theme', getInitialDarkMode() ? 'dark' : 'light');
+document.body.setAttribute('theme', theme);
 
 ReactDOM.render((
     <Credits />

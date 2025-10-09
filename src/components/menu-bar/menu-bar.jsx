@@ -511,7 +511,7 @@ class MenuBar extends React.Component {
                         </div>)}
 
                         {/* tw: theme toggler */}
-{/*
+
                         {this.props.onClickTheme && (
                             <div
                                 className={classNames(styles.menuBarItem, styles.hoverable)}
