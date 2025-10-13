@@ -210,14 +210,14 @@ const Footer = () => (
                             id="tw.privacy"
                         />
                     </a>
-                    <a href="https://github.com/PenguinMod/PenguinMod-Home/issues">
+                    <a href="https://github.com/arc360alt/ArkIDE-Home/issues">
                         <FormattedMessage
                             defaultMessage="Feedback & Bugs"
                             description="Link to feedback/bugs page"
                             id="tw.feedback"
                         />
                     </a>
-                    <a href="https://github.com/PenguinMod">
+                    <a href="https://github.com/arc360alt">
                         <FormattedMessage
                             defaultMessage="Source Code"
                             description="Link to source code"
