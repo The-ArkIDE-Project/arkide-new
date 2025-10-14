@@ -228,7 +228,7 @@ class Renderer {
         if (/^\d{6,}$/.test(id)) {
             return (
                 <a
-                    href={`https://arkide.arc360hub.com/#${id}`}
+                    href={`https://studio.arkide.site/#${id}`}
                 >
                     {`#${id}`}
                 </a>
@@ -236,7 +236,7 @@ class Renderer {
         }
         return (
             <a
-                href={`https://arkidehome.arc360hub.com/search?q=%23${id}`}
+                href={`https://arkide.site/search?q=%23${id}`}
                 target="_blank"
                 rel="noreferrer"
             >
@@ -248,7 +248,7 @@ class Renderer {
     mention (name) {
         return (
             <a
-                href={`https://arkidehome.arc360hub.com/profile?user=${name}`}
+                href={`https://arkide.site/profile?user=${name}`}
                 target="_blank"
                 rel="noreferrer"
             >
@@ -260,7 +260,7 @@ class Renderer {
     emoji (name) {
         return (
             <img
-                src={`https://library.penguinmod.com/files/emojis/${name}.png`}
+                src={`https://library.arkide.site/files/emojis/${name}.png`}
                 alt={`:${name}:`}
                 title={`:${name}:`}
                 loading="lazy"

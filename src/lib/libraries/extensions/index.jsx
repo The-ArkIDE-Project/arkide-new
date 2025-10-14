@@ -341,8 +341,8 @@ const menuItems = [
     },
     {
         name: 'ArkIDE Aditions',
-        extensionId: 'https://extensions.arc360hub.com/extensions/Ark/arkide-additons.js',
-        iconURL: 'https://extensions.arc360hub.com/images/Ark/banner.svg',
+        extensionId: 'https://extensions.arkide.site/extensions/Ark/arkide-additons.js',
+        iconURL: 'https://extensions.arkide.site/images/Ark/banner.svg',
         tags: ['penguinmod'],
         description: 'A simple extension that adds some cool new blocks for ArkIDE.',
         extDeveloper: 'Ark',
@@ -1111,7 +1111,7 @@ const menuItems = [
                 id="pm.extraLibraryExtensions.name"
             />
         ),
-        href: 'https://extensions.arc360hub.com/',
+        href: 'https://extensions.arkide.site/',
         extensionId: 'special_penguinmodExtensionLibrary',
         iconURL: penguinmodLibraryExtensionIcon,
         description: (
@@ -1369,7 +1369,7 @@ if (IsLocal || IsLiveTests) {
         {
             name: 'fire in the hole',
             extensionId: 'https://extensions.penguinmod.com/extensions/JeremyGamer13/FireInTheHole.js',
-            iconURL: 'https://library.penguinmod.com/files/emojis/cluelesssmile.png',
+            iconURL: 'https://library.arkide.site/files/emojis/cluelesssmile.png',
             tags: ['penguinmod', 'joke'],
             internetConnectionRequired: true,
             description: 'april fools took too long man this joke is not funny anymore',

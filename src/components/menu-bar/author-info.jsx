@@ -31,7 +31,7 @@ const ActualAuthorInfo = ({
             </h1>
             <div>
                 <span className={styles.usernameLine}>
-                    <a style={{ color: "white" }} target="_blank" href={"https://arkidehome.arc360hub.com/profile?user=" + username}>
+                    <a style={{ color: "white" }} target="_blank" href={"https://arkide.site/profile?user=" + username}>
                         <FormattedMessage
                             defaultMessage="by {username}"
                             description="Shows that a project was created by this user"

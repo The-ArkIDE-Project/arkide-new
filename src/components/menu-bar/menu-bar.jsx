@@ -950,7 +950,7 @@ class MenuBar extends React.Component {
                     <div className={styles.menuBarItem}>
                         <a
                             className={styles.feedbackLink}
-                            href="https://arkidehome.arc360hub.com"
+                            href="https://arkide.site"
                             rel="noopener noreferrer"
                             target="_blank"
                         >

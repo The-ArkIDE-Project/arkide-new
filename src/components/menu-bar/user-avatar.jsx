@@ -9,7 +9,7 @@ const UserAvatar = ({
     imageUrl,
     username
 }) => (
-    <a target="_blank" href={"https://arkide.arc360hub.com/profile?user=" + username}>
+    <a target="_blank" href={"https://studio.arkide.site/profile?user=" + username}>
         <img
             className={classNames(
                 className,

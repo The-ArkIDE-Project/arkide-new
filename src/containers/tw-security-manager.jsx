@@ -25,7 +25,7 @@ const isTrustedExtensionOrigin = url => (
     /* Always trust the official extension repostiories */
     url.startsWith('https://extensions.turbowarp.org/') ||
     url.startsWith('https://extensions.penguinmod.com/') ||
-    url.startsWith('https://extensions.arc360hub.com/') ||
+    url.startsWith('https://extensions.arkide.site/') ||
     url.startsWith('https://penguinmod-extensions-gallery.vercel.app/') ||
 
     /* Trust other people's galleries. These can be removed in the future, they will just show a pop-up on load if they are */
