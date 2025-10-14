@@ -20,7 +20,7 @@ jobs:
       - name: Build project
         run: npm run build # Change if your build command differs
       - name: Create CNAME file
-        run: echo "arkide.arc360hub.com" > ./build/CNAME
+        run: echo "studio.arkide.site" > ./build/CNAME
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
