@@ -29,7 +29,7 @@ const messages = defineMessages({
     }
 });
 
-const PM_LIBRARY_API = "https://library.arc360hub.com/";
+const PM_LIBRARY_API = "https://library.arkide.site/";
 
 const ALL_TAG = {tag: 'all', intlLabel: messages.allTag};
 const tagListPrefix = [];
