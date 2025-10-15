@@ -135,7 +135,7 @@ const Credits = () => (
                 All PenguinMod costumes are downloaded or created from:
                 <ul>
                     <li><a href="https://publicdomainvectors.org/">https://publicdomainvectors.org/</a></li>
-                    <li><a href="https://discord.gg/NZ9MBMYTZh">User-submissions from the PenguinMod Discord Server</a></li>
+                    <li><a href="https://discord.gg/aPRchS3Zdp">User-submissions from the PenguinMod Discord Server</a></li>
                     <li>The PenguinMod Developers</li>
                 </ul>
                 All costumes exclusive to PenguinMod are included under Public Domain licenses or licenses such as MIT and CC0.
@@ -149,7 +149,7 @@ const Credits = () => (
                 <ul>
                     <li><a href="https://freesound.org/">https://freesound.org/</a></li>
                     <li><a href="https://archive.org/">https://archive.org/</a></li>
-                    <li><a href="https://discord.gg/NZ9MBMYTZh">User-submissions from the PenguinMod Discord Server</a></li>
+                    <li><a href="https://discord.gg/aPRchS3Zdp">User-submissions from the PenguinMod Discord Server</a></li>
                     <li>The PenguinMod Developers</li>
                 </ul>
                 All sounds exclusive to PenguinMod are included under Public Domain licenses or licenses such as MIT and CC0.
