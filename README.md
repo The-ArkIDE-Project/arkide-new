@@ -1,11 +1,11 @@
 scratch-gui modified for use in [TurboWarp](https://turbowarp.org/) then modified for use in [PenguinMod](https://studio.penguinmod.com) 😀
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/PenguinMod/penguinmod.github.io/)
 
 ## ArkIDE To Do:
 - Add new blocks
 - Add new catigories to the UI
 - Make the homepage/editor UI better
 - Fix some unchanged penguinmod refrences
+- Sync this repo with Penguinmods to add all of the new features they have added in the 2 months this repo has been out-of-date from it
 
 ## GIthub Map:
 - Editor: https://github.com/arc360alt/arkide-new
