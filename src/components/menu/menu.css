@@ -4,7 +4,9 @@
     position: absolute;
     border: 1px solid $ui-black-transparent;
     border-radius: 0 0 8px 8px;
-    background-color: $motion-primary;
+    background-color: rgba(76, 91, 255, 0.85); /* Made semi-transparent */
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
     padding: 0;
     margin: 0;
     min-width: 186px;
@@ -14,8 +16,11 @@
     color: $ui-white;
     box-shadow: 0 8px 8px 0 $ui-black-transparent-default;
 }
+
 [theme="dark"] .menu {
-    background-color: $motion-primary-dark;
+    background-color: rgba(70, 52, 235, 0.85); /* Made semi-transparent */
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
 }
 
 .menu.left {
