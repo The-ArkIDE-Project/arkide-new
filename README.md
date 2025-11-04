@@ -4,8 +4,8 @@ scratch-gui modified for use in [TurboWarp](https://turbowarp.org/) then modifie
 - Add new blocks
 - Add new catigories to the UI
 - Make the homepage/editor UI better
-- Fix some unchanged penguinmod refrences
 - Sync this repo with Penguinmods to add all of the new features they have added in the 2 months this repo has been out-of-date from it
+- Change back all of the chrismas changes after January 1st 2026.
 
 ## GIthub Map:
 - Editor: https://github.com/arc360alt/arkide-new
