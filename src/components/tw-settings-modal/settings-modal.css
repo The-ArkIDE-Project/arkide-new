@@ -49,12 +49,12 @@
 }
 
 [theme="dark"] .setting.active {
-    background: #16202c;
+    background: #20162c;
 }
 
 [theme="dark"] .setting:hover,
 [theme="dark"] .setting:focus-within {
-    background: #202f41;
+    background: #2d2041;
 }
 
 .label {

@@ -2,19 +2,10 @@ import React from 'react';
 import darkModeCSS from '!raw-loader!./tw-theme-dark.css';
 
 const THEME_KEY = 'tw:theme';
-
 const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 export const getInitialDarkMode = () => {
-    try {
-        const item = localStorage.getItem(THEME_KEY);
-        if (item !== null) {
-            return item === 'dark';
-        }
-    } catch (e) {
-        // ignore
-    }
-    return darkMediaQuery.matches;
+    return true; // Always return true to force dark mode
 };
 
 const darkModeStylesheet = document.createElement('style');
@@ -27,7 +18,7 @@ const ThemeHOC = function (WrappedComponent) {
             this.handleQueryChange = this.handleQueryChange.bind(this);
             this.handleClickTheme = this.handleClickTheme.bind(this);
             this.state = {
-                dark: getInitialDarkMode()
+                dark: true // Force dark mode
             };
         }
         componentDidMount () {
@@ -39,7 +30,7 @@ const ThemeHOC = function (WrappedComponent) {
         }
         componentDidUpdate () {
             try {
-                localStorage.setItem(THEME_KEY, this.state.dark ? 'dark' : 'light');
+                localStorage.setItem(THEME_KEY, 'dark'); // Always save as dark
             } catch (e) {
                 // ignore
             }
@@ -52,31 +43,25 @@ const ThemeHOC = function (WrappedComponent) {
             }
         }
         updateDark () {
-            const dark = this.state.dark;
-            document.body.setAttribute('theme', dark ? 'dark' : 'light');
-            if (dark && !darkModeStylesheet.parentNode) {
+            const dark = true; // Force dark mode
+            document.body.setAttribute('theme', 'dark');
+            if (!darkModeStylesheet.parentNode) {
                 // Append at the start of <body> we override scratch-gui styles in <head>
                 // but are overridden by addon styles at the end of <body>
                 document.body.insertBefore(darkModeStylesheet, document.body.firstChild);
-            } else if (!dark && darkModeStylesheet.parentNode) {
-                darkModeStylesheet.parentNode.removeChild(darkModeStylesheet);
             }
         }
         handleQueryChange () {
-            this.setState({
-                dark: darkMediaQuery.matches
-            });
+            // Do nothing - keep dark mode
         }
         handleClickTheme () {
-            this.setState(state => ({
-                dark: !state.dark
-            }));
+            // Do nothing - prevent theme switching
         }
         render () {
             return (
                 <WrappedComponent
                     onClickTheme={this.handleClickTheme}
-                    isDark={this.state.dark}
+                    isDark={true} // Always pass true
                     {...this.props}
                 />
             );

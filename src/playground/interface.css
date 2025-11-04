@@ -119,8 +119,8 @@ a {
     background-color: #dbebff;
 }
 [theme="dark"] .infobox {
-    border-color: #203652;
-    background-color: #16202c;
+    border-color: #322052;
+    background-color: #1f162c;
 }
 .infobox p {
     margin: 4px 0;
@@ -136,8 +136,8 @@ a {
 } */
 
 [theme="dark"] .unshared-update {
-    border-color: #203652;
-    background-color: #16202c;
+    border-color: #362052;
+    background-color: #20162c;
 }
 .unshared-update p {
     margin: 4px 0;
