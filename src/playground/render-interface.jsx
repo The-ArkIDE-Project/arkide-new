@@ -210,7 +210,7 @@ const Footer = () => (
                             id="tw.privacy"
                         />
                     </a>
-                    <a href="https://github.com/arc360alt/ArkIDE-Home/issues">
+                    <a href="https://github.com/The-ArkIDE-Project/ArkIDE-Home/issues">
                         <FormattedMessage
                             defaultMessage="Feedback & Bugs"
                             description="Link to feedback/bugs page"

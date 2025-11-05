@@ -88,7 +88,7 @@
     "redux-throttle": "0.1.1",
     "scratch-audio": "github:PenguinMod/PenguinMod-Audio#develop",
     "scratch-blocks": "github:PenguinMod/PenguinMod-Blocks#develop-builds",
-    "scratch-paint": "github:arc360alt/ArkIDE-Paint#develop",
+    "scratch-paint": "github:The-ArkIDE-Project/ArkIDE-Paint#develop",
     "scratch-render": "github:PenguinMod/PenguinMod-Render#develop",
     "scratch-render-fonts": "github:PenguinMod/penguinmod-render-fonts#master",
     "scratch-storage": "github:PenguinMod/PenguinMod-Storage#develop",

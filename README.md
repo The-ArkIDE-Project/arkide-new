@@ -10,10 +10,10 @@ scratch-gui modified for use in [TurboWarp](https://turbowarp.org/) then modifie
 - Change back all of the chrismas changes after January 1st 2026.
 
 ## GIthub Map:
-- Editor: https://github.com/arc360alt/arkide-new
-- Desktop: https://github.com/arc360alt/ArkIDE-Desktop
-- Home: https://github.com/arc360alt/ArkIDE-Home
-- Extension Gallery: https://github.com/arc360alt/ArkIDE-ExtensionGallery
+- Editor: https://github.com/The-ArkIDE-Project/arkide-new
+- Desktop: https://github.com/The-ArkIDE-Project/ArkIDE-Desktop
+- Home: https://github.com/The-ArkIDE-Project/ArkIDE-Home
+- Extension Gallery: https://github.com/The-ArkIDE-Project/ArkIDE-ExtensionGallery
 - API: Self hosted on a seperate server.
 
 
