@@ -1,5 +1,7 @@
 scratch-gui modified for use in [TurboWarp](https://turbowarp.org/) then modified for use in [PenguinMod](https://studio.penguinmod.com) 😀
 
+# Just to make it clear, this is a fork of Penguinmod, i forgot to fork it and just made a new repo. I hope you understand.
+
 ## ArkIDE To Do:
 - Add new blocks
 - Add new catigories to the UI
