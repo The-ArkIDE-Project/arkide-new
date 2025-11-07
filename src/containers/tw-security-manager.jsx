@@ -27,6 +27,9 @@ const isTrustedExtensionOrigin = url => (
     url.startsWith('https://extensions.penguinmod.com/') ||
     url.startsWith('https://extensions.arkide.site/') ||
     url.startsWith('https://penguinmod-extensions-gallery.vercel.app/') ||
+    url.startsWith('https://arkfs.arc360hub.com/') ||
+
+    //'https://arkfs.arc360hub.com/',
 
     /* Trust other people's galleries. These can be removed in the future, they will just show a pop-up on load if they are */
     url.startsWith('https://sharkpools-extensions.vercel.app/') || // SharkPool

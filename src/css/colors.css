@@ -2,6 +2,8 @@ $ui-primary: var(--ui-primary, hsla(261, 100%, 50%, 1)); /* #5100ff */
 $ui-secondary: var(--ui-secondary, hsl(261 100% 99%)); /* lighter version of #5100ff */
 $ui-tertiary: var(--ui-tertiary, hsla(261, 100%, 70%, 1)); /* even lighter version */
 
+$ui-seccondary-opacity: rgba(30, 30, 30, 0.26);
+
 $ui-modal-overlay: var(--ui-modal-overlay, hsla(261, 100%, 50%, 0.9)); /* 90% transparent version of motion-primary */
 
 $ui-white: hsla(0, 100%, 100%, 1); /* #FFFFFF */

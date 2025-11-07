@@ -8,18 +8,24 @@
     width: 100%;
     height: calc(100% - (3.4em + $library-header-height));
 }
+
 .library-filter-bar {
     width: 342px;
     height: calc(100% - 4px);
     padding: 6px;
     margin-left: 4px;
     border-radius: 8px;
-    background: white;
+    background: rgba(255, 255, 255, 0.85); /* Made semi-transparent */
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
     overflow: auto;
     border: 2px solid $ui-black-transparent;
 }
+
 [theme="dark"] .library-filter-bar {
-    background: $ui-primary;
+    background: rgba(39, 39, 39, 0.85); /* Made semi-transparent */
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
 }
 
 .library-header {
@@ -27,19 +33,24 @@
     flex-direction: row;
     align-items: center;
     margin-left: 6px;
+    background-color: rgb(43, 43, 43);
 }
+
 .library-item-count {
     opacity: 0.5;
     margin-block: 0;
     margin-left: 4px;
 }
+
 [theme="dark"] .library-header {
     color: white;
 }
+
 [dir="rtl"] .library-header {
     margin-left: initial;
     margin-right: 6px;
 }
+
 [dir="rtl"] .library-item-count {
     margin-left: initial;
     margin-right: 4px;
@@ -49,6 +60,7 @@
     margin-right: 2.5%;
     text-align: right;
 }
+
 [dir="rtl"] .library-tag-count {
     margin-right: initial;
     margin-left: 2.5%;
@@ -61,7 +73,9 @@
     justify-content: flex-start;
     align-content: flex-start;
     align-items: flex-start;
-    background: $ui-secondary;
+    background: rgba(231, 231, 233, 0); /* Made semi-transparent */
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
     flex-grow: 1;
     flex-wrap: wrap;
     overflow-y: auto;
@@ -109,6 +123,7 @@
     align-items: center;
     justify-content: space-between;
 }
+
 [theme="dark"] .tag-checkbox-wrapper {
     color: white;
 }
@@ -128,6 +143,7 @@
     background-position: center;
     background-size: contain;
 }
+
 [theme="dark"] .library-filter-collapse {
     filter: brightness(50);
 }

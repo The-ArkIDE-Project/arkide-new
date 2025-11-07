@@ -43,7 +43,7 @@
     -webkit-overflow-scrolling: 'touch';
     user-select: none;
 
-    background-color: $ui-secondary;
+    background-color: $ui-seccondary-opacity;
 
     /* Default modal resets */
     margin: 0;
@@ -176,4 +176,47 @@ $sides: 20rem;
 
 [dir="rtl"] .help-button {
     padding-left: 0;
+}
+/* Specific styles for extension library only */
+#extensionLibrary .modal-overlay {
+    background-color: transparent; /* Remove grey backdrop for extension library only */
+    backdrop-filter: blur(5px); /* Optional: slight blur on the background */
+    -webkit-backdrop-filter: blur(5px); /* Safari support */
+}
+
+#extensionLibrary .modal-content {
+    background: rgba(255, 255, 255, 0.95); /* Semi-transparent background */
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+}
+
+[theme="dark"] #extensionLibrary .modal-content {
+    background: rgba(73, 78, 114, 0.95); /* Dark mode background */
+}
+/* Specific styles for extension library only */
+[id="extensionLibrary"] .modal-overlay {
+    background-color: transparent !important; /* Remove grey backdrop for extension library only */
+    backdrop-filter: blur(5px); /* Optional: slight blur on the background */
+    -webkit-backdrop-filter: blur(5px); /* Safari support */
+}
+
+[id="extensionLibrary"] .modal-content.full-screen {
+    background-color: transparent !important; /* Make the full-screen modal transparent */
+}
+
+/* Keep the filter bar and scroll grid blurred */
+[id="extensionLibrary"] .library-filter-bar {
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+[theme="dark"] [id="extensionLibrary"] .library-filter-bar {
+    background: rgba(73, 78, 114, 0);
+}
+
+[id="extensionLibrary"] .library-scroll-grid {
+    background: rgba(231, 231, 233, 0);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }

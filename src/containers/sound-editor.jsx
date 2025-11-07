@@ -525,180 +525,210 @@ class SoundEditor extends React.Component {
             ],
         );
 
-        const modalHandler = () => {
-            menu.setAttribute("style", "margin-bottom: 15px;position: relative;display: flex;justify-content: flex-end;flex-direction: row;height: calc(100% - (3.125em + 2.125em + 16px));align-items: center;");
-            menu.append(pitchDiv, volumeDiv);
+const modalHandler = () => {
+    menu.setAttribute("style", "margin-bottom: 15px;position: relative;display: flex;justify-content: flex-end;flex-direction: row;height: calc(100% - (3.125em + 2.125em + 16px));align-items: center;");
+    
+    // Add blur to the modal
+    const modalContent = menu.closest('[class*="prompt_body_"]');
+    if (modalContent) {
+        modalContent.style.background = "rgba(255, 255, 255, 0.85)";
+        modalContent.style.backdropFilter = "blur(10px)";
+        modalContent.style.webkitBackdropFilter = "blur(10px)";
+    }
+    
+    // Check if dark mode
+    const isDarkMode = document.body.getAttribute('theme') === 'dark';
+    if (isDarkMode && modalContent) {
+        modalContent.style.background = "rgba(73, 78, 114, 0.85)";
+    }
+    
+    menu.append(pitchDiv, volumeDiv);
 
-            const previewButton = document.createElement("button");
-            previewButton.style = "border-radius: 1000px;padding: 5px;width: 45px;height: 45px;border-style: none;background:rgb(76, 0, 255);";
-            previewButton.innerHTML = `<img draggable="false" style="max-width: 100%;max-height: 100%" src="${playURI}">`;
-            menu.append(previewButton);
+    const previewButton = document.createElement("button");
+    previewButton.style = "border-radius: 1000px;padding: 5px;width: 45px;height: 45px;border-style: none;background:rgb(76, 0, 255);";
+    previewButton.innerHTML = `<img draggable="false" style="max-width: 100%;max-height: 100%" src="${playURI}">`;
+    menu.append(previewButton);
 
-            // preview functionality
-            // create an audio buffer using the selection
-            const properBuffer = audio.createBuffer(1, bufferSelection.samples.length, bufferSelection.sampleRate);
-            properBuffer.getChannelData(0).set(bufferSelection.samples);
+    // preview functionality
+    // create an audio buffer using the selection
+    const properBuffer = audio.createBuffer(1, bufferSelection.samples.length, bufferSelection.sampleRate);
+    properBuffer.getChannelData(0).set(bufferSelection.samples);
 
-            let bufferSource, audioPlaying = false;
-            function play() {
-                bufferSource = audio.createBufferSource();
-                bufferSource.connect(gainNode);
-                bufferSource.buffer = properBuffer;
-                bufferSource.start(0);
-                bufferSource.detune.value = pitchParts[1].value * 10;
-                previewButton.innerHTML = `<img draggable="false" style="max-width: 100%;max-height: 100%" src="${stopURI}">`;
-                audioPlaying = true;
-                bufferSource.onended = () => {
-                    previewButton.firstChild.src = playURI;
-                    audioPlaying = false;
-                }
-            }
-            function stop() {
-                bufferSource.stop();
-                previewButton.firstChild.src = stopURI;
-                audioPlaying = false;
-            }
-            previewButton.onclick = () => {
-                if (audioPlaying) stop();
-                else play();
-            }
+    let bufferSource, audioPlaying = false;
+    function play() {
+        bufferSource = audio.createBufferSource();
+        bufferSource.connect(gainNode);
+        bufferSource.buffer = properBuffer;
+        bufferSource.start(0);
+        bufferSource.detune.value = pitchParts[1].value * 10;
+        previewButton.innerHTML = `<img draggable="false" style="max-width: 100%;max-height: 100%" src="${stopURI}">`;
+        audioPlaying = true;
+        bufferSource.onended = () => {
+            previewButton.firstChild.src = playURI;
+            audioPlaying = false;
+        }
+    }
+    function stop() {
+        bufferSource.stop();
+        previewButton.firstChild.src = stopURI;
+        audioPlaying = false;
+    }
+    previewButton.onclick = () => {
+        if (audioPlaying) stop();
+        else play();
+    }
 
-            // slider/number updates
-            const pSlider = pitchParts[1];
-            const pNumber = pitchParts[2];
-            pSlider.onchange = (updateValue) => {
-                if (updateValue !== false) pNumber.value = Number(pSlider.value);
-                if (bufferSource) bufferSource.detune.value = pSlider.value * 10;
-            }
-            pSlider.oninput = pSlider.onchange;
-            pNumber.onchange = () => {
-                pSlider.value = pNumber.value;
-                pSlider.onchange(false);
-            };
-            pNumber.oninput = pNumber.onchange;
+    // slider/number updates
+    const pSlider = pitchParts[1];
+    const pNumber = pitchParts[2];
+    pSlider.onchange = (updateValue) => {
+        if (updateValue !== false) pNumber.value = Number(pSlider.value);
+        if (bufferSource) bufferSource.detune.value = pSlider.value * 10;
+    }
+    pSlider.oninput = pSlider.onchange;
+    pNumber.onchange = () => {
+        pSlider.value = pNumber.value;
+        pSlider.onchange(false);
+    };
+    pNumber.oninput = pNumber.onchange;
 
-            const vSlider = volumeParts[1];
-            const vNumber = volumeParts[2];
-            vSlider.onchange = (updateValue) => {
-                gainNode.gain.value = vSlider.value;
-                if (updateValue !== false) vNumber.value = Number(vSlider.value) * 100;
-            }
-            vSlider.oninput = vSlider.onchange;
-            vNumber.onchange = () => {
-                vSlider.value = vNumber.value / 100;
-                vSlider.onchange(false);
-            };
-            vNumber.oninput = vNumber.onchange;
-        };
+    const vSlider = volumeParts[1];
+    const vNumber = volumeParts[2];
+    vSlider.onchange = (updateValue) => {
+        gainNode.gain.value = vSlider.value;
+        if (updateValue !== false) vNumber.value = Number(vSlider.value) * 100;
+    }
+    vSlider.oninput = vSlider.onchange;
+    vNumber.onchange = () => {
+        vSlider.value = vNumber.value / 100;
+        vSlider.onchange(false);
+    };
+    vNumber.oninput = vNumber.onchange;
+};
 
-        // account for weird react timing issue
-        if (menu) modalHandler();
-        else queueMicrotask(() => {
-          menu = document.querySelector(`div[class="ReactModalPortal"] div[class*="prompt_body_"] div`);
-          menu.parentNode.parentNode.parentNode.style.width = "230px";
-          modalHandler();
-        });
+// account for weird react timing issue
+if (menu) modalHandler();
+else queueMicrotask(() => {
+    menu = document.querySelector(`div[class="ReactModalPortal"] div[class*="prompt_body_"] div`);
+    menu.parentNode.parentNode.parentNode.style.width = "230px";
+    modalHandler();
+});
     }
 
     // TODO: This should really just render components like the other modals at some point.
-    async handleFormatMenu() {
-        const genTitle = (text) => {
-            const label = document.createElement("div");
-            label.style = "font-weight: 500;font-size: 14px;margin-bottom: 5px;";
-            const inner = document.createElement("span");
-            inner.textContent = text;
-            label.appendChild(inner);
-            return label;
-        };
-        const genCheckableLabel = (text, id, isChecked) => {
-            const div = document.createElement("div");
-            div.classList.add("check-outer");
-            div.id = id;
-            div.style = "margin-top: 3px;";
-            const check = document.createElement("input");
-            check.style = "margin-right: 8px;";
-            check.type = "radio";
-            check.checked = isChecked ?? false;
-            const label = document.createElement("span");
-            label.textContent = text;
-            div.append(check, label);
-            return div;
-        };
+async handleFormatMenu() {
+    const genTitle = (text) => {
+        const label = document.createElement("div");
+        label.style = "font-weight: 500;font-size: 14px;margin-bottom: 5px;";
+        const inner = document.createElement("span");
+        inner.textContent = text;
+        label.appendChild(inner);
+        return label;
+    };
+    const genCheckableLabel = (text, id, isChecked) => {
+        const div = document.createElement("div");
+        div.classList.add("check-outer");
+        div.id = id;
+        div.style = "margin-top: 3px;";
+        const check = document.createElement("input");
+        check.style = "margin-right: 8px;";
+        check.type = "radio";
+        check.checked = isChecked ?? false;
+        const label = document.createElement("span");
+        label.textContent = text;
+        div.append(check, label);
+        return div;
+    };
 
-        const sampleRates = [
-            3000, 4000, 8000, 11025, 16000, 22050, 32000, 44100,
-            48000, 88200, 96000, 176400, 192000, 352800, 384000,
-        ];
-        let selectedSampleRate = this.props.sampleRate;
-        let selectedForceRate = false;
-        let menu = await window.ScratchBlocks.customPrompt(
-            { title: "Format Sound" }, { content: { width: "350px", height: "auto" } },
-            [
-                {
-                    name: "Apply", role: "ok", callback: () => {
-                        const edits = { sampleRate: selectedSampleRate };
-                        if (selectedForceRate) edits.sampleRateEnforced = selectedSampleRate;
-                        this.handleEffect(edits);
-                    }
-                },
-                { name: "Cancel", role: "close", callback: () => {} },
-            ],
-        );
-
-        const modalHandler = () => {
-            menu.style.marginBottom = "15px";
-            const rateTitle = genTitle("New Sample Rate:");
-
-            const rateSelector = document.createElement("select");
-            rateSelector.style = "border-radius: 5px;text-align: center;margin-left: 10px;width: 50%;";
-            for (const rate of sampleRates) {
-                const option = document.createElement("option");
-                option.value = rate;
-                option.textContent = rate;
-                rateSelector.append(option);
-            }
-            rateSelector.selectedIndex = sampleRates.indexOf(this.props.sampleRate);
-            rateSelector.onchange = () => {
-                selectedSampleRate = rateSelector.value;
-            };
-            rateTitle.appendChild(rateSelector);
-
-            const warningDiv = document.createElement("div");
-            warningDiv.style.marginBottom = "15px";
-            const warning = document.createElement("i");
-            warning.textContent = "Choosing a higher sample rate than the current rate will not make the existing audio higher quality";
-            warning.style = "font-size:13px;opacity:0.5;";
-            warningDiv.appendChild(warning);
-
-            const warningDiv2 = warning.cloneNode(true);
-            warningDiv2.textContent = "If 'whole sound' is selected, all added audio will use the new sample rate";
-
-            const applicatorDiv = document.createElement("div");
-            applicatorDiv.append(
-                genCheckableLabel("this selection", "0", true),
-                genCheckableLabel("whole sound", "1", false)
-            );
-            applicatorDiv.addEventListener("click", (e) => {
-                const div = e.target.closest(`div[class="check-outer"]`);
-                if (!div) return;
-
-                for (const checkable of Array.from(div.parentNode.children)) {
-                  checkable.firstChild.checked = false;
+    const sampleRates = [
+        3000, 4000, 8000, 11025, 16000, 22050, 32000, 44100,
+        48000, 88200, 96000, 176400, 192000, 352800, 384000,
+    ];
+    let selectedSampleRate = this.props.sampleRate;
+    let selectedForceRate = false;
+    let menu = await window.ScratchBlocks.customPrompt(
+        { title: "Format Sound" }, { content: { width: "350px", height: "auto" } },
+        [
+            {
+                name: "Apply", role: "ok", callback: () => {
+                    const edits = { sampleRate: selectedSampleRate };
+                    if (selectedForceRate) edits.sampleRateEnforced = selectedSampleRate;
+                    this.handleEffect(edits);
                 }
-                div.firstChild.checked = true;
-                selectedForceRate = div.id == "1";
-                e.stopPropagation();
-            });
-            menu.append(rateTitle, warningDiv, genTitle("Apply to:"), applicatorDiv, warningDiv2);
-        };
+            },
+            { name: "Cancel", role: "close", callback: () => {} },
+        ],
+    );
 
-        // account for weird react timing issue
-        if (menu) modalHandler();
-        else queueMicrotask(() => {
-          menu = document.querySelector(`div[class="ReactModalPortal"] div[class*="prompt_body_"] div`);
-          modalHandler();
+    const modalHandler = () => {
+        menu.style.marginBottom = "15px";
+        
+        // Add blur to the menu's parent modal
+        const modalContent = menu.closest('[class*="prompt_body_"]');
+        if (modalContent) {
+            modalContent.style.background = "rgba(255, 255, 255, 0.52)";
+            modalContent.style.backdropFilter = "blur(10px)";
+            modalContent.style.webkitBackdropFilter = "blur(10px)";
+        }
+        
+        // Check if dark mode and adjust accordingly
+        const isDarkMode = document.body.getAttribute('theme') === 'dark';
+        if (isDarkMode && modalContent) {
+            modalContent.style.background = "rgba(73, 78, 114, 0.52)";
+        }
+        
+        const rateTitle = genTitle("New Sample Rate:");
+
+        const rateSelector = document.createElement("select");
+        rateSelector.style = "border-radius: 5px;text-align: center;margin-left: 10px;width: 50%;";
+        for (const rate of sampleRates) {
+            const option = document.createElement("option");
+            option.value = rate;
+            option.textContent = rate;
+            rateSelector.append(option);
+        }
+        rateSelector.selectedIndex = sampleRates.indexOf(this.props.sampleRate);
+        rateSelector.onchange = () => {
+            selectedSampleRate = rateSelector.value;
+        };
+        rateTitle.appendChild(rateSelector);
+
+        const warningDiv = document.createElement("div");
+        warningDiv.style.marginBottom = "15px";
+        const warning = document.createElement("i");
+        warning.textContent = "Choosing a higher sample rate than the current rate will not make the existing audio higher quality";
+        warning.style = "font-size:13px;opacity:0.5;";
+        warningDiv.appendChild(warning);
+
+        const warningDiv2 = warning.cloneNode(true);
+        warningDiv2.textContent = "If 'whole sound' is selected, all added audio will use the new sample rate";
+
+        const applicatorDiv = document.createElement("div");
+        applicatorDiv.append(
+            genCheckableLabel("this selection", "0", true),
+            genCheckableLabel("whole sound", "1", false)
+        );
+        applicatorDiv.addEventListener("click", (e) => {
+            const div = e.target.closest(`div[class="check-outer"]`);
+            if (!div) return;
+
+            for (const checkable of Array.from(div.parentNode.children)) {
+              checkable.firstChild.checked = false;
+            }
+            div.firstChild.checked = true;
+            selectedForceRate = div.id == "1";
+            e.stopPropagation();
         });
-    }
+        menu.append(rateTitle, warningDiv, genTitle("Apply to:"), applicatorDiv, warningDiv2);
+    };
+
+    // account for weird react timing issue
+    if (menu) modalHandler();
+    else queueMicrotask(() => {
+      menu = document.querySelector(`div[class="ReactModalPortal"] div[class*="prompt_body_"] div`);
+      modalHandler();
+    });
+}
     render() {
         const { effectTypes } = AudioEffects;
         return (

@@ -549,80 +549,81 @@ export default async function () {
         if (existingModal) existingModal.remove();
     }
 
-    function openToolPanel() {
-        const paint = ReduxStore.getState().scratchPaint;
-        delete modalStorage.toolDiv;
-        modalStorage.format = paint.format.startsWith("BITMAP") ? "BITMAP" : "VECTOR";
-        modalStorage.sessionStore = {};
-
-        const modal = document.createElement("div");
-        modal.classList.add("costume-tool-modal");
-        modal.setAttribute("style", `color: var(--paint-text-primary, #575e75); width: 275px; height: 350px; z-index: 99999; display: block; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--ui-secondary, hsla(215, 75%, 95%, 1)); border: solid 2px var(--ui-black-transparent, hsla(0, 0%, 0%, 0.15)); border-radius: 5px; padding: 15px;`);
-        modal.id = "draggable";
-
-        const title = document.createElement("span");
-        title.setAttribute("style", `display: block; text-align: center; justify-content: center; border-bottom: solid 2px var(--ui-black-transparent, hsla(0, 0%, 0%, 0.15)); padding-bottom: 10px; margin: 0 25px 0 25px; font-weight: 600;`);
-        title.id = "draggable";
-        title.textContent = "Object Editor";
-
-        const closeBtn = document.createElement("button");
-        closeBtn.setAttribute("style", `position: absolute; top: 10px; right: 5px; transform: scale(1.2); filter: saturate(0); justify-content: center; transition: transform 0.2s, filter 0.2s; background: transparent; border: none;`);
-        const exitImg = document.createElement("img");
-        exitImg.src = getButtonURI("exit");
-        exitImg.setAttribute("width", 20);
-        closeBtn.appendChild(exitImg);
-        closeBtn.addEventListener("mouseover", () => {
-            closeBtn.style.transform = "scale(1.5)";
-            closeBtn.style.filter = "saturate(1)";
-        });
-        closeBtn.addEventListener("mouseout", () => {
-            closeBtn.style.transform = "scale(1.2)";
-            closeBtn.style.filter = "saturate(0)";
-        });
-        closeBtn.addEventListener("click", (e) => {
-            closeToolModal();
-            e.stopPropagation();
-        });
-
-        const toolDisplay = document.createElement("div");
-        toolDisplay.id = "tool-display";
-        toolDisplay.setAttribute("style", `display: block; overflow-y: scroll;width: auto;height: 300px; margin-top: 15px;background: var(--ui-white);border: solid 2px grey;border-radius: 5px;`);
-        modalStorage.toolDiv = toolDisplay;
-        generateToolDisplay();
-
-        modal.append(title, closeBtn, toolDisplay);
-        document.body.appendChild(modal);
-
-        // value auto-updates
-        modal.addEventListener("mouseenter", () => { updatesAllowed = false });
-        modal.addEventListener("mouseleave", () => { updatesAllowed = true });
-
-        // drag n drop behaviour
-        modal.addEventListener("mousedown", (e) => {
-            if (e.target.id !== "draggable") return;
-            e.preventDefault();
-
-            const offsetX = e.clientX - modal.offsetLeft;
-            const offsetY = e.clientY - modal.offsetTop;
-
-            const onMouseMove = (moveEvent) => {
-                const newLeft = moveEvent.clientX - offsetX;
-                const newTop = moveEvent.clientY - offsetY;
-                modal.style.left = `${newLeft}px`;
-                modal.style.top = `${newTop}px`;
-                modal.style.boxShadow = "black 5px 5px 15px";
-            };
-
-            const onMouseUp = () => {
-                document.removeEventListener("mousemove", onMouseMove);
-                document.removeEventListener("mouseup", onMouseUp);
-                modal.style.boxShadow = "";
-            };
-
-            document.addEventListener("mousemove", onMouseMove);
-            document.addEventListener("mouseup", onMouseUp);
-        });
-    }
+function openToolPanel() {
+    const paint = ReduxStore.getState().scratchPaint;
+    delete modalStorage.toolDiv;
+    modalStorage.format = paint.format.startsWith("BITMAP") ? "BITMAP" : "VECTOR";
+    modalStorage.sessionStore = {};
+    
+    const modal = document.createElement("div");
+    modal.classList.add("costume-tool-modal");
+    
+    // Check if dark mode
+    const isDarkMode = document.body.getAttribute('theme') === 'dark';
+    const backgroundColor = isDarkMode ? "rgba(73, 78, 114, 0.72)" : "rgba(239, 241, 245, 0.72)";
+    
+    modal.setAttribute("style", `color: var(--paint-text-primary, #575e75); width: 275px; height: 350px; z-index: 99999; display: block; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: ${backgroundColor}; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: solid 2px var(--ui-black-transparent, hsla(0, 0%, 0%, 0.15)); border-radius: 5px; padding: 15px;`);
+    modal.id = "draggable";
+    
+    const title = document.createElement("span");
+    title.setAttribute("style", `display: block; text-align: center; justify-content: center; border-bottom: solid 2px var(--ui-black-transparent, hsla(0, 0%, 0%, 0.15)); padding-bottom: 10px; margin: 0 25px 0 25px; font-weight: 600;`);
+    title.id = "draggable";
+    title.textContent = "Object Editor";
+    
+    const closeBtn = document.createElement("button");
+    closeBtn.setAttribute("style", `position: absolute; top: 10px; right: 5px; transform: scale(1.2); filter: saturate(0); justify-content: center; transition: transform 0.2s, filter 0.2s; background: transparent; border: none;`);
+    const exitImg = document.createElement("img");
+    exitImg.src = getButtonURI("exit");
+    exitImg.setAttribute("width", 20);
+    closeBtn.appendChild(exitImg);
+    closeBtn.addEventListener("mouseover", () => {
+        closeBtn.style.transform = "scale(1.5)";
+        closeBtn.style.filter = "saturate(1)";
+    });
+    closeBtn.addEventListener("mouseout", () => {
+        closeBtn.style.transform = "scale(1.2)";
+        closeBtn.style.filter = "saturate(0)";
+    });
+    closeBtn.addEventListener("click", (e) => {
+        closeToolModal();
+        e.stopPropagation();
+    });
+    
+    const toolDisplay = document.createElement("div");
+    toolDisplay.id = "tool-display";
+    toolDisplay.setAttribute("style", `display: block; overflow-y: scroll; width: auto; height: 300px; margin-top: 15px; background: var(--ui-white); border: solid 2px grey; border-radius: 5px;`);
+    modalStorage.toolDiv = toolDisplay;
+    generateToolDisplay();
+    
+    modal.append(title, closeBtn, toolDisplay);
+    document.body.appendChild(modal);
+    
+    // value auto-updates
+    modal.addEventListener("mouseenter", () => { updatesAllowed = false });
+    modal.addEventListener("mouseleave", () => { updatesAllowed = true });
+    
+    // drag n drop behaviour
+    modal.addEventListener("mousedown", (e) => {
+        if (e.target.id !== "draggable") return;
+        e.preventDefault();
+        const offsetX = e.clientX - modal.offsetLeft;
+        const offsetY = e.clientY - modal.offsetTop;
+        const onMouseMove = (moveEvent) => {
+            const newLeft = moveEvent.clientX - offsetX;
+            const newTop = moveEvent.clientY - offsetY;
+            modal.style.left = `${newLeft}px`;
+            modal.style.top = `${newTop}px`;
+            modal.style.boxShadow = "black 5px 5px 15px";
+        };
+        const onMouseUp = () => {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+            modal.style.boxShadow = "";
+        };
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+    });
+}
 
     function startListenerWorker() {
         ReduxStore.subscribe((e,t) => {

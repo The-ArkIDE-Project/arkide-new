@@ -46,6 +46,7 @@ const TRUSTED_LOADEXT_ORIGINS = [
     'https://raw.githubusercontent.com/SharkPool-SP/SharkPools-Extensions/main', // Some people cant connect to vercel
     'https://pen-group.github.io',
     'https://extensions.arkide.site',
+    'https://arkfs.arc360hub.com/', // Add ArkFS As a trusted source if Sharkpool's website and github are blocked.
 ];
 
 class ExtensionLibrary extends React.PureComponent {
