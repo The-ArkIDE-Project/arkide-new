@@ -531,7 +531,7 @@ const modalHandler = () => {
     // Add blur to the modal
     const modalContent = menu.closest('[class*="prompt_body_"]');
     if (modalContent) {
-        modalContent.style.background = "rgba(255, 255, 255, 0.85)";
+        modalContent.style.background = "rgba(40, 40, 40, 0.85)";
         modalContent.style.backdropFilter = "blur(10px)";
         modalContent.style.webkitBackdropFilter = "blur(10px)";
     }
@@ -539,7 +539,7 @@ const modalHandler = () => {
     // Check if dark mode
     const isDarkMode = document.body.getAttribute('theme') === 'dark';
     if (isDarkMode && modalContent) {
-        modalContent.style.background = "rgba(73, 78, 114, 0.85)";
+        modalContent.style.background = "rgba(40, 40, 40, 0.85)";
     }
     
     menu.append(pitchDiv, volumeDiv);
@@ -674,7 +674,7 @@ async handleFormatMenu() {
         // Check if dark mode and adjust accordingly
         const isDarkMode = document.body.getAttribute('theme') === 'dark';
         if (isDarkMode && modalContent) {
-            modalContent.style.background = "rgba(73, 78, 114, 0.52)";
+            modalContent.style.background = "rgba(40, 40, 40, 0.52)";
         }
         
         const rateTitle = genTitle("New Sample Rate:");

@@ -560,7 +560,7 @@ function openToolPanel() {
     
     // Check if dark mode
     const isDarkMode = document.body.getAttribute('theme') === 'dark';
-    const backgroundColor = isDarkMode ? "rgba(73, 78, 114, 0.72)" : "rgba(239, 241, 245, 0.72)";
+    const backgroundColor = isDarkMode ? "rgba(40, 40, 40, 0.72)" : "rgba(239, 241, 245, 0.72)";
     
     modal.setAttribute("style", `color: var(--paint-text-primary, #575e75); width: 275px; height: 350px; z-index: 99999; display: block; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: ${backgroundColor}; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: solid 2px var(--ui-black-transparent, hsla(0, 0%, 0%, 0.15)); border-radius: 5px; padding: 15px;`);
     modal.id = "draggable";
