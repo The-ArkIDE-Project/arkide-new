@@ -23,7 +23,7 @@
     cursor: pointer;
 }
 [theme="dark"] .library-item {
-    background: $ui-primary;
+    background: rgba(20, 20, 20, 0.2);
 }
 
 .library-item-sound {
