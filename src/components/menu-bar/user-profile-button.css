@@ -29,6 +29,10 @@
     margin-left: .5rem;
 }
 
+.icon {
+    margin-right: .5rem;
+}
+
 .content {
     white-space: nowrap;
     line-height: 34px;

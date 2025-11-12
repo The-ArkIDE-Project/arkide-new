@@ -24,24 +24,32 @@ class UserProfileButton extends React.Component {
         return null;
     }
 
+
+
     loadUserProfile() {
         const username = this.getCookie('arkide_username');
+        console.log('Fetched cookie username:', username); // 🔍 logging
+
         if (username) {
+            // Update state so render shows profile instead of login
             this.setState({
                 username: username,
                 profilePicUrl: `https://arkideapi.arc360hub.com/api/v1/users/getpfp?username=${encodeURIComponent(username)}`
             });
+        } else {
+            console.log('No arkide_username cookie found');
         }
     }
 
     handleProfileClick = () => {
         if (this.state.username) {
-            window.location.href = `/profile?user=${encodeURIComponent(this.state.username)}`;
+            window.open(`https://arkide.site/profile/?user=${encodeURIComponent(this.state.username)}`, "_blank");
         }
     }
 
+
     handleLoginClick = () => {
-        window.location.href = 'https://arkide.site/login';
+        window.open('https://arkide.site/signin', "_blank");
     }
 
     render() {
