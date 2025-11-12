@@ -185,7 +185,7 @@
     object-fit: contain;
     background: #F9F9F9;
     border: 1px solid #ddd;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     overflow: hidden;
     margin: 0 0.5rem 0.5rem;
 }

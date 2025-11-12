@@ -15,7 +15,7 @@
     padding: 6px;
     margin-left: 4px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.85); /* Made semi-transparent */
+    background: rgba(255, 255, 255, 0.80); /* Made semi-transparent */
     backdrop-filter: blur(10px); /* Add blur effect */
     -webkit-backdrop-filter: blur(10px); /* Safari support */
     overflow: auto;
@@ -23,7 +23,7 @@
 }
 
 [theme="dark"] .library-filter-bar {
-    background: rgba(39, 39, 39, 0.85); /* Made semi-transparent */
+    background: rgba(39, 39, 39, 0.80); /* Made semi-transparent */
     backdrop-filter: blur(10px); /* Add blur effect */
     -webkit-backdrop-filter: blur(10px); /* Safari support */
 }

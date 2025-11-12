@@ -224,7 +224,7 @@
     background-color: $pen-primary;
     width: 3.5rem;
     height: 3.5rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     border: 0.25rem solid $ui-white;
 }
 
@@ -237,7 +237,7 @@
     align-self: flex-start;
     width: 3.5rem;
     height: 3.5rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     border: 0.25rem solid $ui-white;
 }
 

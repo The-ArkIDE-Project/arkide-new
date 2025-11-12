@@ -118,7 +118,7 @@ stage doesn't "spill" out from under its rounded corners. instead, shift these o
 .frame {
     background: $motion-transparent;
     border: 2px solid $motion-primary;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     animation-name: flash;
     animation-duration: 0.75s;
     animation-fill-mode: forwards; /* Leave at 0 opacity after animation */
@@ -131,7 +131,7 @@ stage doesn't "spill" out from under its rounded corners. instead, shift these o
     justify-content: center;
     align-items: center;
     background: rgba(0,0,0,0.25);
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     pointer-events: all;
     cursor: pointer;
 }

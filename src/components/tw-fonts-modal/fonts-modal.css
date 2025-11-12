@@ -34,7 +34,7 @@
     padding: 0.5rem;
     margin: 0;
     border: 2px solid $ui-black-transparent;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
 }
 .open-button:hover {
     color: $motion-primary;
@@ -182,7 +182,7 @@
     display: flex;
     align-items: center;
     border: 2px solid $ui-black-transparent;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     padding: 0.5rem;
     gap: 0.5rem;
 }

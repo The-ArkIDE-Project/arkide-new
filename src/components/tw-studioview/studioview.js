@@ -307,7 +307,7 @@ StudioView.THUMBNAIL_SRC = 'https://arkideapi.arc360hub.com/api/v1/projects/getp
 
 // The URL for project pages.
 // $id is replaced with the project ID.
-StudioView.PROJECT_PAGE = 'https://studio.penguinmod.com/#$id';
+StudioView.PROJECT_PAGE = 'https://studio.arkide.site/#$id';
 
 // The amount of "placeholders" to insert before the next page loads.
 StudioView.PLACEHOLDER_COUNT = 9;

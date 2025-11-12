@@ -7,13 +7,18 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: .75rem;
-    padding-right: .75rem;
+    padding: 0 0.75rem;
     user-select: none;
+    height: 34px;
+    background-color: white;
+    color: #4634eb;
+    margin-right: 0.5rem;
 }
 
 .icon {
     height: 1.5rem;
+    width: 1.5rem;
+    flex-shrink: 0;
 }
 
 [dir="ltr"] .icon {
@@ -26,4 +31,10 @@
 
 .content {
     white-space: nowrap;
+    line-height: 34px;
+}
+
+.userProfilePic {
+    border-radius: 50%;
+    object-fit: cover;
 }

@@ -142,7 +142,7 @@ const Footer = () => (
             <div className={styles.footerText}>
                 <FormattedMessage
                     // eslint-disable-next-line max-len
-                    defaultMessage="PenguinMod, ArkIDE and TurboWarp are not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
+                    defaultMessage="ArkIDE, Penguinmod and TurboWarp are not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
                     description="Disclaimer that PenguinMod and TurboWarp are not connected to Scratch"
                     id="tw.footer.disclaimer"
                 />

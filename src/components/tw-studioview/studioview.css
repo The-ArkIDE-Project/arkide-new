@@ -3,18 +3,25 @@ Imported from:
 https://github.com/forkphorus/forkphorus/tree/master/studioview
 With changes to make it work properly in the scratch-gui environment.
 */
-
 /*
 Further modifications made for PenguinMod (like featured projects)
+Enhanced with animations and glow effects
 */
-
 @keyframes gradient {
   0% {
     background-position: 0% 0%;
   }
-
   100% {
     background-position: 100% 100%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
   }
 }
 
@@ -22,6 +29,7 @@ Further modifications made for PenguinMod (like featured projects)
 .wrapper {
   height: 100%;
 }
+
 /* fix some styles that can be messed up by scratch-gui */
 .studioview-root * {
   box-sizing: content-box !important;
@@ -30,48 +38,113 @@ Further modifications made for PenguinMod (like featured projects)
 .studioview-root {
   height: 100%;
 }
+
 .studioview-list {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
   overflow-anchor: none;
+  padding: 4px;
 }
+
 .studioview-project, .studioview-placeholder {
   display: inline-block;
   width: 142px;
   padding: 3px;
-  margin-bottom: 1px;
-  margin-right: 1px;
-  border-radius: 4px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+  border-radius: 8px;
   border-style: solid;
   border-width: 1px;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              background 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08),
+              0 1px 2px rgba(0, 0, 0, 0.05);
+  will-change: transform;
+  position: relative;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
 }
+
+.studioview-project:hover {
+  transform: scale(1.03) translateY(-3px);
+  box-shadow: 0 8px 16px rgba(77, 151, 255, 0.15),
+              0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(77, 151, 255, 0.5);
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 10;
+}
+
 [theme="dark"] .studioview-project,
 [theme="dark"] .studioview-placeholder {
-  border-color: #ffffff4d;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
+              0 1px 3px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.03);
 }
+
+[theme="dark"] .studioview-project:hover {
+  border-color: rgba(77, 151, 255, 0.6);
+  box-shadow: 0 16px 32px rgba(77, 151, 255, 0.2),
+              0 8px 16px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .featured-studioview-project {
   background-color: #ffc400;
   background: linear-gradient(
-      145deg,
-      rgba(255, 196, 0, 1) 0%,
-      rgba(255, 196, 0, 1) 45%,
-      rgba(255, 255, 255, 1) 50%,
-      rgba(255, 196, 0, 1) 54%,
-      rgba(255, 196, 0, 1) 100%
-  );
+    145deg,
+    rgba(255, 196, 0, 1) 0%,
+    rgba(255, 196, 0, 1) 45%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 196, 0, 1) 54%,
+    rgba(255, 196, 0, 1) 100%
+  ) !important;
   background-size: 300% 300%;
   animation: gradient 3s ease infinite;
+  box-shadow: 0 6px 16px rgba(255, 196, 0, 0.4),
+              0 2px 8px rgba(255, 196, 0, 0.2);
+  border-color: rgba(255, 196, 0, 0.5);
+  backdrop-filter: none !important;
 }
+
+.featured-studioview-project:hover {
+  box-shadow: 0 16px 36px rgba(255, 196, 0, 0.5),
+              0 8px 16px rgba(255, 196, 0, 0.3);
+  animation: gradient 1.5s easy infinite, float 2s ease-in-out infinite;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 196, 0, 1) 0%,
+    rgba(255, 196, 0, 1) 45%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 196, 0, 1) 54%,
+    rgba(255, 196, 0, 1) 100%
+  ) !important;
+}
+
+.featured-studioview-project .studioview-title,
+.featured-studioview-project .studioview-author {
+  color: black !important;
+}
+
+.featured-studioview-project:hover .studioview-title {
+  color: rgb(40, 40, 40) !important;
+}
+
 [theme="dark"] .featured-studioview-project > div {
   color: black;
 }
+
 .studioview-root .studioview-project {
   color: inherit;
   position: relative;
   text-decoration: none;
 }
+
 .studioview-loaded:hover::before, .studioview-loaded:active::before {
   content: '';
   pointer-events: none;
@@ -81,12 +154,21 @@ Further modifications made for PenguinMod (like featured projects)
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: currentColor;
-  opacity: 0.1;
+  background: linear-gradient(135deg, rgba(77, 151, 255, 0.1), rgba(77, 151, 255, 0.05));
+  opacity: 0;
+  border-radius: 12px;
+  transition: opacity 0.3s ease;
 }
+
+.studioview-project:hover .studioview-loaded::before {
+  opacity: 1;
+}
+
 .studioview-root .studioview-loaded:active::before {
-  opacity: 0.2;
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(77, 151, 255, 0.15), rgba(77, 151, 255, 0.08));
 }
+
 .studioview-root .studioview-title,
 .studioview-root .studioview-author {
   text-overflow: ellipsis;
@@ -94,14 +176,37 @@ Further modifications made for PenguinMod (like featured projects)
   overflow: hidden;
   color: inherit;
   text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
 }
+
+.studioview-project:hover .studioview-title,
+.studioview-project:hover .studioview-author {
+  transform: translateY(-1px);
+}
+
 .studioview-title {
   font-size: 0.9em;
   font-weight: bold;
+  margin-top: 4px;
 }
+
+.studioview-project:hover .studioview-title {
+  color: #4d97ff;
+}
+
+[theme="dark"] .studioview-project:hover .studioview-title {
+  color: #6eb0ff;
+}
+
 .studioview-author {
   font-size: 0.75em;
+  opacity: 0.8;
 }
+
+.studioview-project:hover .studioview-author {
+  opacity: 1;
+}
+
 .studioview-error {
   width: 100%;
 }
@@ -110,23 +215,49 @@ Further modifications made for PenguinMod (like featured projects)
   position: relative;
   width: 144px;
   height: 108px;
+  border-radius: 8px;
+  overflow: visible;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
+
+.studioview-project:hover .studioview-thumbnail {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
 .studioview-thumbnail::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-color: currentColor;
-  opacity: 0.1;
+  background: inherit;
+  filter: blur(20px) brightness(1.5) saturate(1.5);
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.5s ease-in-out;
+  border-radius: 8px;
+  pointer-events: none;
 }
+
+.studioview-project:hover .studioview-thumbnail::before {
+  opacity: 0.9;
+}
+
 .studioview-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1;
+  z-index: 2;
   position: relative;
+  border-radius: 6px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.studioview-project:hover .studioview-thumbnail img {
+  transform: scale(1.05);
 }
 
 .studioview-placeholder .studioview-thumbnail,
@@ -138,17 +269,19 @@ Further modifications made for PenguinMod (like featured projects)
 
 .studioview-title {
   height: 20px;
-  margin-top: 2px;
+  margin-top: 6px;
 }
+
 .studioview-author {
   height: 18px;
 }
 
 .studioview-placeholder .studioview-title {
-  border-radius: 2px 2px 2px 0;
+  border-radius: 4px 4px 4px 0;
   width: 100%;
 }
+
 .studioview-placeholder .studioview-author {
-  border-radius: 0 0 2px 2px;
+  border-radius: 0 0 4px 4px;
   width: 50%;
 }

@@ -296,7 +296,7 @@
 
 .connection-button {
     padding: 0.6rem 0.75rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     background: $motion-primary;
     color: white;
     font-weight: 600;
