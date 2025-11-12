@@ -16,8 +16,16 @@ class UserProfileButton extends React.Component {
         this.loadUserProfile();
     }
 
+    // Helper to read a cookie by name
+    getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        return null;
+    }
+
     loadUserProfile() {
-        const username = localStorage.getItem('username');
+        const username = this.getCookie('arkide_username');
         if (username) {
             this.setState({
                 username: username,
