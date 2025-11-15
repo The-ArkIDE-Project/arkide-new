@@ -203,7 +203,7 @@ const PromptComponent = props => props.isCustom ? (
                         values={{
                             packager: (
                                 <a
-                                    href="https://arkide.penguinmod.com/PenguinMod-Packager"
+                                    href="https://packager.arkide.site/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

@@ -165,7 +165,7 @@ const Footer = () => (
                     </a>
                 </div>
                 <div className={styles.footerSection}>
-                    <a href="https://studio.arkide.site/PenguinMod-Packager">
+                    <a href="https://packager.arkide.site/">
                         {/* Do not translate */}
                         {'ArkIDE Packager'}
                     </a>

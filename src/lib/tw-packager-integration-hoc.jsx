@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import log from './log';
 import { getIsShowingProject } from '../reducers/project-state';
 
-const PACKAGER_URL = 'https://studio.arkide.site/PenguinMod-Packager';
-const PACKAGER_ORIGIN = "https://studio.arkide.site";
+const PACKAGER_URL = 'https://packager.arkide.site/';
+const PACKAGER_ORIGIN = "https://packager.arkide.site";
 
 const PackagerIntegrationHOC = function (WrappedComponent) {
     class PackagerIntegrationComponent extends React.Component {
