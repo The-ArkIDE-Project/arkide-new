@@ -39,6 +39,7 @@ import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 import vmManagerHOC from '../lib/vm-manager-hoc.jsx';
 import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 import TWFullScreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
+import BlockSearch from '../lib/block-search';
 
 import GUIComponent from '../components/gui/gui.jsx';
 import HomeCommunication from './home-communication.jsx';
@@ -49,15 +50,54 @@ class GUI extends React.Component {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
+        
+        // Initialize block search immediately
+        this.initializeBlockSearch();
     }
     componentDidUpdate (prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
             this.props.onUpdateProjectId(this.props.projectId);
         }
         if (this.props.isShowingProject && !prevProps.isShowingProject) {
-            // this only notifies container when a project changes from not yet loaded to loaded
-            // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
+        }
+    }
+
+    initializeBlockSearch() {
+        console.log('Attempting to initialize block search...');
+        
+        const tryInit = () => {
+            console.log('tryInit called');
+            console.log('VM:', this.props.vm);
+            console.log('Blockly:', window.Blockly);
+            
+            try {
+                const workspace = this.props.vm?.runtime?.getEditingTarget?.()?.blocks?._workspace || 
+                                window.Blockly?.getMainWorkspace?.();
+                console.log('Workspace found:', workspace);
+                
+                if (workspace) {
+                    console.log('Calling BlockSearch.init...');
+                    BlockSearch.init(workspace);
+                    console.log('BlockSearch initialized successfully');
+                    return true;
+                }
+            } catch (err) {
+                console.error('Block search init error:', err);
+            }
+            return false;
+        };
+
+        if (!tryInit()) {
+            console.log('Initial attempt failed, will retry...');
+            let attempts = 0;
+            const retry = setInterval(() => {
+                console.log('Retry attempt:', attempts);
+                if (tryInit() || attempts++ > 10) {
+                    clearInterval(retry);
+                    console.log('Stopped retrying');
+                }
+            }, 200);
         }
     }
     render () {
