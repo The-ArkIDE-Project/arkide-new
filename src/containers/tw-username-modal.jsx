@@ -24,10 +24,18 @@ class UsernameModal extends React.Component {
             valueValid: !this.props.usernameInvalid
         };
     }
+    getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        return null;
+    }
+
     componentDidUpdate (prevProps) {
         if (prevProps.usernameLoggedIn !== this.props.usernameLoggedIn) {
+            const cookieName = this.getCookie('arkide_username');
             this.setState({
-                value: this.props.username,
+                value: cookieName || this.props.username,
                 valueValid: true
             });
         }
@@ -43,7 +51,8 @@ class UsernameModal extends React.Component {
     }
     handleOk () {
         if (this.props.usernameLoggedIn) return; // user is logged in
-        this.props.onSetUsername(this.state.value);
+        const cookieName = this.getCookie('arkide_username');
+        this.props.onSetUsername(cookieName || this.state.value);
         this.props.onCloseUsernameModal();
     }
     handleCancel () {
@@ -57,10 +66,15 @@ class UsernameModal extends React.Component {
         });
     }
     handleReset () {
-        if (this.props.usernameLoggedIn) return; // user is logged in
-        const randomUsername = isScratchDesktop() ? 'player' : generateRandomUsername();
+        if (this.props.usernameLoggedIn) return;
+
+        const cookieName = this.getCookie('arkide_username');
+
+        // If cookie missing → default to "player"
+        const username = cookieName || 'player';
+
         this.props.onCloseUsernameModal();
-        this.props.onSetUsername(randomUsername);
+        this.props.onSetUsername(username);
     }
     render () {
         return (

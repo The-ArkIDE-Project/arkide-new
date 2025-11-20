@@ -78,7 +78,7 @@ class GUI extends React.Component {
                 
                 if (workspace) {
                     console.log('Calling BlockSearch.init...');
-                    BlockSearch.init(workspace);
+                    BlockSearch.init(workspace, vm);
                     console.log('BlockSearch initialized successfully');
                     return true;
                 }
