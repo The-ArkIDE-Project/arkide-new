@@ -13,9 +13,10 @@
 }
 
 .share-button {
-    background: $motion-primary;
+    background: #4634eb;
     color: $ui-white;
     box-shadow: 0 0 0 1px $ui-black-transparent;
+    transition: all 0.3s ease;
 }
 
 .disabled {
@@ -27,17 +28,37 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+    background-color: #4634eb; /* Solid background to block shadow */
+    border-radius: inherit; /* Match parent border radius */
+}
+
+.share-button:hover {
+    background-color: #4634eb; /* Ensure solid background on hover */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.356),
+                0 0 20px rgba(255, 255, 255, 0.08); /* Only outer shadows */
 }
 
 [theme="dark"] .share-button {
     background: transparent;
     color: $ui-white;
-    box-shadow: 0 0 0 1px $ui-black-transparent;
+}
+
+[theme="dark"] .share-content {
+    background-color: transparent;
+}
+
+[theme="dark"] .share-content:hover {
+    background-color: rgba(70, 52, 235, 0.2);
 }
 
 .share-button-is-shared {
     background: $ui-black-transparent;
     cursor: default;
+}
+
+.share-button-is-shared .share-content {
+    background: $ui-black-transparent;
 }
 
 .icon {

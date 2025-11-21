@@ -10,6 +10,12 @@
     padding-left: .75rem;
     padding-right: .75rem;
     user-select: none;
+    transition: all 0.3s ease;
+}
+
+.outlined-button:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.356),
+              0 0 20px rgba(255, 255, 255, 0.08);
 }
 
 .icon {

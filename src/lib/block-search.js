@@ -177,6 +177,8 @@ buildExtensionMetadata() {
         const blockTypes = Object.keys(ScratchBlocks.Blocks);
         let newBlocksFound = 0;
         
+        console.log(`🔍 Scanning ${blockTypes.length} block types...`);
+        
         // DEFINE HELPER FUNCTIONS FIRST, BEFORE USING THEM
         
         // Helper to get actual color from a rendered block in the flyout
@@ -188,7 +190,14 @@ buildExtensionMetadata() {
             try {
                 const flyoutBlocks = toolbox.flyout_.workspace_.getAllBlocks(false);
                 const block = flyoutBlocks.find(b => {
+                    // Accept both shadow and non-shadow blocks for reporters/booleans
                     const isShadow = (typeof b.isShadow === 'function') ? b.isShadow() : b.isShadow;
+                    const isReporter = b.outputConnection !== undefined && b.outputConnection !== null;
+                    
+                    // For reporter/boolean blocks, accept shadows too
+                    if (isReporter) {
+                        return b.type === blockType;
+                    }
                     return b.type === blockType && !isShadow;
                 });
                 
@@ -326,18 +335,19 @@ buildExtensionMetadata() {
         
         // NOW ITERATE THROUGH BLOCKS
         blockTypes.forEach(blockType => {
-            // Skip if already in metadata
-            if (this.dynamicBlockMetadata[blockType]) return;
-            
-            // Skip invalid/internal block types
-            if (blockType.startsWith('extension_') || 
-                blockType === 'procedures_prototype' ||
-                blockType === 'argument_reporter_string_number' ||
-                blockType === 'argument_reporter_boolean' ||
-                blockType === 'text' ||
-                blockType === 'math_number') {
-                return;
-            }
+                    // Skip if already in metadata
+                    if (this.dynamicBlockMetadata[blockType]) return;
+                    
+                    // Skip invalid/internal block types - BUT ALLOW reporter/boolean blocks!
+                    if (blockType.startsWith('extension_') || 
+                        blockType === 'procedures_prototype' ||
+                        blockType === 'text' ||
+                        blockType === 'math_number') {
+                        return;
+                    }
+                    
+                    // IMPORTANT: Keep argument reporters as they are real blocks
+                    // (argument_reporter_string_number, argument_reporter_boolean)
             
             const blockDefinition = ScratchBlocks.Blocks[blockType];
             if (!blockDefinition) return;
@@ -715,165 +725,147 @@ handleCategorySwitch(categoryName) {
 }
 
 addSearchCategory() {
-    console.log('Adding search category (robust version)...');
+    console.log('Adding search category (super robust version)...');
+    
+    // Cleanup any existing observers/intervals
+    if (this._searchCategoryObserver) {
+        this._searchCategoryObserver.disconnect();
+        this._searchCategoryObserver = null;
+    }
+    if (this._searchCategoryInterval) {
+        clearInterval(this._searchCategoryInterval);
+        this._searchCategoryInterval = null;
+    }
 
-    // Helper: find the best toolbox container to observe/attach to
-    const findToolboxRoot = () => {
-        // Prefer Scratch category container if present
-        let root = document.querySelector('.scratchCategoryMenu') ||
-                   document.querySelector('.blocklyToolboxDiv') ||
-                   document.querySelector('[class*="categoryMenu"]');
-
-        // If nothing found, fallback to body (last resort)
-        if (!root) root = document.body;
-        return root;
-    };
-
-    // Function that ensures the search category exists in the current menu
     const ensureSearchCategory = () => {
         try {
-            const targetMenu = document.querySelector('.scratchCategoryMenu') ||
-                               document.querySelector('.blocklyTreeRoot') ||
-                               document.querySelector('[class*="categoryMenu"]');
-
-            if (!targetMenu) {
-                // Nothing to attach to right now
-                return;
+            const targetMenu = document.querySelector('.scratchCategoryMenu');
+            if (!targetMenu || !targetMenu.isConnected) {
+                return false;
             }
 
-            // If already exists, do nothing
+            // Check if already exists AND is still in DOM
             let existing = targetMenu.querySelector('.scratch-search-category');
-            if (existing) return;
+            if (existing && existing.isConnected) {
+                return true;
+            }
 
-            // Create the DOM node
+            // Remove any orphaned search categories
+            document.querySelectorAll('.scratch-search-category').forEach(el => el.remove());
+
+            // Create new search category
             const searchCategory = document.createElement('div');
             searchCategory.className = 'scratchCategoryMenuItem scratch-search-category';
             searchCategory.setAttribute('role', 'treeitem');
+            searchCategory.setAttribute('data-search-injected', 'true');
             searchCategory.style.cssText = `
                 padding: 8px 1px;
                 cursor: pointer;
                 display: flex;
-                flex-direction: column;     /* ← vertical layout */
-                align-items: center;        /* center horizontally */
+                flex-direction: column;
+                align-items: center;
                 justify-content: center;
-                gap: 3px;                   /* spacing between icon + text */
+                gap: 3px;
                 background: transparent;
                 color: white;
                 font-weight: bold;
                 user-select: none;
                 text-align: center;
                 border-bottom: 1px solid rgba(0,0,0,0.08);
-                height: 64px;               /* matches Scratch category height */
+                height: 64px;
+                transition: all 0.2s;
             `;
 
+            searchCategory.addEventListener('mouseenter', () => {
+                searchCategory.style.backgroundColor = 'rgba(255,255,255,0.1)';
+            });
+            searchCategory.addEventListener('mouseleave', () => {
+                searchCategory.style.backgroundColor = 'transparent';
+            });
 
-            // ICON
             const icon = document.createElement('span');
             icon.textContent = '🔍';
-            icon.style.fontSize = '20px';   // bigger so it looks like Scratch category icons
-            icon.style.lineHeight = '20px';
-            icon.style.margin = '0';
+            icon.style.cssText = 'font-size: 20px; line-height: 20px; margin: 0;';
 
-            // LABEL
             const label = document.createElement('span');
             label.textContent = 'Search';
-            label.style.fontSize = '12px';
-            label.style.margin = '0';
-            label.style.display = 'block';
+            label.style.cssText = 'font-size: 12px; margin: 0; display: block;';
 
             searchCategory.appendChild(icon);
             searchCategory.appendChild(label);
 
-            // Safe click handler: mark currentCategory and toggle search UI.
-            // Do not fire ScratchBlocks/Blockly events here.
             searchCategory.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.currentCategory = 'search';
-                // If UI not created yet, do nothing
-                if (!this.searchContainer) {
-                    console.warn('searchContainer not created yet (click ignored).');
-                    return;
-                }
-                // Show search bar
                 this.handleCategorySwitch('search');
                 this.toggleSearchBar();
             });
 
-            // Insert at top
             targetMenu.insertBefore(searchCategory, targetMenu.firstChild);
-            console.log('Search category inserted!');
+            console.log('✅ Search category injected');
+            return true;
         } catch (err) {
             console.error('Error in ensureSearchCategory:', err);
+            return false;
         }
     };
 
-    // Debounced reconstructor to avoid re-creating repeatedly
-    let reconTimeout = null;
-    const scheduleEnsure = () => {
-        if (reconTimeout) clearTimeout(reconTimeout);
-        reconTimeout = setTimeout(() => {
-            ensureSearchCategory();
-            reconTimeout = null;
-        }, 50);
+    // Initial injection with retry
+    const tryInject = (attempts = 0) => {
+        if (attempts > 10) {
+            console.warn('Failed to inject search category after 10 attempts');
+            return;
+        }
+        
+        if (!ensureSearchCategory()) {
+            setTimeout(() => tryInject(attempts + 1), 200);
+        }
     };
+    
+    tryInject();
 
-    // Create it initially after small delay (toolbox renders late)
-    setTimeout(() => {
-        ensureSearchCategory();
-    }, 300);
+    // Watch for toolbox changes using MutationObserver
+    const observeToolbox = () => {
+        const toolboxContainer = document.querySelector('.blocklyToolboxDiv') || 
+                                document.querySelector('[class*="blocks_blocks"]') ||
+                                document.body;
 
-    // Disconnect any previous observer we installed
-    if (this._searchCategoryObserver) {
-        try { this._searchCategoryObserver.disconnect(); } catch(e){/*noop*/}
-        this._searchCategoryObserver = null;
-    }
-
-    // Observe the toolbox root (or body if not found). Observe childList + subtree so we catch replacements.
-    const toolboxRoot = findToolboxRoot();
-    try {
         const observer = new MutationObserver((mutations) => {
-            // If menu gets removed/replaced, schedule re-insertion
-            for (const m of mutations) {
-                if (m.type === 'childList' && (m.addedNodes.length || m.removedNodes.length)) {
-                    scheduleEnsure();
-                    break;
-                }
-                // attribute changes could also indicate re-render
-                if (m.type === 'attributes') {
-                    scheduleEnsure();
-                    break;
+            for (const mutation of mutations) {
+                // Check if category menu was added/modified
+                if (mutation.addedNodes.length > 0) {
+                    for (const node of mutation.addedNodes) {
+                        if (node.classList && 
+                            (node.classList.contains('scratchCategoryMenu') ||
+                             node.querySelector && node.querySelector('.scratchCategoryMenu'))) {
+                            setTimeout(() => ensureSearchCategory(), 100);
+                            break;
+                        }
+                    }
                 }
             }
         });
 
-        // Save observer so we can disconnect later if needed
-        this._searchCategoryObserver = observer;
-
-        observer.observe(toolboxRoot, {
+        observer.observe(toolboxContainer, {
             childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['class', 'style']
+            subtree: true
         });
 
-        // Also run a safety interval: sometimes Scratch does a full replace and observers
-        // on the previous node don't catch it. This interval checks and ensures existence.
-        if (!this._searchCategoryInterval) {
-            this._searchCategoryInterval = setInterval(() => {
-                ensureSearchCategory();
-            }, 800);
-        }
-    } catch (e) {
-        console.error('Could not observe toolbox root, falling back to periodic ensure:', e);
-        // Fallback periodic ensure if MutationObserver not allowed
-        if (!this._searchCategoryInterval) {
-            this._searchCategoryInterval = setInterval(() => {
-                ensureSearchCategory();
-            }, 800);
-        }
-    }
+        this._searchCategoryObserver = observer;
+    };
 
-    // Hide search bar initially if created
+    observeToolbox();
+
+    // Safety interval to catch any missed injections
+    this._searchCategoryInterval = setInterval(() => {
+        const menu = document.querySelector('.scratchCategoryMenu');
+        if (menu && !menu.querySelector('.scratch-search-category')) {
+            console.log('🔧 Re-injecting missing search category...');
+            ensureSearchCategory();
+        }
+    }, 1000);
+
+    // Hide search UI initially
     if (this.searchContainer) {
         this.searchContainer.style.display = 'none';
         this.isSearchVisible = false;
@@ -1099,24 +1091,51 @@ toggleSearchBar() {
             this.resultsContainer.appendChild(resultItem);
         });
     }
-    addBlockToWorkspace(blockType) {
-        if (!this.workspace || !LazyScratchBlocks.isLoaded()) return;
+addBlockToWorkspace(blockType) {
+    if (!this.workspace || !LazyScratchBlocks.isLoaded()) return;
 
-        const ScratchBlocks = LazyScratchBlocks.get();
-        const metadata = this.dynamicBlockMetadata[blockType] || BLOCK_METADATA[blockType];
-        
-        if (!metadata) {
-            console.warn('No metadata for block:', blockType);
-            return;
-        }
-        
-        if (blockType.startsWith('extension_')) {
-            console.warn('Invalid block type (extension_ prefix):', blockType);
-            return;
-        }
-        
+    const ScratchBlocks = LazyScratchBlocks.get();
+    const metadata = this.dynamicBlockMetadata[blockType] || BLOCK_METADATA[blockType];
+    
+    if (!metadata) {
+        console.warn('No metadata for block:', blockType);
+        return;
+    }
+    
+    if (blockType.startsWith('extension_')) {
+        console.warn('Invalid block type (extension_ prefix):', blockType);
+        return;
+    }
+    
+    // Helper to get safe center position
+    const getSafeCenterPosition = () => {
         try {
-            const toolbox = this.workspace.getToolbox();
+            const metrics = this.workspace.getMetrics();
+            const scale = this.workspace.scale || 1;
+            
+            // Calculate visible center
+            const viewLeft = metrics.viewLeft || 0;
+            const viewTop = metrics.viewTop || 0;
+            const viewWidth = metrics.viewWidth || 400;
+            const viewHeight = metrics.viewHeight || 300;
+            
+            // Position in center of visible area
+            const centerX = viewLeft + (viewWidth / 2 / scale);
+            const centerY = viewTop + (viewHeight / 2 / scale);
+            
+            // Clamp to reasonable bounds
+            const safeX = Math.max(50, Math.min(centerX, 5000));
+            const safeY = Math.max(50, Math.min(centerY, 5000));
+            
+            return { x: safeX, y: safeY };
+        } catch (e) {
+            console.warn('Error getting center position, using defaults:', e);
+            return { x: 200, y: 200 };
+        }
+    };
+    
+    try {
+        const toolbox = this.workspace.getToolbox();
             if (!toolbox || !toolbox.flyout_) {
                 console.warn('No toolbox or flyout available');
                 return;
@@ -1183,18 +1202,34 @@ toggleSearchBar() {
                         return false;
                     }
                     
-                    setTimeout(() => {
+setTimeout(() => {
                         try {
-                            const scale = this.workspace.scale || 1;
-                            const metrics = this.workspace.getMetrics();
-                            const centerX = (metrics.viewWidth / 2 / scale);
-                            const centerY = (metrics.viewHeight / 2 / scale);
+                            const position = getSafeCenterPosition();
                             
-                            newBlock.moveBy(centerX - 100, centerY - 50);
+                            // Get block's current position
+                            const currentPos = newBlock.getRelativeToSurfaceXY();
                             
+                            // Calculate offset to center
+                            const offsetX = position.x - currentPos.x;
+                            const offsetY = position.y - currentPos.y;
+                            
+                            // Move block to center
+                            newBlock.moveBy(offsetX, offsetY);
+                            
+                            // Ensure block is rendered
+                            if (newBlock.render) {
+                                newBlock.render();
+                            }
+                            
+                            // Select and bring to front
                             if (newBlock.select) {
                                 newBlock.select();
                             }
+                            
+                            // Scroll to block if needed
+                            this.workspace.centerOnBlock(newBlock.id);
+                            
+                            console.log(`✅ Block positioned at (${position.x}, ${position.y})`);
                         } catch (e) {
                             console.warn('Error positioning block:', e);
                         }
@@ -1287,13 +1322,16 @@ createBlockDirectly(blockType) {
             if (newBlock.initSvg) newBlock.initSvg();
             if (newBlock.render) newBlock.render(false);
             
-            // Position in center
-            const scale = this.workspace.scale || 1;
-            const metrics = this.workspace.getMetrics();
-            const centerX = (metrics.viewWidth / 2 / scale);
-            const centerY = (metrics.viewHeight / 2 / scale);
+// Position in center using safe positioning
+            const position = getSafeCenterPosition();
+            const currentPos = newBlock.getRelativeToSurfaceXY();
+            const offsetX = position.x - currentPos.x;
+            const offsetY = position.y - currentPos.y;
             
-            newBlock.moveBy(centerX - 100, centerY - 50);
+            newBlock.moveBy(offsetX, offsetY);
+            
+            // Scroll to make sure it's visible
+            this.workspace.centerOnBlock(newBlock.id);
             
             // Select the block
             if (newBlock.select) {
