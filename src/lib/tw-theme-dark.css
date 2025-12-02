@@ -73,8 +73,11 @@
     color-scheme: light;
 }
 .blocklyWidgetDiv .goog-menu {
-    background: var(--ui-primary);
-    border-color: var(--ui-black-transparent);
+    background: rgba(0, 0, 0, 0.35) !important;     /* transparent black for blur */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.1) !important; 
 }
 .blocklyWidgetDiv .goog-menuitem {
     color: var(--text-primary);
