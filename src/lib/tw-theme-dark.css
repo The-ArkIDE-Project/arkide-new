@@ -89,7 +89,7 @@
     border-top-color: var(--ui-black-transparent) !important;
 }
 .blocklyWidgetDiv .goog-menuitem.goog-menuitem-highlight {
-    background-color: var(--ui-tertiary);
+    background-color: rgba(31, 31, 31, 0.445);
     border-color: transparent; /* remove border */
 }
 .scratchCommentText {
