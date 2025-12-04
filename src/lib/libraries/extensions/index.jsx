@@ -340,18 +340,18 @@ const menuItems = [
         featured: true
     },
     {
-        name: 'ArkIDE Aditions',
-        extensionId: 'https://extensions.arkide.site/extensions/Ark/jsonnumberarray.js',
-        iconURL: 'https://extensions.arkide.site/images/Ark/jsonant.svg',
+        name: 'ArkIDE Additons',
+        extensionId: 'https://extensions.arkide.site/extensions/Ark/arkide-additons.js',
+        iconURL: 'https://extensions.arkide.site/images/Ark/banner.svg',
         tags: ['penguinmod'],
         description: 'A simple extension that adds some cool new blocks for ArkIDE.',
         extDeveloper: 'Ark',
         featured: true
-    },
+    },    
     {
-        name: 'Json Number Array Operations',
-        extensionId: 'https://extensions.arkide.site/extensions/Ark/arkide-additons.js',
-        iconURL: 'https://extensions.arkide.site/images/Ark/banner.svg',
+        name: 'JSON Number Array Operations',
+        extensionId: 'https://extensions.arkide.site/extensions/Ark/jsonnumberarray.js',
+        iconURL: 'https://extensions.arkide.site/images/Ark/jsonant.svg',
         tags: ['penguinmod'],
         description: 'A nice extension that adds useful operation blocks for Json Number Arrays.',
         extDeveloper: 'Ark',
