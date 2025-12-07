@@ -10730,6 +10730,19 @@
         "libraryFilePage": "images/user/utensils/SpoonAndFork.svg"
     },
     {
+        "name": "Keith",
+        "tags": [
+            "people",
+            "new"
+        ],
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "rotationCenterX": 0,
+        "rotationCenterY": 0,
+        "fromPenguinModLibrary": true,
+        "libraryFilePage": "images/Keith.svg"
+    },
+    {
         "name": "Squirrel",
         "tags": [
             "animals",
