@@ -1,83 +1,132 @@
 @import "../../css/units.css";
 
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
 .outlined-button {
-  cursor: pointer;
-  border-radius: 0.1rem;
-  font-weight: bold;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.25rem 0.75rem; /* Reduced vertical padding */
-  user-select: none;
-  min-height: 34px; /* Changed from height to min-height */
-  background-color: rgba(255, 255, 255, 0);
-  color: #ffffff;
-  min-width: 0;
-  flex-shrink: 1;
-  box-sizing: border-box;
-  transition: background-color 0.3s ease;
+    cursor: pointer;
+    border-radius: 0.1rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    user-select: none;
+    min-height: 34px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #ffffff;
+    min-width: 0;
+    flex-shrink: 1;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
 .outlined-button:hover {
-  background-color: rgba(35, 37, 48, 0.288);
+    background-color: rgba(35, 37, 48, 0.288);
 }
 
 .outlined-button:hover .userProfilePic {
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.274), 
-              0 0 25px rgba(255, 255, 255, 0.055);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.274), 
+                0 0 25px rgba(255, 255, 255, 0.055);
 }
 
 .icon {
-  height: 2.5rem;
-  width: 2.5rem;
-  flex-shrink: 0;
-  min-width: 2.5rem;
-  display: flex; /* Ensure proper sizing */
-  align-items: center;
-  justify-content: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    flex-shrink: 0;
+    min-width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 [dir="ltr"] .icon {
-  margin-right: .5rem;
+    margin-right: .5rem;
 }
 
 [dir="rtl"] .icon {
-  margin-left: .5rem;
+    margin-left: .5rem;
 }
 
 .icon {
-  margin-right: .5rem;
+    margin-right: .5rem;
 }
 
 .content {
-  white-space: nowrap;
-  line-height: 34px;
-  font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
+    white-space: nowrap;
+    line-height: 34px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .userProfilePic {
-  border-radius: 20%;
-  object-fit: cover;
-  height: 2.5rem;
-  width: 2.5rem;
-  transition: box-shadow 0.3s ease;
+    border-radius: 20%;
+    object-fit: cover;
+    height: 2.5rem;
+    width: 2.5rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background-color: rgba(40, 44, 52, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    min-width: 180px;
+    z-index: 1000;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item:active {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Hide text on very small screens, show only icon */
 @media (max-width: 480px) {
-  .content {
-    display: none;
-  }
-  
-  .outlined-button {
-    padding: 0.25rem 0.5rem;
-    margin-right: 0.1rem;
-  }
-  
-  .icon {
-    margin-right: 0;
-  }
+    .content {
+        display: none;
+    }
+    .outlined-button {
+        padding: 0.25rem 0.5rem;
+        margin-right: 0.1rem;
+    }
+    .icon {
+        margin-right: 0;
+    }
+    .dropdown-menu {
+        right: -0.5rem;
+    }
 }

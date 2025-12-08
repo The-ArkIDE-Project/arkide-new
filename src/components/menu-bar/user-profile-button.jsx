@@ -8,29 +8,46 @@ class UserProfileButton extends React.Component {
         super(props);
         this.state = {
             username: null,
-            profilePicUrl: null
+            profilePicUrl: null,
+            dropdownOpen: false
         };
+        this.dropdownRef = React.createRef();
     }
 
     componentDidMount() {
         this.loadUserProfile();
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside = (event) => {
+        if (this.dropdownRef.current && !this.dropdownRef.current.contains(event.target)) {
+            this.setState({ dropdownOpen: false });
+        }
     }
 
     // Helper to read a cookie by name
     getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name)) {
+                // Get everything after the cookie name
+                const value = cookie.substring(name.length).trim();
+                // Remove the first character (= or :) and any quotes
+                return value.substring(1).replace(/^"|"$/g, '');
+            }
+        }
         return null;
     }
-
-
 
     loadUserProfile() {
         // const username = "ark"
         const username = this.getCookie('arkide_username');
         console.log('Fetched cookie username:', username); // 🔍 logging
-
         if (username) {
             // Update state so render shows profile instead of login
             this.setState({
@@ -43,18 +60,22 @@ class UserProfileButton extends React.Component {
     }
 
     handleProfileClick = () => {
-        if (this.state.username) {
-            window.open(`https://arkide.site/profile/?user=${encodeURIComponent(this.state.username)}`, "_blank");
-        }
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen
+        }));
     }
 
+    handleMenuItemClick = (url) => {
+        window.open(url, "_blank");
+        this.setState({ dropdownOpen: false });
+    }
 
     handleLoginClick = () => {
         window.open('https://arkide.site/signin', "_blank");
     }
 
     render() {
-        const { username, profilePicUrl } = this.state;
+        const { username, profilePicUrl, dropdownOpen } = this.state;
 
         if (!username) {
             // Show login button if not logged in
@@ -71,21 +92,46 @@ class UserProfileButton extends React.Component {
 
         // Show user profile if logged in
         return (
-            <span
-                className={styles.outlinedButton}
-                role="button"
-                onClick={this.handleProfileClick}
-            >
-                <img
-                    className={classNames(styles.icon, styles.userProfilePic)}
-                    draggable={false}
-                    src={profilePicUrl}
-                    height="24"
-                    width="24"
-                    alt={username}
-                />
-                <div className={styles.content}>{username}</div>
-            </span>
+            <div className={styles.dropdownContainer} ref={this.dropdownRef}>
+                <span
+                    className={styles.outlinedButton}
+                    role="button"
+                    onClick={this.handleProfileClick}
+                >
+                    <img
+                        className={classNames(styles.icon, styles.userProfilePic)}
+                        draggable={false}
+                        src={profilePicUrl}
+                        height="24"
+                        width="24"
+                        alt={username}
+                    />
+                    <div className={styles.content}>{username}</div>
+                </span>
+
+                {dropdownOpen && (
+                    <div className={styles.dropdownMenu}>
+                        <div 
+                            className={styles.dropdownItem}
+                            onClick={() => this.handleMenuItemClick(`https://arkide.site/profile/?user=${encodeURIComponent(username)}`)}
+                        >
+                            Go to Profile
+                        </div>
+                        <div 
+                            className={styles.dropdownItem}
+                            onClick={() => this.handleMenuItemClick('https://arkide.site/mystuff/')}
+                        >
+                            My Stuff
+                        </div>
+                        <div 
+                            className={styles.dropdownItem}
+                            onClick={() => this.handleMenuItemClick('https://arkide.site/settings/')}
+                        >
+                            Settings
+                        </div>
+                    </div>
+                )}
+            </div>
         );
     }
 }
