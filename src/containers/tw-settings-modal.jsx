@@ -121,12 +121,13 @@ class UsernameModal extends React.Component {
         const {
             /* eslint-disable no-unused-vars */
             onClose,
-            vm,
+            // vm,  // REMOVE this line - don't destructure vm separately
             /* eslint-enable no-unused-vars */
             ...props
         } = this.props;
         return (
             <SettingsModalComponent
+                vm={this.props.vm}  // ADD this line - explicitly pass vm
                 onClose={this.props.onClose}
                 onFramerateChange={this.handleFramerateChange}
                 onCustomizeFramerate={this.handleCustomizeFramerate}

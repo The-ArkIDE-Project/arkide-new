@@ -10,6 +10,7 @@ import Input from '../forms/input.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 import DocumentationLink from '../tw-documentation-link/documentation-link.jsx';
 import styles from './settings-modal.css';
+import VM from 'scratch-vm';
 
 /* eslint-disable react/no-multi-comp */
 
@@ -498,7 +499,152 @@ const Header = props => (
 Header.propTypes = {
     children: PropTypes.node
 };
+const ProjectSizeTracker = ({ vm }) => {
+    const [projectSize, setProjectSize] = React.useState(0);
 
+    React.useEffect(() => {
+        const calculateSize = () => {
+    
+    if (!vm || !vm.runtime) {
+        return 0;
+    }
+            if (!vm || !vm.runtime) return 0;
+
+            let totalSize = 0;
+            const processedAssets = new Set();
+
+            const getAssetSize = (asset) => {
+                if (!asset) return 0;
+                if (asset.size) return asset.size;
+                if (asset.data) return asset.data.length || asset.data.byteLength || 0;
+                return 0;
+            };
+
+            if (vm.runtime.targets) {
+                vm.runtime.targets.forEach(target => {
+                    if (target.sprite && target.sprite.costumes) {
+                        target.sprite.costumes.forEach(costume => {
+                            const assetId = costume.assetId || costume.md5;
+                            if (assetId && !processedAssets.has(assetId)) {
+                                processedAssets.add(assetId);
+                                totalSize += getAssetSize(costume.asset);
+                            }
+                        });
+                    }
+
+                    if (target.sprite && target.sprite.sounds) {
+                        target.sprite.sounds.forEach(sound => {
+                            const assetId = sound.assetId || sound.md5;
+                            if (assetId && !processedAssets.has(assetId)) {
+                                processedAssets.add(assetId);
+                                totalSize += getAssetSize(sound.asset);
+                            }
+                        });
+                    }
+                });
+            }
+
+            const scriptEstimate = vm.runtime.targets ? vm.runtime.targets.length * 5000 : 10000;
+            totalSize += scriptEstimate;
+
+            return totalSize;
+        };
+
+        const updateSize = () => {
+            const size = calculateSize();
+            setProjectSize(size);
+        };
+
+        updateSize();
+        const interval = setInterval(updateSize, 2000);
+
+        return () => clearInterval(interval);
+    }, [vm]);
+
+    const formatBytes = (bytes) => {
+        if (bytes === 0) return '0 B';
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    };
+
+    const UPLOAD_LIMIT = 64 * 1024 * 1024;
+    const percentage = Math.min((projectSize / UPLOAD_LIMIT) * 100, 100);
+    const isNearLimit = percentage > 80 && percentage <= 100;
+    const isOverLimit = projectSize > UPLOAD_LIMIT;
+
+    let barClass = styles.projectSizeBarSafe;
+    if (isOverLimit) {
+        barClass = styles.projectSizeBarDanger;
+    } else if (isNearLimit) {
+        barClass = styles.projectSizeBarWarning;
+    }
+
+    return (
+        <div className={styles.projectSizeContainer}>
+            <div className={styles.projectSizeHeader}>
+                <span>
+                    <FormattedMessage
+                        defaultMessage="Project Size"
+                        description="Project size tracker header"
+                        id="pm.settingsModal.projectSize"
+                    />
+                </span>
+                <span className={styles.projectSizeValue}>
+                    {formatBytes(projectSize)}
+                </span>
+            </div>
+
+            <div className={styles.projectSizeBarContainer}>
+                <div
+                    className={classNames(styles.projectSizeBar, barClass)}
+                    style={{ width: `${percentage}%` }}
+                >
+                    {percentage > 15 && `${percentage.toFixed(1)}%`}
+                </div>
+            </div>
+                <FormattedMessage
+                    defaultMessage="This is a tracker to make sure that your project stays under the upload limit for ArkIDE Home."
+                    description="Project size tracker header"
+                    id="pm.settingsModal.sizedisc"
+                />
+            <div className={styles.projectSizeInfo}>
+                <FormattedMessage
+                    defaultMessage="Upload limit for ArkIDE: {limit}"
+                    description="Upload limit info"
+                    id="pm.settingsModal.uploadLimit"
+                    values={{
+                        limit: formatBytes(UPLOAD_LIMIT)
+                    }}
+                />
+            </div>
+
+            {isOverLimit && (
+                <div className={styles.projectSizeDangerText}>
+                    <FormattedMessage
+                        defaultMessage="⚠️ Your project is over the 64MB upload limit. You won't be able to upload this project to the ArkIDE website until you reduce its size by removing unused costumes or sounds."
+                        description="Over limit warning"
+                        id="pm.settingsModal.overLimitWarning"
+                    />
+                </div>
+            )}
+
+            {isNearLimit && !isOverLimit && (
+                <div className={styles.projectSizeWarningText}>
+                    <FormattedMessage
+                        defaultMessage="⚠️ Your project is approaching the 64MB upload limit. Consider removing unused assets to stay under the limit."
+                        description="Near limit warning"
+                        id="pm.settingsModal.nearLimitWarning"
+                    />
+                </div>
+            )}
+        </div>
+    );
+};
+
+ProjectSizeTracker.propTypes = {
+    vm: PropTypes.instanceOf(VM).isRequired
+};
 const SettingsModalComponent = props => (
     <Modal
         className={styles.modalContent}
@@ -582,6 +728,14 @@ const SettingsModalComponent = props => (
                     {...props}
                 />
             )}
+            <Header>
+                <FormattedMessage
+                    defaultMessage="Project Information"
+                    description="Settings modal section"
+                    id="pm.settingsModal.projectInfo"
+                />
+            </Header>
+            <ProjectSizeTracker vm={props.vm} />
             {/* {!props.isEmbedded && (
                 <StoreProjectOptions
                     {...props}
@@ -619,6 +773,7 @@ SettingsModalComponent.propTypes = {
     intl: intlShape,
     onClose: PropTypes.func,
     isEmbedded: PropTypes.bool,
+    vm: PropTypes.instanceOf(VM), 
     framerate: PropTypes.number,
     onFramerateChange: PropTypes.func,
     onCustomizeFramerate: PropTypes.func,
