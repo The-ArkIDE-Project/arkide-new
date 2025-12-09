@@ -358,6 +358,15 @@ const menuItems = [
         featured: true
     },
     {
+        name: 'ArkIDE Console',
+        extensionId: 'https://extensions.arkide.site/extensions/Ark/arkide-console.js',
+        iconURL: 'https://extensions.arkide.site/images/Ark/console.svg',
+        tags: ['penguinmod'],
+        description: 'Add a console to your project to log messages, errors, and warnings.',
+        extDeveloper: 'Ark',
+        featured: true
+    },
+    {
         name: 'Files',
         extensionId: 'twFiles',
         twDeveloper: 'GarboMuffin',

@@ -303,7 +303,7 @@ const GUIComponent = props => {
         costume: costumesTab,
         sound: soundsTab,
         variable: variablesTab,
-        // file: filesTab,
+        file: filesTab,
     };
 
     // For now, rearranging tabs is not supported
@@ -581,19 +581,19 @@ const GUIComponent = props => {
                                                 />
                                             </div>
                                         </MenuItem>}
-                                        {/* {!tabOrder.includes('file') && <MenuItem onClick={() => addTabToEditor('file')}>
-                                            <div className={styles.tabAdditionItem}>
-                                                <img
-                                                    draggable={false}
-                                                    src={filesIcon}
-                                                />
-                                                <FormattedMessage
-                                                    defaultMessage="Files"
-                                                    description="Button to get to the files panel"
-                                                    id="gui.gui.filesTab"
-                                                />
-                                            </div>
-                                        </MenuItem>} */}
+                                            {!tabOrder.includes('file') && <MenuItem onClick={() => addTabToEditor('file')}>
+                                                <div className={styles.tabAdditionItem}>
+                                                    <img
+                                                        draggable={false}
+                                                        src={filesIcon}
+                                                    />
+                                                    <FormattedMessage
+                                                        defaultMessage="Files"
+                                                        description="Button to get to the files panel"
+                                                        id="gui.gui.filesTab"
+                                                    />
+                                                </div>
+                                            </MenuItem>}
                                     </ContextMenu>
 
                                     <div id="sa_addons_after_add_tab_anchor" />
@@ -639,6 +639,9 @@ const GUIComponent = props => {
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {variablesTabVisible ? <VariablesTab vm={vm} /> : null}
+                                </TabPanel>
+                                <TabPanel className={tabClassNames.tabPanel}>
+                                    {filesTabVisible ? <FilesTab vm={vm} /> : null}
                                 </TabPanel>
                             </Tabs>
                             {backpackVisible ? (
