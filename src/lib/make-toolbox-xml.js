@@ -665,13 +665,13 @@ const control = function (isInitialSetup, isStage) {
             </value>
         </block>
         ${blockSeparator}
-        <block type="control_if">
+        <block type="control_expandableIf">
             <mutation branches="1" ends-in-else="false"></mutation>
             <value name="BOOL1">
                 <shadow type="checkbox"></shadow>
             </value>
         </block>
-        <block type="control_if_else">
+        <block type="control_expandableIf">
             <mutation branches="2" ends-in-else="true"></mutation>
             <value name="BOOL1">
                 <shadow type="checkbox"></shadow>
@@ -1046,7 +1046,15 @@ const operators = function (isInitialSetup) {
                 </shadow>
             </value>
         </block>
-        
+        <block type="operator_expandableMath">
+            <mutation inputcount="2" menuvalues="+"></mutation>
+            <value name="NUM1">
+                <shadow type="math_number"><field name="NUM">0</field></shadow>
+            </value>
+            <value name="NUM2">
+                <shadow type="math_number"><field name="NUM">0</field></shadow>
+            </value>
+        </block>
         <block type="operator_advMathExpanded">
             <value name="ONE">
                 <shadow type="math_number">
@@ -1185,6 +1193,15 @@ const operators = function (isInitialSetup) {
                 </shadow>
             </value>
         </block>
+        <block type="operator_expandableCompare">
+        <mutation inputcount="2" menuvalues=""></mutation>
+            <value name="INPUT1">
+                <shadow type="text"><field name="TEXT"></field></shadow>
+            </value>
+            <value name="INPUT2">
+                <shadow type="text"><field name="TEXT"></field></shadow>
+            </value>
+        </block>
         ${blockSeparator}
         <block type="operator_trueBoolean"></block>
         <block type="operator_falseBoolean"></block>
@@ -1210,6 +1227,15 @@ const operators = function (isInitialSetup) {
                 <shadow type="checkbox" />
             </value>
         </block>
+        <block type="operator_expandableBool">
+            <mutation inputcount="2" menuvalues=""></mutation>
+            <value name="BOOL1">
+                <shadow type="checkbox"><field name="CHECKBOX"></field></shadow>
+            </value>
+            <value name="BOOL2">
+                <shadow type="checkbox"><field name="CHECKBOX"></field></shadow>
+            </value>
+        </block>
         ${blockSeparator}
         ${isInitialSetup ? '' : `
             <block type="operator_newLine"></block>
@@ -1227,7 +1253,19 @@ const operators = function (isInitialSetup) {
                     </shadow>
                 </value>
             </block>
-
+            <block type="operator_expandablejoininputs">
+                <mutation inputcount="2"></mutation>
+                <value name="INPUT1">
+                    <shadow type="text">
+                        <field name="TEXT">apple</field>
+                    </shadow>
+                </value>
+                <value name="INPUT2">
+                    <shadow type="text">
+                        <field name="TEXT">banana</field>
+                    </shadow>
+                </value>
+            </block>
             ${blockSeparator}
             <block type="operator_indexOfTextInText">
                 <value name="TEXT1">
@@ -1467,10 +1505,12 @@ const liveTests = function () {
             <mutation proccode="tw:debugger;" argumentids="[]" warp="false" returns="null" edited="true" optype="null"></mutation>
         </block>
         ${blockSeparator}
+        <block type="operator_checkboxBoolean"></block>
         <block type="control_fieldbutton"></block>
         <block type="motion_mutatorCheckboxTest"></block>
         ${blockSeparator}
         <block type="control_dualblock"></block>
+        <block type="test_spread"></block>
     </category>
     `;
 };
