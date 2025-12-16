@@ -54,11 +54,11 @@ const Credits = () => (
     <main className={styles.main}>
         <header className={styles.headerContainer}>
             <h1 className={styles.headerText}>
-                PenguinMod Credits
+                ArkIDE Credits
             </h1>
         </header>
         <section>
-            <h1>PenguinMod</h1>
+            <h1>Penguinmod</h1>
         </section>
         <section>
             <h2>Thank you</h2>
@@ -82,13 +82,15 @@ const Credits = () => (
             <UserList users={UserData.pmDevelopers} />
             <p><i>The list order is randomized on each refresh.</i></p>
             <p>There are even community members who have helped develop PenguinMod. People like <i>you!</i></p>
+            <h1>ArkIDE Devs</h1>
             <UserList users={UserData.arkideDevs} />
             <p><i>The list order is randomized on each refresh.</i></p>
             <p>This project is by me and a few of my friends, so updates will be very infrequent.</p>
+            <h1>Penguinmod continues here</h1>
             <UserList users={UserData.pmPullRequestDevelopers} />
             <p><i>The list order is randomized on each refresh.</i></p>
             <p>
-                We've also included work from other open-source projects inside of PenguinMod.
+                We've also included work from other open-source projects inside of ArkIDE.
                 Here's a list of some other projects you should check out:
             </p>
             <UserList users={UserData.pmCodeUsedFrom} />
@@ -280,6 +282,8 @@ const Credits = () => (
         </section>
     </main>
 );
+
+document.body.setAttribute('theme', 'dark');
 
 ReactDOM.render((
     <Credits />
