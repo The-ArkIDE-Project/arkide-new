@@ -281,8 +281,6 @@ const Credits = () => (
     </main>
 );
 
-document.body.setAttribute('theme', theme);
-
 ReactDOM.render((
     <Credits />
 ), appTarget);
