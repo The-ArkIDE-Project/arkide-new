@@ -1179,11 +1179,11 @@ const menuItems = [
     },{
         // not really an extension, but it's easiest to present it as one
         name: 'ExtForge',
-        href: 'https://jwklong.github.io/extforge',
+        href: 'https://extforge.arkide.site/',
         extensionId: 'special_extforge',
         iconURL: ExtForgeIcon,
         description: 'Create extensions with a block-based UI.',
-        extDeveloper: 'jwklong',
+        extDeveloper: 'jwklong (Updated by Arc360)',
         isNew: true,
         tags: ['extcreate'],
         featured: true
