@@ -5,6 +5,7 @@ import bindAll from 'lodash.bindall';
 import VM from 'scratch-vm';
 import log from './log';
 import {defineMessages, intlShape, injectIntl} from 'react-intl';
+import {manuallyTrustExtension} from '../containers/tw-security-manager.jsx';
 
 import {
     setUsername
@@ -369,6 +370,13 @@ const TWStateManager = function (WrappedComponent) {
                 // force live tests to off no matter what
                 this.props.vm.isLiveTest = false;
             }
+            const unsandboxed = urlParams.has('unsandboxed');
+            for (const extension of urlParams.getAll('extension')) {
+                if (unsandboxed) {
+                    manuallyTrustExtension(extension);
+                }
+                this.props.vm.extensionManager.loadExtensionURL(extension);
+            }
 
             if (urlParams.has('clones')) {
                 const clones = +urlParams.get('clones');
@@ -409,10 +417,6 @@ const TWStateManager = function (WrappedComponent) {
                 this.props.vm.setRuntimeOptions({
                     disableDirectionClamping: true
                 });
-            }
- 
-            for (const extension of urlParams.getAll('extension')) {
-                this.props.vm.extensionManager.loadExtensionURL(extension);
             }
 
             const routerCallbacks = {
