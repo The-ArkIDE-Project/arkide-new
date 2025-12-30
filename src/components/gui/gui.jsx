@@ -43,6 +43,7 @@ import TWCustomExtensionModal from '../../containers/tw-custom-extension-modal.j
 import TWRestorePointManager from '../../containers/tw-restore-point-manager.jsx';
 import TWFontsModal from '../../containers/tw-fonts-modal.jsx';
 import PMExtensionModals from '../../containers/pm-extension-modals.jsx';
+import TWScreenshotModal from '../../containers/screenshot-modal.jsx';
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -177,6 +178,7 @@ const GUIComponent = props => {
         settingsModalVisible,
         customExtensionModalVisible,
         fontsModalVisible,
+        screenshotModalVisible,
         isPlayground,
         vm,
         ...componentProps
@@ -374,6 +376,7 @@ const GUIComponent = props => {
                 {settingsModalVisible && <TWSettingsModal />}
                 {customExtensionModalVisible && <TWCustomExtensionModal />}
                 {fontsModalVisible && <TWFontsModal />}
+                {screenshotModalVisible && <TWScreenshotModal />}
                 <PMExtensionModals vm={vm} />
             </React.Fragment>
         );
@@ -753,6 +756,7 @@ GUIComponent.propTypes = {
     settingsModalVisible: PropTypes.bool,
     customExtensionModalVisible: PropTypes.bool,
     fontsModalVisible: PropTypes.bool,
+    screenshotModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 GUIComponent.defaultProps = {
@@ -780,7 +784,8 @@ const mapStateToProps = state => ({
     customStageSize: state.scratchGui.customStageSize,
     isWindowFullScreen: state.scratchGui.tw.isWindowFullScreen,
     // This is the button's mode, as opposed to the actual current state
-    stageSizeMode: state.scratchGui.stageSize.stageSize
+    stageSizeMode: state.scratchGui.stageSize.stageSizeMode,
+    screenshotModalVisible: state.scratchGui.modals.screenshotModal
 });
 
 export default injectIntl(connect(

@@ -16,6 +16,7 @@ const MODAL_SETTINGS = 'settingsModal';
 const MODAL_CUSTOM_EXTENSION = 'customExtensionModal';
 const MODAL_RESTORE_POINTS = 'restorePointModal';
 const MODAL_FONTS = 'fontsModal';
+const MODAL_SCREENSHOT = 'screenshotModal';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -33,6 +34,7 @@ const initialState = {
     [MODAL_CUSTOM_EXTENSION]: false,
     [MODAL_RESTORE_POINTS]: false,
     [MODAL_FONTS]: false,
+    [MODAL_SCREENSHOT]: false,
     extensionModalSwapId: null
 };
 
@@ -157,6 +159,12 @@ const closeRestorePointModal = function () {
 const closeFontsModal = function () {
     return closeModal(MODAL_FONTS);
 };
+const openScreenshotModal = function () {
+    return openModal(MODAL_SCREENSHOT);
+};
+const closeScreenshotModal = function () {
+    return closeModal(MODAL_SCREENSHOT);
+};
 export {
     reducer as default,
     initialState as modalsInitialState,
@@ -189,5 +197,7 @@ export {
     closeSettingsModal,
     closeCustomExtensionModal,
     closeRestorePointModal,
-    closeFontsModal
+    closeFontsModal,
+    openScreenshotModal,
+    closeScreenshotModal
 };

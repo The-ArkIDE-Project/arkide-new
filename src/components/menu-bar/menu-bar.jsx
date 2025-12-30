@@ -26,6 +26,7 @@ import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
 import UserProfileButton from './user-profile-button.jsx';
+import cameraIcon from '../../../static/camera.svg';
 
 import FramerateChanger from '../../containers/tw-framerate-changer.jsx';
 import ChangeUsername from '../../containers/tw-change-username.jsx';
@@ -33,6 +34,7 @@ import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
 
 import { openTipsLibrary, openSettingsModal, openRestorePointModal } from '../../reducers/modals';
+import { openScreenshotModal } from '../../reducers/modals';
 import { setPlayer } from '../../reducers/mode';
 import {
     autoUpdateProject,
@@ -210,6 +212,7 @@ class MenuBar extends React.Component {
             'handleClickSeeCommunity',
             'handleClickDownloadLogs',
             'handleClickShare',
+            'handleClickScreenshot',  // ADD THIS LINE
             'handleKeyPress',
             'handleLanguageMouseUp',
             'handleRestoreOption',
@@ -425,6 +428,10 @@ class MenuBar extends React.Component {
         };
     }
     handleClickDownloadLogs() { downloadLogs(); }
+
+    handleClickScreenshot() {
+        this.props.onClickScreenshot();
+    }
     render() {
         const saveNowMessage = (
             <FormattedMessage
@@ -526,6 +533,19 @@ class MenuBar extends React.Component {
                                 />
                             </div>
                         )}
+
+                        {/* tw: screenshot button */}
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable)}
+                            onMouseUp={this.handleClickScreenshot}
+                        >
+                            <img
+                                src={cameraIcon}
+                                width="24"
+                                height="24"
+                                draggable={false}
+                            />
+                        </div>
 
                         {/* tw: display compile errors */}
                         {this.props.compileErrors.length > 0 && <div>
@@ -1071,7 +1091,8 @@ MenuBar.propTypes = {
     userOwnsProject: PropTypes.bool,
     username: PropTypes.string,
     usernameLoggedIn: PropTypes.bool.isRequired,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    onClickScreenshot: PropTypes.func,
 };
 
 MenuBar.defaultProps = {
@@ -1140,7 +1161,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(openSettingsModal());
         dispatch(closeEditMenu());
     },
-    onSeeCommunity: () => dispatch(setPlayer(true))
+    onSeeCommunity: () => dispatch(setPlayer(true)),
+    onClickScreenshot: () => dispatch(openScreenshotModal()),
 });
 
 export default compose(
