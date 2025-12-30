@@ -27,7 +27,8 @@ class ScreenshotModalComponent extends React.Component {
             'handleDownload',
             'handleFilenameChange',
             'handleWidthChange',
-            'handleHeightChange'
+            'handleHeightChange',
+            'handleScaleChange'
         ]);
         
         // Generate default filename
@@ -44,7 +45,10 @@ class ScreenshotModalComponent extends React.Component {
         this.state = {
             filename: `${projectName}-${date}-${time}`,
             width: canvasWidth,
-            height: canvasHeight
+            height: canvasHeight,
+            baseWidth: canvasWidth,
+            baseHeight: canvasHeight,
+            scale: 1
         };
     }
     
@@ -55,15 +59,36 @@ class ScreenshotModalComponent extends React.Component {
     handleWidthChange(width) {
         const numWidth = parseInt(width, 10);
         if (!isNaN(numWidth) && numWidth > 0) {
-            this.setState({ width: numWidth });
+            // Calculate new scale based on width change
+            const newScale = numWidth / this.state.baseWidth;
+            this.setState({ 
+                width: numWidth,
+                height: Math.round(this.state.baseHeight * newScale),
+                scale: newScale
+            });
         }
     }
     
     handleHeightChange(height) {
         const numHeight = parseInt(height, 10);
         if (!isNaN(numHeight) && numHeight > 0) {
-            this.setState({ height: numHeight });
+            // Calculate new scale based on height change
+            const newScale = numHeight / this.state.baseHeight;
+            this.setState({ 
+                height: numHeight,
+                width: Math.round(this.state.baseWidth * newScale),
+                scale: newScale
+            });
         }
+    }
+    
+    handleScaleChange(e) {
+        const scale = parseFloat(e.target.value);
+        this.setState({
+            scale: scale,
+            width: Math.round(this.state.baseWidth * scale),
+            height: Math.round(this.state.baseHeight * scale)
+        });
     }
     
     handleDownload() {
@@ -166,10 +191,42 @@ class ScreenshotModalComponent extends React.Component {
                         </div>
                         <div className={styles.hint}>
                             <FormattedMessage
-                                defaultMessage="Default stage size is 480×360"
+                                defaultMessage="Original size: {width}×{height}"
                                 description="Resolution hint"
                                 id="pm.screenshotModal.resolutionHint"
+                                values={{
+                                    width: this.state.baseWidth,
+                                    height: this.state.baseHeight
+                                }}
                             />
+                        </div>
+                    </div>
+                    
+                    <div className={styles.section}>
+                        <div className={styles.label}>
+                            <FormattedMessage
+                                defaultMessage="Scale ({scale}x)"
+                                description="Screenshot scale label"
+                                id="pm.screenshotModal.scale"
+                                values={{
+                                    scale: this.state.scale.toFixed(2)
+                                }}
+                            />
+                        </div>
+                        <input
+                            type="range"
+                            min="0.25"
+                            max="4"
+                            step="0.25"
+                            value={this.state.scale}
+                            onChange={this.handleScaleChange}
+                            className={styles.scaleSlider}
+                        />
+                        <div className={styles.scaleMarkers}>
+                            <span>0.25x</span>
+                            <span>1x</span>
+                            <span>2x</span>
+                            <span>4x</span>
                         </div>
                     </div>
                     
