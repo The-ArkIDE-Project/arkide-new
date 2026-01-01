@@ -1,0 +1,92 @@
+[dir="ltr"] .sa-js-viewer-container {
+  margin-right: 0.2rem;
+}
+
+[dir="rtl"] .sa-js-viewer-container {
+  margin-left: 0.2rem;
+}
+
+.sa-js-viewer-interface {
+  display: none;
+  position: absolute;
+  z-index: 492;
+  flex-direction: column;
+  width: 650px;
+  height: 450px;
+  background-color: white;
+}
+
+[theme="dark"] .sa-js-viewer-interface {
+  background: rgb(17, 17, 17);
+}
+
+.sa-js-viewer-interface [class*="card_header-buttons_"] {
+  background-color: #2938be;
+  border-color: #3c3aa8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sa-js-viewer-interface h1 {
+  padding: 10px;
+  z-index: 10;
+  width: calc(100% - 20px);
+  font-size: 20px;
+  margin: 0;
+  color: white;
+  cursor: move;
+  user-select: none;
+}
+
+.sa-js-viewer-code {
+  flex: 1;
+  overflow: auto;
+  padding: 15px;
+  box-sizing: border-box;
+  font-family: monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+  background: rgb(17, 17, 17);
+  color: #d4d4d4;
+  cursor: auto;
+}
+
+.sa-js-viewer-code::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.sa-js-viewer-code::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+.sa-js-viewer-code::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 6px;
+}
+
+.sa-js-viewer-code::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+.code-line {
+  display: flex;
+  transition: background-color 0.1s ease;
+}
+
+.code-line:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.line-number {
+  color: #858585;
+  margin-right: 15px;
+  user-select: none;
+  min-width: 35px;
+  text-align: right;
+}
+
+.line-content {
+  flex: 1;
+}
