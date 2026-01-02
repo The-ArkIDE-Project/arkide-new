@@ -905,7 +905,9 @@ class MenuBar extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <Divider className={classNames(styles.divider)} />
+                    {!window.location.href.includes('fromprojectpage') && (
+                        <Divider className={classNames(styles.divider)} />
+                    )}
                     {/* {(this.props.authorUsername && this.props.authorUsername !== this.props.username) ? (
                         <AuthorInfo
                             className={styles.authorInfo}
@@ -931,6 +933,7 @@ class MenuBar extends React.Component {
                     <div className={classNames(styles.menuBarItem)}>
                         {this.props.canRemix ? remixButton : []}
                     </div>
+                {!window.location.href.includes('fromprojectpage') && (
                     <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>
                         {this.props.enableCommunity ? (
                             (this.props.isShowingProject || this.props.isUpdating) && (
@@ -960,6 +963,7 @@ class MenuBar extends React.Component {
                             />
                         ) : []))}
                     </div>
+                )}
                     <div className={styles.menuBarItem}>
                         {this.props.isShowingProject && this.props.canEditTitle ?
                             (<ShareButton

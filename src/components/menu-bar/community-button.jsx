@@ -10,23 +10,31 @@ import styles from './community-button.css';
 const CommunityButton = ({
     className,
     onClick
-}) => (
-    <Button
-        className={classNames(
-            className,
-            styles.communityButton
-        )}
-        iconClassName={styles.communityButtonIcon}
-        iconSrc={communityIcon}
-        onClick={onClick}
-    >
-        <FormattedMessage
-            defaultMessage="See Project Page"
-            description="Label for see project page button"
-            id="gui.menuBar.seeProjectPage"
-        />
-    </Button>
-);
+}) => {
+    // Check if 'fromprojectpage' is anywhere in the URL
+    const shouldHide = window.location.href.includes('fromprojectpage');
+    
+    // Don't render the button if it should be hidden
+    if (shouldHide) return null;
+    
+    return (
+        <Button
+            className={classNames(
+                className,
+                styles.communityButton
+            )}
+            iconClassName={styles.communityButtonIcon}
+            iconSrc={communityIcon}
+            onClick={onClick}
+        >
+            <FormattedMessage
+                defaultMessage="See Project Page"
+                description="Label for see project page button"
+                id="gui.menuBar.seeProjectPage"
+            />
+        </Button>
+    );
+};
 
 CommunityButton.propTypes = {
     className: PropTypes.string,
