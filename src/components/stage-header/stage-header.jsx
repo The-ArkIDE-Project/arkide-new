@@ -16,6 +16,7 @@ import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
 import unFullScreenIcon from './icon--unfullscreen.svg';
 import settingsIcon from './icon--settings.svg';
+import screenshotIcon from './icon--screenshot.svg';
 
 // import popoutIcon from './icon--popout.svg';
 // import bringBackIcon from './icon--popin.svg';
@@ -55,7 +56,12 @@ const messages = defineMessages({
         defaultMessage: 'Open gameplay settings',
         description: 'Button to open gameplay settings in embeds',
         id: 'pm.openGameplay'
-    }
+    },
+    screenshotMessage: {
+    defaultMessage: 'Take screenshot',
+    description: 'Button to take a screenshot',
+    id: 'gui.stageHeader.screenshot'
+    },
 });
 
 const enableSettingsButton = new URLSearchParams(location.search).has('settings-button');
@@ -77,6 +83,22 @@ const StageHeaderComponent = function (props) {
     } = props;
 
     let header = null;
+
+        // ADD THIS:
+        const screenshotButton = (
+            <Button
+                className={styles.stageButton}
+                onClick={props.onTakeScreenshot}
+            >
+                <img
+                    alt={props.intl.formatMessage(messages.screenshotMessage)}
+                    className={styles.stageButtonIcon}
+                    draggable={false}
+                    src={screenshotIcon}
+                    title={props.intl.formatMessage(messages.screenshotMessage)}
+                />
+            </Button>
+        );
 
     // const popoutWindowButton = <Button
     //     className={styles.stageButton}
@@ -148,6 +170,7 @@ const StageHeaderComponent = function (props) {
                     <Controls vm={vm} />
                     <div className={styles.embedButtons}>
                         {settingsButton}
+                        {screenshotButton}
                         {/* {popoutWindowButton} */}
                         {fullscreenButton}
                     </div>
@@ -206,6 +229,7 @@ const StageHeaderComponent = function (props) {
                     <div className={styles.stageSizeRow}>
                         {stageControls}
                         <div className={styles.embedButtons}>
+                            {screenshotButton}
                             {/* {popoutWindowButton} */}
                             <Button
                                 className={styles.stageButton}
@@ -251,7 +275,10 @@ StageHeaderComponent.propTypes = {
     onOpenSettings: PropTypes.func.isRequired,
     isEmbedded: PropTypes.bool.isRequired,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    onOpenSettings: PropTypes.func.isRequired,
+    onTakeScreenshot: PropTypes.func.isRequired,
+    isEmbedded: PropTypes.bool.isRequired,
 };
 
 StageHeaderComponent.defaultProps = {
