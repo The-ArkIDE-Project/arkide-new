@@ -22,6 +22,7 @@ import defineDynamicBlock from '../lib/define-dynamic-block';
 import AddonHooks from '../addons/hooks';
 import LoadScratchBlocksHOC from '../lib/tw-load-scratch-blocks-hoc.jsx';
 import uid from "../lib/uid.js";
+import setupBlockExport from '../lib/block-export-image';
 
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
@@ -236,6 +237,53 @@ class Blocks extends React.Component {
         for (const category of this.props.vm.runtime._blockInfo) {
             this.handleExtensionAdded(category);
         }
+        // Setup block export functionality
+        setupBlockExport(this.ScratchBlocks, this.workspace);
+        // Setup block export functionality
+setupBlockExport(this.ScratchBlocks, this.workspace);
+
+// Setup pin/unpin functionality for toolbox blocks
+const setupPinUnpin = (ScratchBlocks, getToolboxXMLFn, updateToolboxStateFn) => {
+    const originalShowContextMenu = ScratchBlocks.BlockSvg.prototype.showContextMenu_;
+    
+    ScratchBlocks.BlockSvg.prototype.showContextMenu_ = function(e) {
+        const block = this;
+        
+        if (block.workspace.isFlyout) {
+            const menuOptions = [];
+            
+            const blockXML = ScratchBlocks.Xml.domToText(
+                ScratchBlocks.Xml.blockToDom(block)
+            );
+            
+            const { isBlockPinned, pinBlock, unpinBlock } = require('../lib/pinned-blocks-storage');
+            const isPinned = isBlockPinned(blockXML);
+            
+            menuOptions.push({
+                enabled: true,
+                text: isPinned ? 'Unpin Block' : 'Pin Block',
+                callback: () => {
+                    if (isPinned) {
+                        unpinBlock(blockXML);
+                    } else {
+                        pinBlock(blockXML);
+                    }
+                    
+                    const toolboxXML = getToolboxXMLFn();
+                    if (toolboxXML) {
+                        updateToolboxStateFn(toolboxXML);
+                    }
+                }
+            });
+            
+            ScratchBlocks.ContextMenu.show(e, menuOptions, this.RTL);
+        } else {
+            originalShowContextMenu.call(this, e);
+        }
+    };
+};
+
+setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.updateToolboxState);
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (

@@ -4,6 +4,53 @@ const categorySeparator = '<sep gap="36"/>';
 
 const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 
+import { getPinnedBlocks, cleanupPinnedBlocks } from './pinned-blocks-storage';
+
+const pinned = function (loadedExtensions = []) {
+    cleanupPinnedBlocks();
+    const pinnedBlocks = getPinnedBlocks();
+    
+    // Filter out blocks from extensions that aren't loaded
+    const filteredBlocks = pinnedBlocks.filter(blockXML => {
+        // Check if block is from an extension by looking for extension ID in the block type
+        const typeMatch = blockXML.match(/type="([^"]+)"/);
+        if (!typeMatch) return true; // Keep blocks without a type (shouldn't happen)
+        
+        const blockType = typeMatch[1];
+        
+        // Check if this is an extension block (contains underscore, like "pen_clear")
+        if (blockType.includes('_')) {
+            const extensionId = blockType.split('_')[0];
+            
+            // Core categories that aren't extensions
+            const coreCategories = [
+                'motion', 'looks', 'sound', 'event', 'control', 
+                'sensing', 'operator', 'data', 'procedures', 'argument'
+            ];
+            
+            // If it's a core category, keep it
+            if (coreCategories.includes(extensionId)) {
+                return true;
+            }
+            
+            // Otherwise, only keep if the extension is loaded
+            return loadedExtensions.some(ext => ext.id === extensionId);
+        }
+        
+        // Keep non-extension blocks (core blocks)
+        return true;
+    });
+    
+    const blocksXML = filteredBlocks.join('\n');
+    
+    return `
+    <category name="Pinned" id="pinned" colour="#FF66CC" secondaryColour="#E64DB8" iconURI="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9ImNlbnRyYWwiPvCfk4w8L3RleHQ+PC9zdmc+">
+        ${blocksXML || '<label text="Right-click blocks to pin them here"></label>'}
+        ${categorySeparator}
+    </category>
+    `;
+};
+
 const translate = (id, english) => {
     if (LazyScratchBlocks.isLoaded()) {
         const ScratchBlocks = LazyScratchBlocks.get();
@@ -1566,9 +1613,11 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
     const listsXML = moveCategory('lists') || lists(isInitialSetup, isStage, targetId);
     const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
     const liveTestsXML = moveCategory('liveTests') || liveTests(isLiveTest);
+    const pinnedXML = pinned(categoriesXML); // Pass the loaded extensions
 
     const everything = [
         xmlOpen,
+        pinnedXML,
         motionXML,
         looksXML,
         soundXML,
