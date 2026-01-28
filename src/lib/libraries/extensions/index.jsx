@@ -382,6 +382,15 @@ const menuItems = [
         extDeveloper: 'Ark',
         featured: true
     },
+    {
+        name: 'Store My Stuff',
+        extensionId: 'https://extensions.arkide.site/extensions/Ark/store-my-stuff.js',
+        iconURL: 'https://extensions.arkide.site/images/Ark/storemystuff.svg',
+        tags: ['penguinmod'],
+        description: 'Store strings and numbers to my server or local/indexdb storage.',
+        extDeveloper: 'Ark',
+        featured: true
+    },
     // ArkIDE Extensions end
     {
         name: 'Files',
