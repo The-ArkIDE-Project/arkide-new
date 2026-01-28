@@ -64,22 +64,15 @@ class GUI extends React.Component {
     }
 
     initializeBlockSearch() {
-        console.log('Attempting to initialize block search...');
         
         const tryInit = () => {
-            console.log('tryInit called');
-            console.log('VM:', this.props.vm);
-            console.log('Blockly:', window.Blockly);
             
             try {
                 const workspace = this.props.vm?.runtime?.getEditingTarget?.()?.blocks?._workspace || 
                                 window.Blockly?.getMainWorkspace?.();
-                console.log('Workspace found:', workspace);
                 
                 if (workspace) {
-                    console.log('Calling BlockSearch.init...');
                     BlockSearch.init(workspace, vm);
-                    console.log('BlockSearch initialized successfully');
                     return true;
                 }
             } catch (err) {
@@ -89,13 +82,10 @@ class GUI extends React.Component {
         };
 
         if (!tryInit()) {
-            console.log('Initial attempt failed, will retry...');
             let attempts = 0;
             const retry = setInterval(() => {
-                console.log('Retry attempt:', attempts);
                 if (tryInit() || attempts++ > 10) {
                     clearInterval(retry);
-                    console.log('Stopped retrying');
                 }
             }, 200);
         }

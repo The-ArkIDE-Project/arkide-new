@@ -162,7 +162,6 @@ class BlockSearch {
             }, 300);
         });
 
-        console.log('✅ VM extension listeners set up');
     }
 
 buildExtensionMetadata() {
@@ -177,9 +176,6 @@ buildExtensionMetadata() {
         const blockTypes = Object.keys(ScratchBlocks.Blocks);
         let newBlocksFound = 0;
         
-        console.log(`🔍 Scanning ${blockTypes.length} block types...`);
-        
-        // DEFINE HELPER FUNCTIONS FIRST, BEFORE USING THEM
         
         // Helper to get actual color from a rendered block in the flyout
         const getBlockColorFromFlyout = (blockType) => {
@@ -456,7 +452,6 @@ buildExtensionMetadata() {
         });
         
         if (newBlocksFound > 0) {
-            console.log(`📚 Added ${newBlocksFound} new blocks. Total: ${Object.keys(this.dynamicBlockMetadata).length}`);
         }
     } catch (err) {
         console.error('Error building extension metadata:', err);
@@ -500,7 +495,6 @@ setupExtensionListener() {
                 originalRefresh.call(toolbox);
                 // Rebuild metadata after toolbox updates
                 setTimeout(() => {
-                    console.log('Toolbox refreshed, rebuilding metadata...');
                     this.buildExtensionMetadata();
                 }, 500);
             };
@@ -524,7 +518,6 @@ setupExtensionListener() {
                     if (result && result.then) {
                         result.then(() => {
                             setTimeout(() => {
-                                console.log('Extension loaded, rebuilding metadata...');
                                 window.BlockSearch?.buildExtensionMetadata();
                             }, 1000);
                         });
@@ -566,9 +559,7 @@ setupExtensionURLMonitoring() {
         if (typeof message === 'string') {
             // Check for arkide-additons specifically
             if (message.includes('arkide-additons') || message.includes('arkide')) {
-                console.log('🔍 Detected ArkIDE extension!');
                 setTimeout(() => {
-                    console.log('⚡ Rebuilding metadata for ArkIDE...');
                     this.buildExtensionMetadata();
                 }, 2000); // Longer delay for complex extensions
                 return;
@@ -577,7 +568,6 @@ setupExtensionURLMonitoring() {
             // Check if message contains extension URL
             for (const origin of trustedExtensionOrigins) {
                 if (message.includes(origin)) {
-                    console.log('🔍 Detected extension from:', origin);
                     setTimeout(() => {
                         console.log('⚡ Rebuilding metadata...');
                         this.buildExtensionMetadata();
@@ -612,12 +602,10 @@ setupExtensionURLMonitoring() {
     const originalFetch = window.fetch;
     window.fetch = function(url, ...args) {
         if (typeof url === 'string' && isTrustedExtensionOrigin(url) && url.endsWith('.js')) {
-            console.log('🌐 Fetching extension:', url);
             
             const fetchPromise = originalFetch.call(this, url, ...args);
             fetchPromise.then(() => {
                 setTimeout(() => {
-                    console.log('✅ Extension fetch complete, rebuilding...');
                     window.BlockSearch?.buildExtensionMetadata();
                 }, 2500); // Even longer for fetch
             }).catch((err) => {
@@ -632,7 +620,6 @@ setupExtensionURLMonitoring() {
         return originalFetch.call(this, url, ...args);
     };
     
-    console.log('🔍 Extension URL monitoring active');
 }
 
 stopMetadataRefresh() {
@@ -802,7 +789,6 @@ addSearchCategory() {
             });
 
             targetMenu.insertBefore(searchCategory, targetMenu.firstChild);
-            console.log('✅ Search category injected');
             return true;
         } catch (err) {
             console.error('Error in ensureSearchCategory:', err);
@@ -860,7 +846,6 @@ addSearchCategory() {
     this._searchCategoryInterval = setInterval(() => {
         const menu = document.querySelector('.scratchCategoryMenu');
         if (menu && !menu.querySelector('.scratch-search-category')) {
-            console.log('🔧 Re-injecting missing search category...');
             ensureSearchCategory();
         }
     }, 1000);
@@ -952,16 +937,13 @@ toggleSearchBar() {
     }
 
     attachToToolbox() {
-        console.log('Attempting to attach to toolbox...');
         
         // Find the blocks wrapper specifically
         let targetDiv = document.querySelector('[class*="blocks_blocks"]') ||
                         document.querySelector('.injectionDiv');
         
-        console.log('Target div:', targetDiv);
         
         if (targetDiv) {
-            console.log('Attaching search to:', targetDiv);
             
             // Make sure parent can contain positioned elements
             const currentPosition = window.getComputedStyle(targetDiv).position;
@@ -986,7 +968,6 @@ toggleSearchBar() {
             `;
             
             targetDiv.appendChild(this.searchContainer);
-            console.log('Search bar attached!');
         }
     }
 
@@ -1026,7 +1007,6 @@ toggleSearchBar() {
             }
         }
 
-        console.log(`Found ${results.length} blocks matching "${query}"`);
         return results.slice(0, 10);
     }
 
@@ -1229,7 +1209,7 @@ setTimeout(() => {
                             // Scroll to block if needed
                             this.workspace.centerOnBlock(newBlock.id);
                             
-                            console.log(`✅ Block positioned at (${position.x}, ${position.y})`);
+
                         } catch (e) {
                             console.warn('Error positioning block:', e);
                         }

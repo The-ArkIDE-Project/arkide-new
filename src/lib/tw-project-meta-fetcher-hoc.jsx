@@ -63,7 +63,7 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
                 this.props.vm.runtime.renderer.setPrivateSkinAccess(true);
             this.props.onSetAuthor('', '');
             this.props.onSetDescription('', '');
-            this.props.onSetRemixedProjectInfo(false, '', '');
+            // this.props.onSetRemixedProjectInfo(false, '', '');
             const projectId = this.props.projectId;
             // Don't try to load metadata for empty projects.
             if (projectId === '0') {
@@ -124,12 +124,13 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
                                     if (this.props.projectId !== projectId) {
                                         return;
                                     }
-
+                                    /*
                                     this.props.onSetRemixedProjectInfo(
                                         true, // loaded
                                         remixProject.title,
                                         remixProject.author.username
                                     );
+                                    */
                                 })
                                 .catch(err => {
                                     // this isnt fatal, just log
@@ -193,7 +194,7 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
             instructions,
             credits
         })),
-        onSetExtraProjectInfo: (accepted, isRemix, remixId, tooLarge, author, releaseDate, isUpdated) => dispatch(setExtraProjectInfo({
+        /*onSetExtraProjectInfo: (accepted, isRemix, remixId, tooLarge, author, releaseDate, isUpdated) => dispatch(setExtraProjectInfo({
             accepted,
             isRemix,
             remixId,
@@ -202,11 +203,14 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
             releaseDate,
             isUpdated
         })),
+        
         onSetRemixedProjectInfo: (loaded, name, author) => dispatch(setRemixedProjectInfo({
             loaded,
             name,
             author
         })),
+        */
+        
         onSetProjectTitle: title => dispatch(setProjectTitle(title))
     });
     return connect(

@@ -47,7 +47,6 @@ class UserProfileButton extends React.Component {
     loadUserProfile() {
         // const username = "ark"
         const username = this.getCookie('arkide_username');
-        console.log('Fetched cookie username:', username); // 🔍 logging
         if (username) {
             // Update state so render shows profile instead of login
             this.setState({

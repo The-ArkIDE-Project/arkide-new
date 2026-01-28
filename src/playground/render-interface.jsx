@@ -410,7 +410,7 @@ class Interface extends React.Component {
                                                 </a>
                                             </b> for the original project <b>
                                                 <a
-                                                    href={`${window.location.origin}/#${extraProjectInfo.remixId}`}
+                                                    href={`${window.location.origin}/#${Number(extraProjectInfo.remixId)}`}
                                                 >
                                                     {remixedProjectInfo.name}
                                                 </a>
