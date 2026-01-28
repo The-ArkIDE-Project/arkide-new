@@ -295,6 +295,26 @@ const EnableDangerousOptimizations = props => (
     />
 );
 
+const DisableBlur = props => (
+    <BooleanSetting
+        {...props}
+        label={
+            <FormattedMessage
+                defaultMessage="Disable Blur"
+                description="Disable Blur setting"
+                id="pm.settingsModal.disableBlur"
+            />
+        }
+        help={
+            <FormattedMessage
+                defaultMessage="Disables background blur effects on modals and UI elements across the website. Good for older computers."
+                description="Disable Blur setting help"
+                id="pm.settingsModal.disableBlurHelp"
+            />
+        }
+    />
+);
+
 const DisableOffscreenRendering = props => (
     <BooleanSetting
         {...props}
@@ -645,129 +665,151 @@ const ProjectSizeTracker = ({ vm }) => {
 ProjectSizeTracker.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired
 };
-const SettingsModalComponent = props => (
-    <Modal
-        className={styles.modalContent}
-        onRequestClose={(...args) => {
-            if (!props.isEmbedded) {
-                props.onStoreProjectOptions();
-            }
-            props.onClose(...args)
-        }}
-        contentLabel={props.intl.formatMessage(messages.title)}
-        id="settingsModal"
-    >
-        <Box className={styles.body}>
-            <Header>
-                <FormattedMessage
-                    defaultMessage="Gameplay"
-                    description="Settings modal section"
-                    id="pm.settingsModal.gameplay"
-                />
-            </Header>
-            <CustomFPS
-                framerate={props.framerate}
-                onChange={props.onFramerateChange}
-                onCustomizeFramerate={props.onCustomizeFramerate}
-            />
-            <HighQualityPen
-                value={props.highQualityPen}
-                onChange={props.onHighQualityPenChange}
-            />
-            <WarpTimer
-                value={props.warpTimer}
-                onChange={props.onWarpTimerChange}
-            />
-            <Header>
-                <FormattedMessage
-                    defaultMessage="Remove Limits"
-                    description="Settings modal section"
-                    id="tw.settingsModal.removeLimits"
-                />
-            </Header>
-            <InfiniteClones
-                value={props.infiniteClones}
-                onChange={props.onInfiniteClonesChange}
-            />
-            <RemoveFencing
-                value={props.removeFencing}
-                onChange={props.onRemoveFencingChange}
-            />
-            <RemoveMiscLimits
-                value={props.removeLimits}
-                onChange={props.onRemoveLimitsChange}
-            />
-            <Header>
-                <FormattedMessage
-                    defaultMessage="Optimizations"
-                    description="Settings modal section"
-                    id="pm.settingsModal.optimizations"
-                />
-            </Header>
-            <DisableOffscreenRendering
-                value={props.disableOffscreenRendering}
-                onChange={props.onDisableOffscreenRenderingChange}
-            />
-            <EnableDangerousOptimizations
-                value={props.dangerousOptimizations}
-                onChange={props.onEnableDangerousOptimizationsChange}
-            />
-            <DisableDirectionClamping
-                value={props.disableDirectionClamping}
-                onChange={props.onDisableDirectionClamping}
-            />
-            <Header>
-                <FormattedMessage
-                    defaultMessage="Screen Resolution"
-                    description="Settings modal section"
-                    id="pm.settingsModal.screenResolution"
-                />
-            </Header>
-            {!props.isEmbedded && (
-                <CustomStageSize
-                    {...props}
-                />
-            )}
-            <Header>
-                <FormattedMessage
-                    defaultMessage="Project Information"
-                    description="Settings modal section"
-                    id="pm.settingsModal.projectInfo"
-                />
-            </Header>
-            <ProjectSizeTracker vm={props.vm} />
-            {/* {!props.isEmbedded && (
-                <StoreProjectOptions
-                    {...props}
-                />
-            )} */}
-            <details>
-                <summary className={styles.summary}>
-                    <Header>
-                        <span className={styles.dropdown}>⯈</span>
-                        <FormattedMessage
-                            defaultMessage="Unsupported"
-                            description="Old unsupported settings section"
-                            id="pm.settingsModal.unsupported"
-                        />
-                    </Header>
-                </summary>
-                <div className={styles.warning}>
-                    <FormattedMessage
-                        // eslint-disable-next-line max-len
-                        defaultMessage="The settings here are unsupported and can break at any time. These settings are here as they either have better methods to create their effects with better results, or break often when used with other extensions."
-                        description="Warning about old unsupported settings in settings menu"
-                        id="pm.settingsModal.unsupportedWarning"
-                    />
+const SettingsModalComponent = props => {
+    const [activeTab, setActiveTab] = React.useState('render');
+
+    return (
+        <Modal
+            className={styles.modalContent}
+            onRequestClose={(...args) => {
+                if (!props.isEmbedded) {
+                    props.onStoreProjectOptions();
+                }
+                props.onClose(...args)
+            }}
+            contentLabel={props.intl.formatMessage(messages.title)}
+            id="settingsModal"
+        >
+            <Box className={styles.body}>
+                <div className={styles.tabContainer}>
+                    <div className={styles.sidebar}>
+                        <button
+                            className={classNames(styles.tabButton, {
+                                [styles.tabButtonActive]: activeTab === 'render'
+                            })}
+                            onClick={() => setActiveTab('render')}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Render"
+                                description="Settings tab"
+                                id="pm.settingsModal.render"
+                            />
+                        </button>
+                        <button
+                            className={classNames(styles.tabButton, {
+                                [styles.tabButtonActive]: activeTab === 'limits'
+                            })}
+                            onClick={() => setActiveTab('limits')}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Limits"
+                                description="Settings tab"
+                                id="pm.settingsModal.limits"
+                            />
+                        </button>
+                        <button
+                            className={classNames(styles.tabButton, {
+                                [styles.tabButtonActive]: activeTab === 'optimization'
+                            })}
+                            onClick={() => setActiveTab('optimization')}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Optimization"
+                                description="Settings tab"
+                                id="pm.settingsModal.optimization"
+                            />
+                        </button>
+                        <button
+                            className={classNames(styles.tabButton, {
+                                [styles.tabButtonActive]: activeTab === 'projectInfo'
+                            })}
+                            onClick={() => setActiveTab('projectInfo')}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Project Information"
+                                description="Settings tab"
+                                id="pm.settingsModal.projectInfo"
+                            />
+                        </button>
+                    </div>
+
+                    <div className={styles.tabContent}>
+                    {activeTab === 'render' && (
+                        <div>
+                            {!props.isEmbedded && (
+                                <CustomStageSize
+                                    {...props}
+                                />
+                            )}
+                            <CustomFPS
+                                framerate={props.framerate}
+                                onChange={props.onFramerateChange}
+                                onCustomizeFramerate={props.onCustomizeFramerate}
+                            />
+                            <HighQualityPen
+                                value={props.highQualityPen}
+                                onChange={props.onHighQualityPenChange}
+                            />
+                            <DisableBlur
+                                value={props.disableBlur}
+                                onChange={props.onDisableBlurChange}
+                            />
+                        </div>
+                    )}
+
+                        {activeTab === 'limits' && (
+                            <div>
+                                <InfiniteClones
+                                    value={props.infiniteClones}
+                                    onChange={props.onInfiniteClonesChange}
+                                />
+                                <RemoveFencing
+                                    value={props.removeFencing}
+                                    onChange={props.onRemoveFencingChange}
+                                />
+                                <RemoveMiscLimits
+                                    value={props.removeLimits}
+                                    onChange={props.onRemoveLimitsChange}
+                                />
+                                <WarpTimer
+                                    value={props.warpTimer}
+                                    onChange={props.onWarpTimerChange}
+                                />
+                            </div>
+                        )}
+
+                        {activeTab === 'optimization' && (
+                            <div>
+                                <DisableOffscreenRendering
+                                    value={props.disableOffscreenRendering}
+                                    onChange={props.onDisableOffscreenRenderingChange}
+                                />
+                                <EnableDangerousOptimizations
+                                    value={props.dangerousOptimizations}
+                                    onChange={props.onEnableDangerousOptimizationsChange}
+                                />
+                                <DisableDirectionClamping
+                                    value={props.disableDirectionClamping}
+                                    onChange={props.onDisableDirectionClamping}
+                                />
+                                <Interpolation
+                                    value={props.interpolation}
+                                    onChange={props.onInterpolationChange}
+                                />
+                            </div>
+                        )}
+
+                        {activeTab === 'projectInfo' && (
+                            <div>
+                                <ProjectSizeTracker vm={props.vm} />
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <Interpolation
-                    value={props.interpolation}
-                    onChange={props.onInterpolationChange}
-                />
-            </details>
-        </Box>
-    </Modal>
-);
+            </Box>
+        </Modal>
+    );
+};
 
 SettingsModalComponent.propTypes = {
     intl: intlShape,
@@ -794,7 +836,9 @@ SettingsModalComponent.propTypes = {
     onDisableCompilerChange: PropTypes.func,
     onEnableDangerousOptimizationsChange: PropTypes.func,
     disableOffscreenRendering: PropTypes.bool,
-    onDisableOffscreenRenderingChange: PropTypes.func
+    onDisableOffscreenRenderingChange: PropTypes.func,
+    disableBlur: PropTypes.bool,
+    onDisableBlurChange: PropTypes.func
 };
 
 export default injectIntl(SettingsModalComponent);

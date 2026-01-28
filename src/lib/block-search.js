@@ -712,7 +712,6 @@ handleCategorySwitch(categoryName) {
 }
 
 addSearchCategory() {
-    console.log('Adding search category (super robust version)...');
     
     // Cleanup any existing observers/intervals
     if (this._searchCategoryObserver) {

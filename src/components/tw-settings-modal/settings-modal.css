@@ -4,14 +4,19 @@
     max-width: max(60%, 750px);
 }
 
+:global(body.disable-blur) * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
 .body {
-    background: rgba(255, 255, 255, 0.85); /* Made semi-transparent */
-    backdrop-filter: blur(10px); /* Add blur effect */
-    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 1.5rem 2.25rem;
-    min-height: 150px;
+    min-height: 900px; /* Add minimum height */
     max-height: calc(100vh - 250px);
-    overflow-y: auto;
+    overflow: hidden; /* Change from auto to hidden since tab-content will handle scrolling */
 }
 
 [theme="dark"] .body {
@@ -319,4 +324,91 @@ details[open] .dropdown {
 [theme="dark"] .project-size-danger-text {
     background: rgba(255, 102, 128, 0.15);
     border-color: rgba(255, 102, 128, 0.4);
+}
+.tab-container {
+    display: flex;
+    gap: 1.5rem;
+    min-height: 400px;
+    height: 100%; /* Make it fill the body */
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 180px;
+    padding-right: 1rem;
+    border-right: 1px solid $ui-tertiary;
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+}
+[theme="dark"] .sidebar {
+    border-right-color: rgba(255, 255, 255, 0.2);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #575E75;
+    transition: background-color 0.2s ease;
+}
+
+[theme="dark"] .tab-button {
+    color: #aaa;
+}
+
+.tab-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+[theme="dark"] .tab-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-button-active {
+    background: #dbebff;
+    color: #575E75;
+    font-weight: bold;
+}
+
+[theme="dark"] .tab-button-active {
+    background: #1e162c71;
+    color: $text-primary;
+}
+
+.tab-content {
+    flex: 1;
+    overflow-y: auto;
+    max-height: none; 
+    padding-right: 0.5rem;
+}
+
+/* For small screens */
+@media (max-width: 1068px) {
+    .tab-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid $ui-tertiary;
+        padding-right: 0;
+        padding-bottom: 0.5rem;
+        min-width: auto;
+    }
+    
+    [theme="dark"] .sidebar {
+        border-bottom-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .tab-button {
+        white-space: nowrap;
+    }
 }

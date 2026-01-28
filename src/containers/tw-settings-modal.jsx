@@ -15,6 +15,45 @@ const messages = defineMessages({
     }
 });
 
+// Blur Manager
+class BlurManager {
+    constructor() {
+        this.STORAGE_KEY = 'arkide_disable_blur';
+    }
+
+    isBlurDisabled() {
+        try {
+            return localStorage.getItem(this.STORAGE_KEY) === 'true';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    setBlurDisabled(disabled) {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, disabled.toString());
+            this.applyBlurSetting(disabled);
+        } catch (e) {
+            console.error('Failed to save blur setting:', e);
+        }
+    }
+
+    applyBlurSetting(disabled) {
+        if (disabled) {
+            document.body.classList.add('disable-blur');
+        } else {
+            document.body.classList.remove('disable-blur');
+        }
+    }
+}
+
+const blurManager = new BlurManager();
+
+// Initialize blur setting on page load
+if (typeof window !== 'undefined') {
+    blurManager.applyBlurSetting(blurManager.isBlurDisabled());
+}
+
 class UsernameModal extends React.Component {
     constructor (props) {
         super(props);
@@ -34,8 +73,12 @@ class UsernameModal extends React.Component {
             'handleStoreProjectOptions',
             'handleEnableDangerousOptimizationsChange',
             'handleDisableOffscreenRenderingChange',
-            'handleDisableDirectionClamping'
+            'handleDisableDirectionClamping',
+            'handleDisableBlurChange'
         ]);
+        this.state = {
+            disableBlur: blurManager.isBlurDisabled()
+        };
     }
     handleFramerateChange (e) {
         this.props.vm.setFramerate(e.target.checked ? 60 : 30);
@@ -95,6 +138,11 @@ class UsernameModal extends React.Component {
             enabled: !e.target.checked
         });
     }
+    handleDisableBlurChange (e) {
+        const disabled = e.target.checked;
+        blurManager.setBlurDisabled(disabled);
+        this.setState({ disableBlur: disabled });
+    }
     handleStageWidthChange (value) {
         this.props.vm.setStageSize(value, this.props.customStageSize.height);
     }
@@ -140,6 +188,7 @@ class UsernameModal extends React.Component {
                 onDisableOffscreenRenderingChange={this.handleDisableOffscreenRenderingChange}
                 onDisableDirectionClamping={this.handleDisableDirectionClamping}
                 onWarpTimerChange={this.handleWarpTimerChange}
+                onDisableBlurChange={this.handleDisableBlurChange}
                 onStageWidthChange={this.handleStageWidthChange}
                 onStageHeightChange={this.handleStageHeightChange}
                 onStagePresetUsed={this.handleStagePresetUsed}
@@ -150,6 +199,7 @@ class UsernameModal extends React.Component {
                     this.props.customStageSize.width !== defaultStageSize.width ||
                     this.props.customStageSize.height !== defaultStageSize.height
                 }
+                disableBlur={this.state.disableBlur}
                 onStoreProjectOptions={this.handleStoreProjectOptions}
                 {...props}
             />
