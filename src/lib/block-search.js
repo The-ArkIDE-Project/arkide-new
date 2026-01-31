@@ -569,7 +569,6 @@ setupExtensionURLMonitoring() {
             for (const origin of trustedExtensionOrigins) {
                 if (message.includes(origin)) {
                     setTimeout(() => {
-                        console.log('⚡ Rebuilding metadata...');
                         this.buildExtensionMetadata();
                     }, 1500);
                     break;

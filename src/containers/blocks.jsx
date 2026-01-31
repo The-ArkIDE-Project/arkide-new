@@ -22,7 +22,7 @@ import defineDynamicBlock from '../lib/define-dynamic-block';
 import AddonHooks from '../addons/hooks';
 import LoadScratchBlocksHOC from '../lib/tw-load-scratch-blocks-hoc.jsx';
 import uid from "../lib/uid.js";
-import setupBlockExport from '../lib/block-export-image';
+// import setupBlockExport from '../lib/block-export-image';
 
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
@@ -238,9 +238,9 @@ class Blocks extends React.Component {
             this.handleExtensionAdded(category);
         }
         // Setup block export functionality
-        setupBlockExport(this.ScratchBlocks, this.workspace);
+        // setupBlockExport(this.ScratchBlocks, this.workspace);
         // Setup block export functionality
-setupBlockExport(this.ScratchBlocks, this.workspace);
+// setupBlockExport(this.ScratchBlocks, this.workspace);
 
 // Setup pin/unpin functionality for toolbox blocks
 const setupPinUnpin = (ScratchBlocks, getToolboxXMLFn, updateToolboxStateFn) => {

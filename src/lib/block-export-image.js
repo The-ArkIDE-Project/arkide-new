@@ -1,7 +1,7 @@
 /**
  * Block Export to Image functionality
  * Adds "Export as Image" option to block right-click menu
- */
+
 
 const setupBlockExport = (ScratchBlocks, workspace) => {
     // Store original context menu function
@@ -202,3 +202,4 @@ const exportBlockAsImage = async (block, workspace) => {
 };
 
 export default setupBlockExport;
+ */
