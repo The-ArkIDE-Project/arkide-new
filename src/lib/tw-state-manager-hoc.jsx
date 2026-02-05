@@ -49,6 +49,15 @@ let isPlayground = location.pathname.includes('playground.html');
  * The State Manager is responsible for managing persistent state and the URL.
  */
 
+const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        return decodeURIComponent(parts.pop().split(';').shift());
+    }
+    return null;
+};
+
 const setLocalStorage = (key, value) => {
     try {
         localStorage.setItem(key, value);
@@ -325,7 +334,8 @@ const TWStateManager = function (WrappedComponent) {
                 this.doNotPersistUsername = username;
                 this.props.onSetUsername(username);
             } else {
-                const persistentUsername = getLocalStorage(USERNAME_KEY);
+                // Try to get username from cookie first (cross-subdomain), then fallback to localStorage
+                const persistentUsername = getCookie('tw:username') || getLocalStorage(USERNAME_KEY);
                 if (persistentUsername === null) {
                     const randomUsername = generateRandomUsername();
                     this.props.onSetUsername(randomUsername);
@@ -433,6 +443,11 @@ const TWStateManager = function (WrappedComponent) {
             if (this.props.username !== prevProps.username && this.props.username !== this.doNotPersistUsername) {
                 // TODO: this always restores the current username once at startup, which is unnecessary
                 setLocalStorage(USERNAME_KEY, this.props.username);
+                
+                // Also set cookie for cross-subdomain access
+                const expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + 30);
+                document.cookie = `tw:username=${encodeURIComponent(this.props.username)}; domain=.arkide.site; path=/; expires=${expiryDate.toUTCString()}; SameSite=None; Secure`;
             }
 
             if (
