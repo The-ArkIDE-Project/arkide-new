@@ -137,20 +137,20 @@ const arkideDevs = [
         image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=insomnia64`,
         href: "https://arkide.site/profile?user=insomnia64",
     },
-    {
-        text: 'w9pti (Moderator)',
-        image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=w9pti`,
-        href: "https://arkide.site/profile?user=w9pti",
-    },
+    //{
+    //    text: 'w9pti (Moderator)',
+    //    image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=w9pti`,
+    //    href: "https://arkide.site/profile?user=w9pti",
+    //},
     {
         text: 'battman (Creator of the old mascot)',
         image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=battman`,
         href: "https://arkide.site/profile?user=battman",
     },
     {
-        text: 'snowyy (Ark but its his alt account)',
-        image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=snowyy`,
-        href: "https://arkide.site/profile?user=snowyy",
+        text: 'cosmic (Ark but its his alt account)',
+        image: `http://arkideapi.arc360hub.com/api/v1/users/getpfp?username=cosmic`,
+        href: "https://arkide.site/profile?user=cosmic",
     },
 ]
 

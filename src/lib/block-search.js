@@ -579,7 +579,6 @@ setupExtensionURLMonitoring() {
             if (message.includes('Loading extension') || 
                 message.includes('extension loaded') ||
                 message.includes('.js unsandboxed')) {
-                console.log('🔍 Extension loading detected');
                 setTimeout(() => {
                     this.buildExtensionMetadata();
                 }, 1500);
