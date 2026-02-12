@@ -92,7 +92,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
             
             const captureCallback = () => {
                 const now = new Date();
-                const filename = `scratch-${now.toISOString().split('T')[0]}-${now.toTimeString().split(' ')[0].replace(/:/g, '-')}`;
+                const filename = `arkide-${now.toISOString().split('T')[0]}-${now.toTimeString().split(' ')[0].replace(/:/g, '-')}`;
                 
                 canvas.toBlob((blob) => {
                     if (!blob) {
