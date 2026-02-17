@@ -1,10 +1,10 @@
-$ui-primary: var(--ui-primary, hsla(261, 100%, 50%, 1)); /* #5100ff */
+$ui-primary: var(--ui-primary, hsl(258 100% 95%)); /* #5100ff */
 $ui-secondary: var(--ui-secondary, hsl(261 100% 99%)); /* lighter version of #5100ff */
-$ui-tertiary: var(--ui-tertiary, hsla(261, 100%, 70%, 1)); /* even lighter version */
+$ui-tertiary: var(--ui-tertiary, hsla(0, 100%, 100%, 1)); /* even lighter version */
 
 $ui-seccondary-opacity: rgba(30, 30, 30, 0.26);
 
-$ui-modal-overlay: var(--ui-modal-overlay, hsla(261, 100%, 50%, 0.9)); /* 90% transparent version of motion-primary */
+$ui-modal-overlay: var(--ui-modal-overlay, hsla(261, 100%, 50%, 0.2)); /* 90% transparent version of motion-primary */
 
 $ui-white: hsla(0, 100%, 100%, 1); /* #FFFFFF */
 $ui-white-dim: hsla(0, 100%, 100%, 0.75);
@@ -22,7 +22,7 @@ $motion-tertiary: hsla(261, 100%, 39%, 1); /* darker version */
 $motion-transparent: hsla(261, 100%, 50%, 0.35); /* 35% transparent version of motion-primary */
 $motion-light-transparent: hsla(261, 100%, 50%, 0.15); /* 15% transparent version */
 
-$motion-primary-dark: #4634eb; /* keep this as-is (used for dark mode contrast) */
+$motion-primary-dark: rgba(89, 0, 255); /* keep this as-is (used for dark mode contrast) */
 
 $ui-primary-light: hsl(261 100% 94.9%);
 $ui-secondary-light: hsl(261 100% 86%);
