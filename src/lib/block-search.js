@@ -751,7 +751,7 @@ addSearchCategory() {
                 justify-content: center;
                 gap: 3px;
                 background: transparent;
-                color: white;
+                color: gray;
                 font-weight: bold;
                 user-select: none;
                 text-align: center;
@@ -1027,6 +1027,7 @@ toggleSearchBar() {
                 align-items: center;
                 gap: 8px;
                 border-radius: 4px;
+                color: white;
             `;
 
             // Category color circle
