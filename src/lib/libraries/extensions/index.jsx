@@ -358,7 +358,7 @@ const menuItems = [
     {
         name: 'ArkIDE Additons',
         extensionId: 'https://extensions.arkide.site/extensions/Ark/arkide-additons.js',
-        iconURL: 'https://extensions.arkide.site/images/Ark/banner.svg',
+        iconURL: 'https://extensions.arkide.site/images/Ark/banner.png',
         tags: ['penguinmod'],
         description: 'A simple extension that adds some cool new blocks for ArkIDE.',
         extDeveloper: 'Ark',
@@ -367,7 +367,7 @@ const menuItems = [
     {
         name: 'JSON Number Array Operations',
         extensionId: 'https://extensions.arkide.site/extensions/Ark/jsonnumberarray.js',
-        iconURL: 'https://extensions.arkide.site/images/Ark/jsonant.svg',
+        iconURL: 'https://extensions.arkide.site/images/Ark/jsonant.png',
         tags: ['penguinmod'],
         description: 'A nice extension that adds useful operation blocks for Json Number Arrays.',
         extDeveloper: 'Ark',
@@ -376,7 +376,7 @@ const menuItems = [
     {
         name: 'ArkIDE Console',
         extensionId: 'https://extensions.arkide.site/extensions/Ark/arkide-console.js',
-        iconURL: 'https://extensions.arkide.site/images/Ark/console.svg',
+        iconURL: 'https://extensions.arkide.site/images/Ark/console.png',
         tags: ['penguinmod'],
         description: 'Add a console to your project to log messages, errors, and warnings.',
         extDeveloper: 'Ark',
@@ -385,7 +385,7 @@ const menuItems = [
     {
         name: 'Store My Stuff',
         extensionId: 'https://extensions.arkide.site/extensions/Ark/store-my-stuff.js',
-        iconURL: 'https://extensions.arkide.site/images/Ark/storemystuff.svg',
+        iconURL: 'https://extensions.arkide.site/images/Ark/storemystuff.png',
         tags: ['penguinmod'],
         description: 'Store strings and numbers to my server or local/indexdb storage.',
         extDeveloper: 'Ark',
