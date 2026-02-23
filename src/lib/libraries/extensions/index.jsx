@@ -83,6 +83,8 @@ import jwVectorExtensionThumb from './penguinmod/extensions/jwVector.svg';
 import jwLambdaExtensionThumb from './penguinmod/extensions/jwLambda.svg';
 import jwScopeExtensionThumb from './penguinmod/extensions/jwScope.svg';
 import jwXMLExtensionIcon from './penguinmod/extensions/jwXML.svg';
+import jwPointerExtensionThumb from './penguinmod/extensions/jwPointer.svg';
+import jwIntExtensionThumb from './penguinmod/extensions/jwInt.svg';
 
 import iygPerlinNoiseExtensionIcon from './penguinmod/extensions/perlinnoisebanner.png';
 
@@ -990,7 +992,25 @@ const menuItems = [
         extensionId: 'jwScope',
         iconURL: jwScopeExtensionThumb,
         tags: ['penguinmod'],
-        description: 'Temporary variables based on the block stack. (extra blocks included if Array extension is added)',
+        description: 'Temporary variables based on block stack. (extra blocks if used with Array extension)',
+        extDeveloper: 'jwklong',
+        featured: true
+    },
+    {
+        name: 'Pointers',
+        extensionId: 'jwPointer',
+        iconURL: jwPointerExtensionThumb,
+        tags: ['penguinmod', 'datamgmt'],
+        description: 'Define references to values. (extra blocks if used with Array extension)',
+        extDeveloper: 'jwklong',
+        featured: true
+    },
+    {
+        name: 'Integers',
+        extensionId: 'jwInt',
+        iconURL: jwIntExtensionThumb,
+        tags: ['penguinmod', 'math'],
+        description: 'Large integers with zero precision loss.',
         extDeveloper: 'jwklong',
         featured: true
     },
@@ -1158,12 +1178,12 @@ const menuItems = [
     {
         name: (
             <FormattedMessage
-                defaultMessage="ArkIDE Extra Extensions"
+                defaultMessage="PenguinMod Extra Extensions"
                 description="Name of library item to open the Extra Extensions gallery"
                 id="pm.extraLibraryExtensions.name"
             />
         ),
-        href: 'https://extensions.arkide.site/',
+        href: 'https://extensions.penguinmod.com/?editor=true',
         extensionId: 'special_penguinmodExtensionLibrary',
         iconURL: penguinmodLibraryExtensionIcon,
         description: (
@@ -1213,11 +1233,11 @@ const menuItems = [
     },{
         // not really an extension, but it's easiest to present it as one
         name: 'ExtForge',
-        href: 'https://extforge.arkide.site/',
+        href: 'https://jwklong.github.io/extforge',
         extensionId: 'special_extforge',
         iconURL: ExtForgeIcon,
         description: 'Create extensions with a block-based UI.',
-        extDeveloper: 'jwklong (Updated by Arc360)',
+        extDeveloper: 'jwklong',
         isNew: true,
         tags: ['extcreate'],
         featured: true
@@ -1465,7 +1485,7 @@ if (IsLocal || IsLiveTests) {
         {
             name: 'fire in the hole',
             extensionId: 'https://extensions.penguinmod.com/extensions/JeremyGamer13/FireInTheHole.js',
-            iconURL: 'https://library.arkide.site/files/emojis/cluelesssmile.png',
+            iconURL: 'https://library.penguinmod.com/files/emojis/cluelesssmile.png',
             tags: ['penguinmod', 'joke'],
             internetConnectionRequired: true,
             description: 'april fools took too long man this joke is not funny anymore',
@@ -1501,6 +1521,22 @@ if (IsLocal || IsLiveTests) {
             extensionId: 'special_editorExtensionLibrary',
             iconURL: penguinmodLibraryExtensionIcon,
             description: 'Opens the editor with this tab as the parent, still with the library opened. For developers.',
+            featured: true
+        },
+        {
+            name: 'localhost:5173',
+            href: 'http://localhost:5173',
+            extensionId: 'special_extensionLibraryLocalhost5173',
+            iconURL: defaultExtensionIcon,
+            description: 'Opens localhost:5173 in a new tab with this tab as the parent. For developers',
+            featured: true
+        },
+        {
+            name: 'localhost:5173?editor=true',
+            href: 'http://localhost:5173?editor=true',
+            extensionId: 'special_extensionLibraryLocalhost5173EditorTrue',
+            iconURL: defaultExtensionIcon,
+            description: 'Opens localhost:5173 in a new tab with this tab as the parent. Sets ?editor=true. For developers',
             featured: true
         },
         {
