@@ -1178,12 +1178,12 @@ const menuItems = [
     {
         name: (
             <FormattedMessage
-                defaultMessage="PenguinMod Extra Extensions"
+                defaultMessage="ArkIDE Extra Extensions"
                 description="Name of library item to open the Extra Extensions gallery"
                 id="pm.extraLibraryExtensions.name"
             />
         ),
-        href: 'https://extensions.penguinmod.com/?editor=true',
+        href: 'https://extensions.arkide.site/?editor=true',
         extensionId: 'special_penguinmodExtensionLibrary',
         iconURL: penguinmodLibraryExtensionIcon,
         description: (
@@ -1233,11 +1233,11 @@ const menuItems = [
     },{
         // not really an extension, but it's easiest to present it as one
         name: 'ExtForge',
-        href: 'https://jwklong.github.io/extforge',
+        href: 'https://extforge.arkide.site',
         extensionId: 'special_extforge',
         iconURL: ExtForgeIcon,
         description: 'Create extensions with a block-based UI.',
-        extDeveloper: 'jwklong',
+        extDeveloper: 'jwklong, Updated by Ark',
         isNew: true,
         tags: ['extcreate'],
         featured: true
