@@ -237,12 +237,7 @@ class Blocks extends React.Component {
         for (const category of this.props.vm.runtime._blockInfo) {
             this.handleExtensionAdded(category);
         }
-        // Setup block export functionality
-        // setupBlockExport(this.ScratchBlocks, this.workspace);
-        // Setup block export functionality
-// setupBlockExport(this.ScratchBlocks, this.workspace);
 
-// Setup pin/unpin functionality for toolbox blocks
 const setupPinUnpin = (ScratchBlocks, getToolboxXMLFn, updateToolboxStateFn) => {
     const originalShowContextMenu = ScratchBlocks.BlockSvg.prototype.showContextMenu_;
     
@@ -250,8 +245,6 @@ const setupPinUnpin = (ScratchBlocks, getToolboxXMLFn, updateToolboxStateFn) => 
         const block = this;
         
         if (block.workspace.isFlyout) {
-            const menuOptions = [];
-            
             const blockXML = ScratchBlocks.Xml.domToText(
                 ScratchBlocks.Xml.blockToDom(block)
             );
@@ -259,24 +252,31 @@ const setupPinUnpin = (ScratchBlocks, getToolboxXMLFn, updateToolboxStateFn) => 
             const { isBlockPinned, pinBlock, unpinBlock } = require('../lib/pinned-blocks-storage');
             const isPinned = isBlockPinned(blockXML);
             
-            menuOptions.push({
-                enabled: true,
-                text: isPinned ? 'Unpin Block' : 'Pin Block',
-                callback: () => {
-                    if (isPinned) {
-                        unpinBlock(blockXML);
-                    } else {
-                        pinBlock(blockXML);
+            const originalShow = ScratchBlocks.ContextMenu.show;
+            ScratchBlocks.ContextMenu.show = function(event, options, rtl) {
+                ScratchBlocks.ContextMenu.show = originalShow;
+                
+                options.push({
+                    enabled: true,
+                    text: isPinned ? 'Unpin Block' : 'Pin Block',
+                    callback: () => {
+                        if (isPinned) {
+                            unpinBlock(blockXML);
+                        } else {
+                            pinBlock(blockXML);
+                        }
+                        
+                        const toolboxXML = getToolboxXMLFn();
+                        if (toolboxXML) {
+                            updateToolboxStateFn(toolboxXML);
+                        }
                     }
-                    
-                    const toolboxXML = getToolboxXMLFn();
-                    if (toolboxXML) {
-                        updateToolboxStateFn(toolboxXML);
-                    }
-                }
-            });
+                });
+                
+                originalShow.call(this, event, options, rtl);
+            };
             
-            ScratchBlocks.ContextMenu.show(e, menuOptions, this.RTL);
+            originalShowContextMenu.call(this, e);
         } else {
             originalShowContextMenu.call(this, e);
         }
@@ -319,6 +319,24 @@ const applyFlyoutBlur = () => {
     
     this.workspace.addChangeListener(syncBlur);
     window.addEventListener('resize', syncBlur);
+    // Apply blur to context menu when it appears
+const observer = new MutationObserver(() => {
+    const menu = document.querySelector('.blocklyWidgetDiv .goog-menu');
+    if (menu && !menu.dataset.blurApplied) {
+        menu.dataset.blurApplied = 'true';
+        menu.style.backdropFilter = 'blur(12px)';
+        menu.style.webkitBackdropFilter = 'blur(12px)';
+        menu.style.background = 'rgba(255, 255, 255, 0.35)';
+        menu.style.border = '1px solid rgba(0, 0, 0, 0.08)';
+    }
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+this.menuBlurObserver = observer;
 };
 
 setTimeout(applyFlyoutBlur, 200);
@@ -386,6 +404,9 @@ setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.upda
         this.workspace.dispose();
         clearTimeout(this.toolboxUpdateTimeout);
         this.props.vm.setInEditor(false);
+        if (this.menuBlurObserver) {
+            this.menuBlurObserver.disconnect();
+        }
     }
     requestToolboxUpdate () {
         clearTimeout(this.toolboxUpdateTimeout);
