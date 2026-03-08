@@ -26,7 +26,10 @@
     stroke: #484848;
 }
 .blocklyFlyoutBackground {
-    fill: #111;
+    fill: #1111117d;
+}
+.blocklyFlyout {
+  backdrop-filter: blur(10px);
 }
 .blocklyFlyoutLabelText {
     fill: #ccc;

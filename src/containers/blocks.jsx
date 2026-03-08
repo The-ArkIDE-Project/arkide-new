@@ -283,6 +283,46 @@ const setupPinUnpin = (ScratchBlocks, getToolboxXMLFn, updateToolboxStateFn) => 
     };
 };
 
+const applyFlyoutBlur = () => {
+    const flyout = this.workspace.getFlyout();
+    const flyoutSvg = flyout.svgGroup_;
+    
+    if (!flyoutSvg) return;
+    
+    const blurDiv = document.createElement('div');
+    blurDiv.className = 'flyout-blur-overlay';
+    blurDiv.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        pointer-events: none;
+        z-index: 0;
+        transition: width 0.2s, height 0.2s;
+    `;
+    
+    const container = this.blocks.querySelector('.injectionDiv') || this.blocks;
+    container.style.position = 'relative';
+    container.appendChild(blurDiv);
+    
+    const syncBlur = () => {
+        const rect = flyoutSvg.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        blurDiv.style.left = `${rect.left - containerRect.left}px`;
+        blurDiv.style.top = `${rect.top - containerRect.top}px`;
+        blurDiv.style.width = `${rect.width}px`;
+        blurDiv.style.height = `${rect.height}px`;
+    };
+    
+    syncBlur();
+    
+    this.workspace.addChangeListener(syncBlur);
+    window.addEventListener('resize', syncBlur);
+};
+
+setTimeout(applyFlyoutBlur, 200);
+
 setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.updateToolboxState);
     }
     shouldComponentUpdate (nextProps, nextState) {
@@ -936,7 +976,7 @@ Blocks.defaultOptions = {
     },
     colours: {
         workspace: '#F9F9F9',
-        flyout: '#F9F9F9',
+        flyout: 'rgba(249, 249, 249, 0.45)',
         toolbox: '#FFFFFF',
         toolboxSelected: '#E9EEF2',
         scrollbar: '#CECDCE',

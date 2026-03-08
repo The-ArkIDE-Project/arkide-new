@@ -5,9 +5,8 @@ scratch-gui modified for use in [TurboWarp](https://turbowarp.org/) then modifie
 ## ArkIDE To Do:
 - Add new blocks
 - Add new catigories to the UI
-- Make the homepage/editor UI better
 - Sync this repo with Penguinmods to add all of the new features they have added in the 2 months this repo has been out-of-date from it
-- Change back all of the chrismas changes after January 1st 2026.
+- Fix some compiler issues where if your project gets too big some blocks just stop working (And the only fix is deleting the top hat block and replacing it)
 
 ## GIthub Map:
 - Editor: https://github.com/The-ArkIDE-Project/arkide-new
