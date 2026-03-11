@@ -54,7 +54,7 @@
 }
 
 [theme="dark"] .setting.active {
-    background: #1e162c71;
+    background: #4f00d872;
 }
 
 [theme="dark"] .setting:hover,
@@ -377,7 +377,7 @@ details[open] .dropdown {
 }
 
 [theme="dark"] .tab-button-active {
-    background: #1e162c71;
+    background: #4f00d872;
     color: $text-primary;
 }
 
@@ -410,5 +410,9 @@ details[open] .dropdown {
     
     .tab-button {
         white-space: nowrap;
+    }
+
+    .bold {
+        font-weight: bold;
     }
 }

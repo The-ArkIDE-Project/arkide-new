@@ -731,6 +731,18 @@ const SettingsModalComponent = props => {
                                 id="pm.settingsModal.projectInfo"
                             />
                         </button>
+                        <button
+                            className={classNames(styles.tabButton, {
+                                [styles.tabButtonActive]: activeTab === 'help'
+                            })}
+                            onClick={() => setActiveTab('help')}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Help"
+                                description="Settings tab"
+                                id="pm.settingsModal.help"
+                            />
+                        </button>
                     </div>
 
                     <div className={styles.tabContent}>
@@ -802,6 +814,25 @@ const SettingsModalComponent = props => {
                         {activeTab === 'projectInfo' && (
                             <div>
                                 <ProjectSizeTracker vm={props.vm} />
+                            </div>
+                        )}
+                        {activeTab === 'help' && (
+                            <div>
+                                <h1>Help about new ArkIDE Editor Features:</h1>
+                                <h3>New shapes section in the costume editor:</h3>
+                                <p>
+                                The new "Font Awesome" section in the shapes selector is a new thing that adds over 1600 new icons to the editor by using the Font Awesome library of SVG Icons, so they can be edited and colored to your liking, you just click on one of them you like in the big list (or search) then click again on the one you clicked but on the "Font Awesome" row this time. Then you can draw them in your workspace, you can stretch them out or <strong>hold shift while drawing them to make them the correct aspect ratio</strong>
+                                </p>
+                                <h3>Screenshot Tool:</h3>
+                                <p>
+                                    The screenshot tool allows you to capture images of your project at any time. You can access it from the toolbar or by clicking the button in the header of the project canavas. Very simple to use.
+                                </p>
+                                <h3>Toolbox search and pinning:</h3>
+                                <p>
+                                    The toolbox now includes a search function that allows you to quickly find specific blocks. You can also pin frequently used blocks to the top of the toolbox for easy access by right clicking your wanted block and clicking on "Pin Block". (Yes if you remove an extension that you pinned a block from, our code will figure it out for you.)
+                                </p>
+                                <hr></hr>
+                                <p>If you would like other help things being added, please report it to our discord or github! Hope this helps you figure out any of our new features!!</p>
                             </div>
                         )}
                     </div>
