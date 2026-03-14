@@ -22,6 +22,7 @@ import defineDynamicBlock from '../lib/define-dynamic-block';
 import AddonHooks from '../addons/hooks';
 import LoadScratchBlocksHOC from '../lib/tw-load-scratch-blocks-hoc.jsx';
 import uid from "../lib/uid.js";
+import blockSearch from '../lib/block-search';
 // import setupBlockExport from '../lib/block-export-image';
 
 import {connect} from 'react-redux';
@@ -342,6 +343,7 @@ this.menuBlurObserver = observer;
 setTimeout(applyFlyoutBlur, 200);
 
 setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.updateToolboxState);
+blockSearch.init(this.workspace, this.props.vm);
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (
@@ -427,31 +429,30 @@ setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.upda
             });
     }
 
-    updateToolbox () {
-        this.toolboxUpdateTimeout = false;
+updateToolbox () {
+    this.toolboxUpdateTimeout = false;
 
-        const categoryId = this.workspace.toolbox_.getSelectedCategoryId();
-        const offset = this.workspace.toolbox_.getCategoryScrollOffset();
-        this.workspace.updateToolbox(this.props.toolboxXML);
-        this._renderedToolboxXML = this.props.toolboxXML;
+    const categoryId = this.workspace.toolbox_.getSelectedCategoryId();
+    const offset = this.workspace.toolbox_.getCategoryScrollOffset();
+    this.workspace.updateToolbox(this.props.toolboxXML);
+    this._renderedToolboxXML = this.props.toolboxXML;
 
-        // In order to catch any changes that mutate the toolbox during "normal runtime"
-        // (variable changes/etc), re-enable toolbox refresh.
-        // Using the setter function will rerender the entire toolbox which we just rendered.
-        this.workspace.toolboxRefreshEnabled_ = true;
+    this.workspace.toolboxRefreshEnabled_ = true;
 
-        const currentCategoryPos = this.workspace.toolbox_.getCategoryPositionById(categoryId);
-        const currentCategoryLen = this.workspace.toolbox_.getCategoryLengthById(categoryId);
-        if (offset < currentCategoryLen) {
-            this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos + offset);
-        } else {
-            this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos);
-        }
-
-        const queue = this.toolboxUpdateQueue;
-        this.toolboxUpdateQueue = [];
-        queue.forEach(fn => fn());
+    const currentCategoryPos = this.workspace.toolbox_.getCategoryPositionById(categoryId);
+    const currentCategoryLen = this.workspace.toolbox_.getCategoryLengthById(categoryId);
+    if (offset < currentCategoryLen) {
+        this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos + offset);
+    } else {
+        this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos);
     }
+
+    const queue = this.toolboxUpdateQueue;
+    this.toolboxUpdateQueue = [];
+    queue.forEach(fn => fn());
+
+    setTimeout(() => blockSearch.reapply(), 100); // <-- add this line
+}
 
     withToolboxUpdates (fn) {
         // if there is a queued toolbox update, we need to wait

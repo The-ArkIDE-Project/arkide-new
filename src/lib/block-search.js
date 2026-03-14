@@ -1,1369 +1,696 @@
+// Huge thanks to @pov_eleanor on ArkIDE For reminding me to fix this broken mess :3
+
 import LazyScratchBlocks from './tw-lazy-scratch-blocks';
 
-// Block metadata for search
-const BLOCK_METADATA = {
-    // Motion
-    motion_movesteps: { name: 'move steps', category: 'motion', color: '#4C97FF' },
-    motion_turnright: { name: 'turn right', category: 'motion', color: '#4C97FF' },
-    motion_turnleft: { name: 'turn left', category: 'motion', color: '#4C97FF' },
-    motion_goto: { name: 'go to', category: 'motion', color: '#4C97FF' },
-    motion_gotoxy: { name: 'go to x y', category: 'motion', color: '#4C97FF' },
-    motion_pointindirection: { name: 'point in direction', category: 'motion', color: '#4C97FF' },
-    motion_xposition: { name: 'x position', category: 'motion', color: '#4C97FF' },
-    motion_yposition: { name: 'y position', category: 'motion', color: '#4C97FF' },
-    
-    // Looks
-    looks_say: { name: 'say', category: 'looks', color: '#9966FF' },
-    looks_sayforsecs: { name: 'say for seconds', category: 'looks', color: '#9966FF' },
-    looks_think: { name: 'think', category: 'looks', color: '#9966FF' },
-    looks_thinkforsecs: { name: 'think for seconds', category: 'looks', color: '#9966FF' },
-    looks_show: { name: 'show', category: 'looks', color: '#9966FF' },
-    looks_hide: { name: 'hide', category: 'looks', color: '#9966FF' },
-    looks_switchcostumeto: { name: 'switch costume', category: 'looks', color: '#9966FF' },
-    looks_nextcostume: { name: 'next costume', category: 'looks', color: '#9966FF' },
-    looks_switchbackdropto: { name: 'switch backdrop', category: 'looks', color: '#9966FF' },
-    looks_changesizeby: { name: 'change size', category: 'looks', color: '#9966FF' },
-    looks_setsizeto: { name: 'set size', category: 'looks', color: '#9966FF' },
-    
-    // Sound
-    sound_play: { name: 'start sound', category: 'sound', color: '#D65CD6' },
-    sound_playuntildone: { name: 'play sound until done', category: 'sound', color: '#D65CD6' },
-    sound_stopallsounds: { name: 'stop all sounds', category: 'sound', color: '#D65CD6' },
-    sound_setvolumeto: { name: 'set volume', category: 'sound', color: '#D65CD6' },
-    sound_changevolumeby: { name: 'change volume', category: 'sound', color: '#D65CD6' },
-    
-    // Events
-    event_whenflagclicked: { name: 'when flag clicked', category: 'events', color: '#FFD500' },
-    event_whenkeypressed: { name: 'when key pressed', category: 'events', color: '#FFD500' },
-    event_whenthisspriteclicked: { name: 'when sprite clicked', category: 'events', color: '#FFD500' },
-    event_whenbackdropswitchesto: { name: 'when backdrop switches', category: 'events', color: '#FFD500' },
-    event_broadcast: { name: 'broadcast', category: 'events', color: '#FFD500' },
-    event_broadcastandwait: { name: 'broadcast and wait', category: 'events', color: '#FFD500' },
-    event_whenbroadcastreceived: { name: 'when I receive', category: 'events', color: '#FFD500' },
-    
-    // Control
-    control_wait: { name: 'wait', category: 'control', color: '#FFAB19' },
-    control_repeat: { name: 'repeat', category: 'control', color: '#FFAB19' },
-    control_forever: { name: 'forever', category: 'control', color: '#FFAB19' },
-    control_if: { name: 'if then', category: 'control', color: '#FFAB19' },
-    control_if_else: { name: 'if else', category: 'control', color: '#FFAB19' },
-    control_wait_until: { name: 'wait until', category: 'control', color: '#FFAB19' },
-    control_repeat_until: { name: 'repeat until', category: 'control', color: '#FFAB19' },
-    control_stop: { name: 'stop', category: 'control', color: '#FFAB19' },
-    control_create_clone_of: { name: 'create clone', category: 'control', color: '#FFAB19' },
-    control_delete_this_clone: { name: 'delete this clone', category: 'control', color: '#FFAB19' },
-    
-    // Sensing
-    sensing_touchingobject: { name: 'touching', category: 'sensing', color: '#4CBFE6' },
-    sensing_touchingcolor: { name: 'touching color', category: 'sensing', color: '#4CBFE6' },
-    sensing_distanceto: { name: 'distance to', category: 'sensing', color: '#4CBFE6' },
-    sensing_askandwait: { name: 'ask and wait', category: 'sensing', color: '#4CBFE6' },
-    sensing_answer: { name: 'answer', category: 'sensing', color: '#4CBFE6' },
-    sensing_keypressed: { name: 'key pressed', category: 'sensing', color: '#4CBFE6' },
-    sensing_mousedown: { name: 'mouse down', category: 'sensing', color: '#4CBFE6' },
-    sensing_mousex: { name: 'mouse x', category: 'sensing', color: '#4CBFE6' },
-    sensing_mousey: { name: 'mouse y', category: 'sensing', color: '#4CBFE6' },
-    sensing_timer: { name: 'timer', category: 'sensing', color: '#4CBFE6' },
-    sensing_resettimer: { name: 'reset timer', category: 'sensing', color: '#4CBFE6' },
-    sensing_of: { name: 'of', category: 'sensing', color: '#4CBFE6' },
-    sensing_current: { name: 'current', category: 'sensing', color: '#4CBFE6' },
-    sensing_username: { name: 'username', category: 'sensing', color: '#4CBFE6' },
-    
-    // Operators
-    operator_add: { name: 'add', category: 'operators', color: '#40BF4A' },
-    operator_subtract: { name: 'subtract', category: 'operators', color: '#40BF4A' },
-    operator_multiply: { name: 'multiply', category: 'operators', color: '#40BF4A' },
-    operator_divide: { name: 'divide', category: 'operators', color: '#40BF4A' },
-    operator_random: { name: 'pick random', category: 'operators', color: '#40BF4A' },
-    operator_gt: { name: 'greater than', category: 'operators', color: '#40BF4A' },
-    operator_lt: { name: 'less than', category: 'operators', color: '#40BF4A' },
-    operator_equals: { name: 'equals', category: 'operators', color: '#40BF4A' },
-    operator_and: { name: 'and', category: 'operators', color: '#40BF4A' },
-    operator_or: { name: 'or', category: 'operators', color: '#40BF4A' },
-    operator_not: { name: 'not', category: 'operators', color: '#40BF4A' },
-    operator_join: { name: 'join', category: 'operators', color: '#40BF4A' },
-    operator_letter_of: { name: 'letter of', category: 'operators', color: '#40BF4A' },
-    operator_length: { name: 'length of', category: 'operators', color: '#40BF4A' },
-    operator_contains: { name: 'contains', category: 'operators', color: '#40BF4A' },
-    operator_mod: { name: 'mod', category: 'operators', color: '#40BF4A' },
-    operator_round: { name: 'round', category: 'operators', color: '#40BF4A' },
-    operator_mathop: { name: 'math operation', category: 'operators', color: '#40BF4A' },
+const CORE_METADATA = {
+    motion_movesteps:         { name: 'move steps',                category: 'motion',    color: '#4C97FF' },
+    motion_turnright:         { name: 'turn right degrees',        category: 'motion',    color: '#4C97FF' },
+    motion_turnleft:          { name: 'turn left degrees',         category: 'motion',    color: '#4C97FF' },
+    motion_goto:              { name: 'go to',                     category: 'motion',    color: '#4C97FF' },
+    motion_gotoxy:            { name: 'go to x y',                 category: 'motion',    color: '#4C97FF' },
+    motion_glidesecstoxy:     { name: 'glide secs to x y',         category: 'motion',    color: '#4C97FF' },
+    motion_pointindirection:  { name: 'point in direction',        category: 'motion',    color: '#4C97FF' },
+    motion_pointtowards:      { name: 'point towards',             category: 'motion',    color: '#4C97FF' },
+    motion_changexby:         { name: 'change x by',               category: 'motion',    color: '#4C97FF' },
+    motion_setx:              { name: 'set x to',                  category: 'motion',    color: '#4C97FF' },
+    motion_changeyby:         { name: 'change y by',               category: 'motion',    color: '#4C97FF' },
+    motion_sety:              { name: 'set y to',                  category: 'motion',    color: '#4C97FF' },
+    motion_ifonedgebounce:    { name: 'if on edge bounce',         category: 'motion',    color: '#4C97FF' },
+    motion_setrotationstyle:  { name: 'set rotation style',        category: 'motion',    color: '#4C97FF' },
+    motion_xposition:         { name: 'x position',                category: 'motion',    color: '#4C97FF' },
+    motion_yposition:         { name: 'y position',                category: 'motion',    color: '#4C97FF' },
+    motion_direction:         { name: 'direction',                 category: 'motion',    color: '#4C97FF' },
+    looks_sayforsecs:         { name: 'say for seconds',           category: 'looks',     color: '#9966FF' },
+    looks_say:                { name: 'say',                       category: 'looks',     color: '#9966FF' },
+    looks_thinkforsecs:       { name: 'think for seconds',         category: 'looks',     color: '#9966FF' },
+    looks_think:              { name: 'think',                     category: 'looks',     color: '#9966FF' },
+    looks_show:               { name: 'show',                      category: 'looks',     color: '#9966FF' },
+    looks_hide:               { name: 'hide',                      category: 'looks',     color: '#9966FF' },
+    looks_switchcostumeto:    { name: 'switch costume to',         category: 'looks',     color: '#9966FF' },
+    looks_nextcostume:        { name: 'next costume',              category: 'looks',     color: '#9966FF' },
+    looks_switchbackdropto:   { name: 'switch backdrop to',        category: 'looks',     color: '#9966FF' },
+    looks_nextbackdrop:       { name: 'next backdrop',             category: 'looks',     color: '#9966FF' },
+    looks_changesizeby:       { name: 'change size by',            category: 'looks',     color: '#9966FF' },
+    looks_setsizeto:          { name: 'set size to',               category: 'looks',     color: '#9966FF' },
+    looks_changeeffectby:     { name: 'change effect by',          category: 'looks',     color: '#9966FF' },
+    looks_seteffectto:        { name: 'set effect to',             category: 'looks',     color: '#9966FF' },
+    looks_cleargraphiceffects:{ name: 'clear graphic effects',     category: 'looks',     color: '#9966FF' },
+    looks_gotofrontback:      { name: 'go to front back layer',    category: 'looks',     color: '#9966FF' },
+    looks_costumenumbername:  { name: 'costume number name',       category: 'looks',     color: '#9966FF' },
+    looks_backdropnumbername: { name: 'backdrop number name',      category: 'looks',     color: '#9966FF' },
+    looks_size:               { name: 'size',                      category: 'looks',     color: '#9966FF' },
+    sound_playuntildone:      { name: 'play sound until done',     category: 'sound',     color: '#D65CD6' },
+    sound_play:               { name: 'start sound',               category: 'sound',     color: '#D65CD6' },
+    sound_stopallsounds:      { name: 'stop all sounds',           category: 'sound',     color: '#D65CD6' },
+    sound_changeeffectby:     { name: 'change sound effect by',    category: 'sound',     color: '#D65CD6' },
+    sound_seteffectto:        { name: 'set sound effect to',       category: 'sound',     color: '#D65CD6' },
+    sound_cleareffects:       { name: 'clear sound effects',       category: 'sound',     color: '#D65CD6' },
+    sound_changevolumeby:     { name: 'change volume by',          category: 'sound',     color: '#D65CD6' },
+    sound_setvolumeto:        { name: 'set volume to',             category: 'sound',     color: '#D65CD6' },
+    sound_volume:             { name: 'volume',                    category: 'sound',     color: '#D65CD6' },
+    event_whenflagclicked:        { name: 'when green flag clicked',   category: 'events',  color: '#FFD500' },
+    event_whenkeypressed:         { name: 'when key pressed',          category: 'events',  color: '#FFD500' },
+    event_whenthisspriteclicked:  { name: 'when this sprite clicked',  category: 'events',  color: '#FFD500' },
+    event_whenbackdropswitchesto: { name: 'when backdrop switches to', category: 'events',  color: '#FFD500' },
+    event_whengreaterthan:        { name: 'when greater than',         category: 'events',  color: '#FFD500' },
+    event_whenbroadcastreceived:  { name: 'when I receive',            category: 'events',  color: '#FFD500' },
+    event_broadcast:              { name: 'broadcast',                 category: 'events',  color: '#FFD500' },
+    event_broadcastandwait:       { name: 'broadcast and wait',        category: 'events',  color: '#FFD500' },
+    control_wait:              { name: 'wait seconds',             category: 'control',   color: '#FFAB19' },
+    control_repeat:            { name: 'repeat',                   category: 'control',   color: '#FFAB19' },
+    control_forever:           { name: 'forever',                  category: 'control',   color: '#FFAB19' },
+    control_if:                { name: 'if then',                  category: 'control',   color: '#FFAB19' },
+    control_if_else:           { name: 'if then else',             category: 'control',   color: '#FFAB19' },
+    control_wait_until:        { name: 'wait until',               category: 'control',   color: '#FFAB19' },
+    control_repeat_until:      { name: 'repeat until',             category: 'control',   color: '#FFAB19' },
+    control_while:             { name: 'while do',                 category: 'control',   color: '#FFAB19' },
+    control_stop:              { name: 'stop',                     category: 'control',   color: '#FFAB19' },
+    control_start_as_clone:    { name: 'when I start as a clone',  category: 'control',   color: '#FFAB19' },
+    control_create_clone_of:   { name: 'create clone of',          category: 'control',   color: '#FFAB19' },
+    control_delete_this_clone: { name: 'delete this clone',        category: 'control',   color: '#FFAB19' },
+    sensing_touchingobject:       { name: 'touching',              category: 'sensing',   color: '#4CBFE6' },
+    sensing_touchingcolor:        { name: 'touching color',        category: 'sensing',   color: '#4CBFE6' },
+    sensing_coloristouchingcolor: { name: 'color touching color',  category: 'sensing',   color: '#4CBFE6' },
+    sensing_distanceto:           { name: 'distance to',           category: 'sensing',   color: '#4CBFE6' },
+    sensing_askandwait:           { name: 'ask and wait',          category: 'sensing',   color: '#4CBFE6' },
+    sensing_answer:               { name: 'answer',                category: 'sensing',   color: '#4CBFE6' },
+    sensing_keypressed:           { name: 'key pressed',           category: 'sensing',   color: '#4CBFE6' },
+    sensing_mousedown:            { name: 'mouse down',            category: 'sensing',   color: '#4CBFE6' },
+    sensing_mousex:               { name: 'mouse x',               category: 'sensing',   color: '#4CBFE6' },
+    sensing_mousey:               { name: 'mouse y',               category: 'sensing',   color: '#4CBFE6' },
+    sensing_loudness:             { name: 'loudness',              category: 'sensing',   color: '#4CBFE6' },
+    sensing_timer:                { name: 'timer',                 category: 'sensing',   color: '#4CBFE6' },
+    sensing_resettimer:           { name: 'reset timer',           category: 'sensing',   color: '#4CBFE6' },
+    sensing_of:                   { name: 'of',                    category: 'sensing',   color: '#4CBFE6' },
+    sensing_current:              { name: 'current',               category: 'sensing',   color: '#4CBFE6' },
+    sensing_dayssince2000:        { name: 'days since 2000',       category: 'sensing',   color: '#4CBFE6' },
+    sensing_username:             { name: 'username',              category: 'sensing',   color: '#4CBFE6' },
+    operator_add:       { name: 'add',            category: 'operators', color: '#40BF4A' },
+    operator_subtract:  { name: 'subtract',       category: 'operators', color: '#40BF4A' },
+    operator_multiply:  { name: 'multiply',       category: 'operators', color: '#40BF4A' },
+    operator_divide:    { name: 'divide',         category: 'operators', color: '#40BF4A' },
+    operator_random:    { name: 'pick random',    category: 'operators', color: '#40BF4A' },
+    operator_gt:        { name: 'greater than',   category: 'operators', color: '#40BF4A' },
+    operator_lt:        { name: 'less than',      category: 'operators', color: '#40BF4A' },
+    operator_equals:    { name: 'equals',         category: 'operators', color: '#40BF4A' },
+    operator_and:       { name: 'and',            category: 'operators', color: '#40BF4A' },
+    operator_or:        { name: 'or',             category: 'operators', color: '#40BF4A' },
+    operator_not:       { name: 'not',            category: 'operators', color: '#40BF4A' },
+    operator_join:      { name: 'join',           category: 'operators', color: '#40BF4A' },
+    operator_letter_of: { name: 'letter of',      category: 'operators', color: '#40BF4A' },
+    operator_length:    { name: 'length of',      category: 'operators', color: '#40BF4A' },
+    operator_contains:  { name: 'contains',       category: 'operators', color: '#40BF4A' },
+    operator_mod:       { name: 'mod',            category: 'operators', color: '#40BF4A' },
+    operator_round:     { name: 'round',          category: 'operators', color: '#40BF4A' },
+    operator_mathop:    { name: 'math operation', category: 'operators', color: '#40BF4A' },
 };
 
+const CAT_LABELS = {
+    motion: 'Motion', looks: 'Looks', sound: 'Sound', events: 'Events',
+    event: 'Events', control: 'Control', sensing: 'Sensing',
+    operators: 'Operators', operator: 'Operators', variables: 'Variables',
+    data: 'Variables', lists: 'Lists', myBlocks: 'My Blocks', procedures: 'My Blocks',
+};
+
+const SKIP_TYPES = new Set([
+    'procedures_prototype','text','math_number','math_positive_number',
+    'math_whole_number','math_integer','math_angle','colour_picker','checkbox','matrix','note',
+]);
+
+const PREFIX_MAP = {
+    'motion_':     { category: 'motion',     color: '#4C97FF' },
+    'looks_':      { category: 'looks',      color: '#9966FF' },
+    'sound_':      { category: 'sound',      color: '#D65CD6' },
+    'event_':      { category: 'events',     color: '#FFD500' },
+    'control_':    { category: 'control',    color: '#FFAB19' },
+    'sensing_':    { category: 'sensing',    color: '#4CBFE6' },
+    'operator_':   { category: 'operators',  color: '#40BF4A' },
+    'data_':       { category: 'variables',  color: '#FF8C1A' },
+    'procedures_': { category: 'myBlocks',   color: '#FF6680' },
+    'argument_':   { category: 'myBlocks',   color: '#FF6680' },
+};
+
+// Detect if dark mode by sampling the toolbox background
+function getThemeColors() {
+    const toolboxEl = document.querySelector('.blocklyToolboxDiv');
+    const flyoutEl = document.querySelector('.blocklyFlyout, [class*="blocklyFlyout"]');
+    let toolboxBg = 'rgb(17,17,17)', flyoutBg = '#1a1a1af2', textColor = '#fff';
+    if (toolboxEl) {
+        const bg = getComputedStyle(toolboxEl).backgroundColor;
+        if (bg && bg !== 'rgba(0, 0, 0, 0)') toolboxBg = bg;
+    }
+    if (flyoutEl) {
+        const bg = getComputedStyle(flyoutEl).backgroundColor;
+        if (bg && bg !== 'rgba(0, 0, 0, 0)') flyoutBg = bg;
+    }
+    // Determine if dark by checking luminance of toolbox bg
+    const m = toolboxBg.match(/\d+/g);
+    if (m) {
+        const [r, g, b] = m.map(Number);
+        const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        textColor = lum < 0.5 ? '#ffffff' : '#1e1e1e';
+        if (lum >= 0.5) flyoutBg = flyoutBg === '#1a1a1a' ? '#f9f9f9' : flyoutBg;
+    }
+    return { flyoutBg, textColor };
+}
+
+const BASE_CSS = `
+... existing css ...
+.scratchCategoryId-search,
+.scratchCategoryId-search ~ * > .scratchCategoryId-search {
+    -webkit-user-drag: none !important;
+    user-drag: none !important;
+}
+.bs-wrap{position:fixed;z-index:99999;display:flex;flex-direction:column;padding:8px;box-sizing:border-box;font-family:sans-serif;}
+.bs-row{display:flex;align-items:center;gap:6px;padding-bottom:8px;}
+.bs-input-wrap{flex:1;position:relative;}
+.bs-input-wrap svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:0.45;}
+.bs-input{width:100%;box-sizing:border-box;padding:7px 10px 7px 30px;border-radius:6px;border:1.5px solid rgba(128,128,128,0.2);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;}
+.bs-input:focus{border-color:#4C97FF;box-shadow:0 0 0 2px rgba(76,151,255,.25);}
+.bs-clear{background:none;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;opacity:.45;display:none;align-items:center;transition:opacity .1s;}
+.bs-clear:hover{opacity:1;}
+.bs-clear.on{display:flex;}
+.bs-results{flex:1;overflow-y:auto;overflow-x:hidden;}
+.bs-results::-webkit-scrollbar{width:5px;}
+.bs-results::-webkit-scrollbar-thumb{background:rgba(128,128,128,.3);border-radius:3px;}
+.bs-hint{padding:6px 4px 3px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.4;user-select:none;}
+.bs-item{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;cursor:pointer;user-select:none;transition:background .1s;}
+.bs-item:hover{background:rgba(76,151,255,.15);}
+.bs-item:active{background:rgba(76,151,255,.25);}
+.bs-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.bs-name{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bs-badge{font-size:10px;padding:2px 6px;border-radius:10px;opacity:.85;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.4);flex-shrink:0;}
+.bs-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:32px 16px;text-align:center;opacity:.4;font-size:13px;user-select:none;}
+@keyframes bs-flash{0%,100%{opacity:1}40%,80%{opacity:.1}}
+.bs-flash{animation:bs-flash .65s ease-in-out 2;}
+`;
+
+function score(query, target) {
+    if (!query || !target) return 0;
+    const q = query.toLowerCase(), t = target.toLowerCase();
+    if (t === q) return 100;
+    if (t.startsWith(q)) return 90;
+    if (t.includes(q)) return 75;
+    const qt = q.split(/\s+/), tt = t.split(/[\s()\[\]]+/).filter(Boolean);
+    const hits = qt.filter(qw => tt.some(tw => tw.includes(qw) || qw.includes(tw))).length;
+    return hits > 0 ? Math.round(40 + (hits / qt.length) * 35) : 0;
+}
+
+function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 class BlockSearch {
     constructor() {
-        this.searchContainer = null;
-        this.searchInput = null;
-        this.resultsContainer = null;
         this.workspace = null;
         this.vm = null;
-        this.isSearchVisible = false;
-        this.currentCategory = null;
-        this.dynamicBlockMetadata = {};
+        this._meta = { ...CORE_METADATA };
+        this._wrap = null;
+        this._input = null;
+        this._results = null;
+        this._clear = null;
+        this._active = false;
     }
 
     init(workspace, vm) {
         this.workspace = workspace;
         this.vm = vm;
-
-        // Initialize metadata with static blocks
-        this.dynamicBlockMetadata = { ...BLOCK_METADATA };
-
-        this.workspace.addChangeListener((event) => {
-            const SB = window.ScratchBlocks || LazyScratchBlocks.get();
-            if (event.type === SB.Events.UI && event.element === "category") {
-                this.handleCategorySwitch(event.newValue);
-            }
-        });
-
-        this.createSearchUI();
-        this.attachToToolbox();
-        this.addSearchCategory();
-        
-        // CRITICAL: Listen to VM's EXTENSION_ADDED event
-        this.setupVMExtensionListener();
-        
-        // Initial metadata build
-        setTimeout(() => {
-            this.buildExtensionMetadata();
-        }, 1000);
-
-        document.addEventListener("click", (e) => {
-            const item = e.target.closest(".scratchCategoryMenuItem");
-            if (!item) return;
-            const text = item.textContent.trim().toLowerCase();
-            this.handleCategorySwitch(text);
-        });
-    }
-
-    setupVMExtensionListener() {
-        if (!this.vm || !this.vm.runtime) {
-            console.warn('VM not available for extension listener');
-            return;
+        if (!document.getElementById('bs-css')) {
+            const s = document.createElement('style');
+            s.id = 'bs-css';
+            s.textContent = BASE_CSS;
+            document.head.appendChild(s);
         }
+        setTimeout(() => this._patchToolbox(), 500);
+        setTimeout(() => this._styleSearchCategory(), 400);
 
-        // Listen to the EXTENSION_ADDED event from VM runtime
-        this.vm.runtime.on('EXTENSION_ADDED', (categoryInfo) => {
-            console.log('🎉 EXTENSION_ADDED event fired:', categoryInfo);
-            
-            // Wait for blocks to be registered, then rebuild
-            setTimeout(() => {
-                console.log('⚡ Rebuilding metadata after extension added...');
-                this.buildExtensionMetadata();
-            }, 500);
-        });
+        setTimeout(() => {
+            const toolbox = this.workspace && this.workspace.getToolbox();
+            if (!toolbox) return;
+            const proto = Object.getPrototypeOf(toolbox);
+            if (proto._bsPopulatePatched) return;
+            proto._bsPopulatePatched = true;
+            const origPopulate = proto.populate_;
+            proto.populate_ = (...args) => {
+                const result = origPopulate.apply(toolbox, args);
+                setTimeout(() => this.reapply(), 100);
+                return result;
+            };
+        }, 600);
 
-        // Also listen for BLOCKSINFO_UPDATE
-        this.vm.runtime.on('BLOCKSINFO_UPDATE', () => {
-            console.log('📦 BLOCKSINFO_UPDATE event fired');
-            setTimeout(() => {
-                this.buildExtensionMetadata();
-            }, 300);
-        });
-
+        if (vm && vm.runtime) {
+            vm.runtime.on('EXTENSION_ADDED', () => setTimeout(() => { this._buildMeta(); this._patchToolbox(); }, 600));
+            vm.runtime.on('BLOCKSINFO_UPDATE', () => setTimeout(() => { this._buildMeta(); this._patchToolbox(); }, 300));
+        }
+        setTimeout(() => this._buildMeta(), 1200);
     }
 
-buildExtensionMetadata() {
-    if (!this.workspace || !LazyScratchBlocks.isLoaded()) {
-        return;
+
+_styleSearchCategory() {
+    if (!this._docListenerAttached) {
+        this._docListenerAttached = true;
+        document.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.scratchCategoryId-search')) {
+                this._searchClickPending = true;
+                setTimeout(() => { this._searchClickPending = false; }, 500);
+                // Cancel the category drag addon's 500ms long press timer
+                setTimeout(() => {
+                    document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+                }, 0);
+            }
+        });
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.closest('.scratchCategoryId-search') ||
+                e.target.closest('.scratchCategoryMenuRow')?.querySelector('.scratchCategoryId-search')) {
+                e.preventDefault();
+            }
+        }, { capture: true });
     }
+    const applyStyle = () => {
+        const searchItem = document.querySelector('.scratchCategoryId-search');
+        if (!searchItem) return;
+        const bubble = searchItem.querySelector('.scratchCategoryItemBubble');
+        if (bubble && bubble.textContent !== '🔍') {
+            bubble.style.cssText = 'background:none!important;border:none!important;font-size:18px;display:flex;align-items:center;justify-content:center;';
+            bubble.textContent = '🔍';
+        }
+        const row = searchItem.closest('.scratchCategoryMenuRow') || searchItem.parentElement;
+        if (row) {
+            row.setAttribute('draggable', 'false');
+            row.style.setProperty('-webkit-user-drag', 'none', 'important');
+        }
+        searchItem.setAttribute('draggable', 'false');
+    };
 
-    const ScratchBlocks = LazyScratchBlocks.get();
-    
-    try {
-        const toolbox = this.workspace.getToolbox();
-        const blockTypes = Object.keys(ScratchBlocks.Blocks);
-        let newBlocksFound = 0;
-        
-        
-        // Helper to get actual color from a rendered block in the flyout
-        const getBlockColorFromFlyout = (blockType) => {
-            if (!toolbox || !toolbox.flyout_ || !toolbox.flyout_.workspace_) {
-                return null;
-            }
-            
-            try {
-                const flyoutBlocks = toolbox.flyout_.workspace_.getAllBlocks(false);
-                const block = flyoutBlocks.find(b => {
-                    // Accept both shadow and non-shadow blocks for reporters/booleans
-                    const isShadow = (typeof b.isShadow === 'function') ? b.isShadow() : b.isShadow;
-                    const isReporter = b.outputConnection !== undefined && b.outputConnection !== null;
-                    
-                    // For reporter/boolean blocks, accept shadows too
-                    if (isReporter) {
-                        return b.type === blockType;
-                    }
-                    return b.type === blockType && !isShadow;
-                });
-                
-                if (!block) return null;
-                
-                // Method 1: Get color from the block's colour_ property
-                if (block.colour_) {
-                    return block.colour_;
-                }
-                
-                // Method 2: Get color from the block's getColour method
-                if (block.getColour && typeof block.getColour === 'function') {
-                    return block.getColour();
-                }
-                
-                // Method 3: Get color from the SVG element directly
-                if (block.svgPath_) {
-                    const fill = block.svgPath_.getAttribute('fill');
-                    if (fill && fill !== 'none') {
-                        return fill;
-                    }
-                }
-                
-                // Method 4: Get from SVG group
-                if (block.svgGroup_) {
-                    const pathElements = block.svgGroup_.getElementsByTagName('path');
-                    if (pathElements.length > 0) {
-                        const fill = pathElements[0].getAttribute('fill');
-                        if (fill && fill !== 'none') {
-                            return fill;
-                        }
-                    }
-                }
-                
-                return null;
-            } catch (e) {
-                console.warn('Error getting color from flyout block:', e);
-                return null;
-            }
-        };
-        
-        // Get block names from the flyout workspace where they're properly formatted
-        const getBlockNameFromFlyout = (blockType) => {
-            if (!toolbox || !toolbox.flyout_ || !toolbox.flyout_.workspace_) {
-                return null;
-            }
-            
-            try {
-                const flyoutBlocks = toolbox.flyout_.workspace_.getAllBlocks(false);
-                const block = flyoutBlocks.find(b => {
-                    const isShadow = (typeof b.isShadow === 'function') ? b.isShadow() : b.isShadow;
-                    return b.type === blockType && !isShadow;
-                });
-                
-                if (!block) return null;
-                
-                // Method 1: Try to get from the SVG text content
-                if (block.svgGroup_) {
-                    const svgTexts = block.svgGroup_.getElementsByTagName('text');
-                    const textParts = [];
-                    
-                    for (let i = 0; i < svgTexts.length; i++) {
-                        const textElement = svgTexts[i];
-                        const text = textElement.textContent || textElement.innerText;
-                        
-                        if (text && text.trim()) {
-                            // Skip dropdown arrows
-                            if (text.trim() === '▼') continue;
-                            
-                            // Check if this is a text field (not a value)
-                            const parentClass = textElement.parentElement?.getAttribute('class') || '';
-                            if (!parentClass.includes('blocklyEditableText')) {
-                                textParts.push(text.trim());
-                            }
-                        }
-                    }
-                    
-                    // Add placeholders for inputs
-                    if (block.inputList) {
-                        const inputTexts = [];
-                        block.inputList.forEach(input => {
-
-                            // Handle explicit dropdown fields here
-                            if (input.fieldRow && input.fieldRow.length > 0) {
-                                input.fieldRow.forEach(field => {
-                                    if (field instanceof ScratchBlocks.FieldDropdown) {
-                                        // Always show [] for dropdowns (your requested behavior)
-                                        inputTexts.push('[]');
-                                    } else if (field.getText && typeof field.getText === 'function') {
-                                        const fieldText = field.getText();
-                                        if (fieldText && fieldText.trim() && fieldText !== '▼') {
-                                            // Skip editable text fields
-                                            if (!field.EDITABLE) {
-                                                inputTexts.push(fieldText.trim());
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-
-                            // Add placeholders for value/statement connections
-                            if (input.connection) {
-                                if (input.type === ScratchBlocks.INPUT_VALUE) {
-                                    inputTexts.push('()');
-                                } else if (input.type === ScratchBlocks.NEXT_STATEMENT) {
-                                    inputTexts.push('[]');
-                                }
-                            }
-                        });
-
-                        if (inputTexts.length > 0) {
-                            return inputTexts.join(' ').toLowerCase().trim();
-                        }
-                    }
-                    
-                    if (textParts.length > 0) {
-                        return textParts.join(' ').toLowerCase().trim();
-                    }
-                }
-                
-                // Method 2: Try from block's toString or custom rendering
-                if (block.toString) {
-                    const blockStr = block.toString();
-                    if (blockStr && blockStr.length > 0 && blockStr.length < 100) {
-                        return blockStr.toLowerCase().trim();
-                    }
-                }
-                
-                return null;
-            } catch (e) {
-                console.warn('Error extracting block name from flyout:', e);
-                return null;
-            }
-        };
-        
-        // NOW ITERATE THROUGH BLOCKS
-        blockTypes.forEach(blockType => {
-                    // Skip if already in metadata
-                    if (this.dynamicBlockMetadata[blockType]) return;
-                    
-                    // Skip invalid/internal block types - BUT ALLOW reporter/boolean blocks!
-                    if (blockType.startsWith('extension_') || 
-                        blockType === 'procedures_prototype' ||
-                        blockType === 'text' ||
-                        blockType === 'math_number') {
+    const tryStart = () => {
+        const menu = document.querySelector('.scratchCategoryMenu');
+        if (!menu) return setTimeout(tryStart, 150);
+        applyStyle();
+        new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                for (const node of m.addedNodes) {
+                    if (node.classList && node.classList.contains('scratchCategoryMenuRow')) {
+                        applyStyle();
+                        this._patchToolbox();
                         return;
                     }
-                    
-                    // IMPORTANT: Keep argument reporters as they are real blocks
-                    // (argument_reporter_string_number, argument_reporter_boolean)
-            
-            const blockDefinition = ScratchBlocks.Blocks[blockType];
-            if (!blockDefinition) return;
-            
-            newBlocksFound++;
-            
-            // Get category
-            let category = 'extension';
-            let color = '#0FBD8C'; // Default fallback
-            
-            // FIRST: Try to get color from the actual rendered block (most accurate!)
-            const flyoutColor = getBlockColorFromFlyout(blockType);
-            if (flyoutColor) {
-                color = flyoutColor;
-            } else {
-                // SECOND: Try to get from VM runtime blockInfo
-                if (this.vm && this.vm.runtime && this.vm.runtime._blockInfo) {
-                    const extensionId = blockType.split('_')[0];
-                    const extInfo = this.vm.runtime._blockInfo.find(info => info.id === extensionId);
-                    
-                    if (extInfo) {
-                        color = extInfo.color1 || extInfo.colour || color;
-                    }
-                }
-                
-                // THIRD: Fallback to prefix matching for built-in categories
-                const prefixMap = {
-                    'motion_': { category: 'motion', color: '#4C97FF' },
-                    'looks_': { category: 'looks', color: '#9966FF' },
-                    'sound_': { category: 'sound', color: '#D65CD6' },
-                    'event_': { category: 'events', color: '#FFD500' },
-                    'control_': { category: 'control', color: '#FFAB19' },
-                    'sensing_': { category: 'sensing', color: '#4CBFE6' },
-                    'operator_': { category: 'operators', color: '#40BF4A' },
-                    'data_': { category: 'variables', color: '#FF8C1A' },
-                    'procedures_': { category: 'myblocks', color: '#FF6680' }
-                };
-                
-                for (const [prefix, info] of Object.entries(prefixMap)) {
-                    if (blockType.startsWith(prefix)) {
-                        category = info.category;
-                        color = info.color;
-                        break;
-                    }
                 }
             }
-            
-            // Get VM category if available (for proper category name)
-            if (this.vm && this.vm.runtime && this.vm.runtime._blockInfo) {
-                const extensionId = blockType.split('_')[0];
-                const extInfo = this.vm.runtime._blockInfo.find(info => info.id === extensionId);
-                if (extInfo) {
-                    category = extInfo.id;
-                }
-            }
-            
-            // Extract category from block type if still 'extension'
-            if (category === 'extension' && blockType.includes('_')) {
-                category = blockType.split('_')[0];
-            }
-            
-            // Get block name - FIRST try from flyout (best quality)
-            let name = getBlockNameFromFlyout(blockType);
-            
-            // Fallback 1: Try from json message0 with proper placeholder replacement
-            if (!name && blockDefinition.json && blockDefinition.json.message0) {
-                let message = blockDefinition.json.message0;
-                const args = blockDefinition.json.args0 || [];
-                
-                // Replace %1, %2, etc with appropriate placeholders
-                args.forEach((arg, index) => {
-                    const placeholder = index + 1;
-                    if (arg.type === 'input_value') {
-                        message = message.replace(`%${placeholder}`, '()');
-                    } else if (arg.type === 'input_statement') {
-                        message = message.replace(`%${placeholder}`, '[]');
-                    } else if (arg.type === 'field_dropdown' || arg.type === 'field_variable') {
-                        message = message.replace(`%${placeholder}`, '[]');
-                    } else {
-                        // For other field types, just remove the placeholder
-                        message = message.replace(`%${placeholder}`, '');
-                    }
-                });
-                
-                message = message.replace(/\s+/g, ' ').trim().toLowerCase();
-                if (message && message.length > 0 && message.length < 100) {
-                    name = message;
-                }
-            }
-            
-            // Fallback 2: Generate from block type
-            if (!name) {
-                name = blockType
-                    .replace(/^[a-z]+_/, '')
-                    .replace(/([A-Z])/g, ' $1')
-                    .replace(/_/g, ' ')
-                    .toLowerCase()
-                    .trim();
-            }
-            
-            this.dynamicBlockMetadata[blockType] = {
-                name: name,
-                category: category,
-                color: color
-            };
-        });
-        
-        if (newBlocksFound > 0) {
-        }
-    } catch (err) {
-        console.error('Error building extension metadata:', err);
-    }
-}
-startMetadataRefresh() {
-    // Initial build after a delay
-    setTimeout(() => {
-        this.buildExtensionMetadata();
-    }, 1000);
-    
-    // Moderate refresh every 8 seconds (since we now have URL monitoring)
-    this.metadataRefreshInterval = setInterval(() => {
-        this.buildExtensionMetadata();
-    }, 8000);
-}
-
-stopMetadataRefresh() {
-    if (this.metadataRefreshInterval) {
-        clearInterval(this.metadataRefreshInterval);
-        this.metadataRefreshInterval = null;
-    }
-}
-
-stopMetadataRefresh() {
-    if (this.metadataRefreshInterval) {
-        clearInterval(this.metadataRefreshInterval);
-        this.metadataRefreshInterval = null;
-    }
-}
-
-setupExtensionListener() {
-    // Listen for when extensions are loaded
-    if (this.workspace && this.workspace.getToolbox()) {
-        const toolbox = this.workspace.getToolbox();
-        
-        // Watch for toolbox updates (happens when extensions load)
-        const originalRefresh = toolbox.refreshSelection;
-        if (originalRefresh) {
-            toolbox.refreshSelection = () => {
-                originalRefresh.call(toolbox);
-                // Rebuild metadata after toolbox updates
-                setTimeout(() => {
-                    this.buildExtensionMetadata();
-                }, 500);
-            };
-        }
-    }
-    
-    // Also listen for VM extension loading if available
-    if (window.vm) {
-        const vm = window.vm;
-        const extensionManager = vm.extensionManager;
-        
-        if (extensionManager) {
-            // Store original loadExtensionURL
-            const originalLoadExtension = extensionManager.loadExtensionURL;
-            
-            if (originalLoadExtension) {
-                extensionManager.loadExtensionURL = function(...args) {
-                    const result = originalLoadExtension.apply(this, args);
-                    
-                    // Wait for extension to fully load, then rebuild metadata
-                    if (result && result.then) {
-                        result.then(() => {
-                            setTimeout(() => {
-                                window.BlockSearch?.buildExtensionMetadata();
-                            }, 1000);
-                        });
-                    }
-                    
-                    return result;
-                };
-            }
-        }
-    }
-}
-
-setupExtensionURLMonitoring() {
-    const trustedExtensionOrigins = [
-        'https://extensions.turbowarp.org/',
-        'https://extensions.penguinmod.com/',
-        'https://extensions.arkide.site/',
-        'https://penguinmod-extensions-gallery.vercel.app/',
-        'https://arkfs.arc360hub.com/',
-        'https://sharkpools-extensions.vercel.app/',
-        'https://sharkpool-sp.github.io/SharkPools-Extensions/',
-        'https://pen-group.github.io/',
-        'http://localhost:8000',
-        'http://localhost:6000',
-        'http://localhost:6001',
-        'http://localhost:5173',
-        'http://localhost:5174'
-    ];
-    
-    const isTrustedExtensionOrigin = (url) => {
-        return trustedExtensionOrigins.some(origin => url.startsWith(origin));
+        }).observe(menu, { childList: true });
     };
-    
-    // Monitor console messages
-    const originalConsoleLog = console.log;
-    const originalConsoleInfo = console.info;
-    
-    const checkForExtensionLoad = (message) => {
-        if (typeof message === 'string') {
-            // Check for arkide-additons specifically
-            if (message.includes('arkide-additons') || message.includes('arkide')) {
-                setTimeout(() => {
-                    this.buildExtensionMetadata();
-                }, 2000); // Longer delay for complex extensions
-                return;
-            }
-            
-            // Check if message contains extension URL
-            for (const origin of trustedExtensionOrigins) {
-                if (message.includes(origin)) {
-                    setTimeout(() => {
-                        this.buildExtensionMetadata();
-                    }, 1500);
-                    break;
-                }
-            }
-            
-            // Check for extension loading patterns
-            if (message.includes('Loading extension') || 
-                message.includes('extension loaded') ||
-                message.includes('.js unsandboxed')) {
-                setTimeout(() => {
-                    this.buildExtensionMetadata();
-                }, 1500);
-            }
-        }
-    };
-    
-    console.log = function(...args) {
-        checkForExtensionLoad(args[0]);
-        return originalConsoleLog.apply(console, args);
-    };
-    
-    console.info = function(...args) {
-        checkForExtensionLoad(args[0]);
-        return originalConsoleInfo.apply(console, args);
-    };
-    
-    // Monitor fetch requests
-    const originalFetch = window.fetch;
-    window.fetch = function(url, ...args) {
-        if (typeof url === 'string' && isTrustedExtensionOrigin(url) && url.endsWith('.js')) {
-            
-            const fetchPromise = originalFetch.call(this, url, ...args);
-            fetchPromise.then(() => {
-                setTimeout(() => {
-                    window.BlockSearch?.buildExtensionMetadata();
-                }, 2500); // Even longer for fetch
-            }).catch((err) => {
-                console.warn('❌ Extension fetch failed:', err);
-                setTimeout(() => {
-                    window.BlockSearch?.buildExtensionMetadata();
-                }, 2500);
-            });
-            
-            return fetchPromise;
-        }
-        return originalFetch.call(this, url, ...args);
-    };
-    
+    tryStart();
 }
 
-stopMetadataRefresh() {
-    if (this.metadataRefreshInterval) {
-        clearInterval(this.metadataRefreshInterval);
-        this.metadataRefreshInterval = null;
-    }
-}
-
-// Add cleanup method
-stopMetadataRefresh() {
-    if (this.metadataRefreshInterval) {
-        clearInterval(this.metadataRefreshInterval);
-        this.metadataRefreshInterval = null;
-    }
-}
-
-    init(workspace) {
-        this.workspace = workspace;
-
-        this.workspace.addChangeListener((event) => {
-            const SB = window.ScratchBlocks || ScratchBlocks;
-
-            if (event.type === SB.Events.UI && event.element === "category") {
-                this.handleCategorySwitch(event.newValue);
+_patchToolbox() {
+    const toolbox = this.workspace && this.workspace.getToolbox();
+    if (!toolbox || !toolbox.categoryMenu_) return;
+    const searchCat = toolbox.categoryMenu_.categories_.find(c => c.id_ === 'search');
+    if (!searchCat || searchCat._bsPatched) return;
+    searchCat._bsPatched = true;
+    const orig = searchCat.setSelected.bind(searchCat);
+    searchCat.setSelected = (isSelected) => {
+        if (isSelected && !this._navigating) {
+            if (this._searchClickPending) {
+                this._searchClickPending = false;
+                this._toggle();
             }
-        });
-
-        this.createSearchUI();
-        this.attachToToolbox();
-        this.addSearchCategory();
-        
-        // Initialize metadata with static blocks
-        this.dynamicBlockMetadata = { ...BLOCK_METADATA };
-
-        // Build extension metadata periodically to catch newly loaded extensions
-        this.startMetadataRefresh();
-        
-        // Setup extension loading listener
-        this.setupExtensionListener();
-        
-        // NEW: Setup extension URL monitoring
-        this.setupExtensionURLMonitoring();
-
-        const checkExtensionLibrary = setInterval(() => {
-    const extensionLibrary = document.querySelector('[class*="extension-library"]') ||
-                            document.querySelector('[class*="extensionLibrary"]');
-    
-    if (extensionLibrary && !this._extensionLibraryWasOpen) {
-        this._extensionLibraryWasOpen = true;
-        console.log('📚 Extension library opened, will rebuild after close');
-    } else if (!extensionLibrary && this._extensionLibraryWasOpen) {
-        this._extensionLibraryWasOpen = false;
-        console.log('📚 Extension library closed, rebuilding metadata...');
-        setTimeout(() => {
-            this.buildExtensionMetadata();
-        }, 1000);
-    }
-}, 500);
-        
-        // Make BlockSearch globally accessible for extension listener
-        window.BlockSearch = this;
-
-        document.addEventListener("click", (e) => {
-            const item = e.target.closest(".scratchCategoryMenuItem");
-            if (!item) return;
-
-            const text = item.textContent.trim().toLowerCase();
-            this.handleCategorySwitch(text);
-        });
-    }
-
-handleCategorySwitch(categoryName) {
-    this.currentCategory = categoryName?.toLowerCase() || "";
-
-    // If switching AWAY from "search", hide it
-    if (this.currentCategory !== "search") {
-        if (this.isSearchVisible) {
-            this.searchContainer.style.display = "none";
-            this.resultsContainer.style.display = "none";
-            this.searchInput.value = "";
-            this.isSearchVisible = false;
-        }
-        
-        // Rebuild metadata when switching categories to catch newly visible blocks
-        setTimeout(() => {
-            this.buildExtensionMetadata();
-        }, 300);
-    }
-}
-
-addSearchCategory() {
-    
-    // Cleanup any existing observers/intervals
-    if (this._searchCategoryObserver) {
-        this._searchCategoryObserver.disconnect();
-        this._searchCategoryObserver = null;
-    }
-    if (this._searchCategoryInterval) {
-        clearInterval(this._searchCategoryInterval);
-        this._searchCategoryInterval = null;
-    }
-
-    const ensureSearchCategory = () => {
-        try {
-            const targetMenu = document.querySelector('.scratchCategoryMenu');
-            if (!targetMenu || !targetMenu.isConnected) {
-                return false;
-            }
-
-            // Check if already exists AND is still in DOM
-            let existing = targetMenu.querySelector('.scratch-search-category');
-            if (existing && existing.isConnected) {
-                return true;
-            }
-
-            // Remove any orphaned search categories
-            document.querySelectorAll('.scratch-search-category').forEach(el => el.remove());
-
-            // Create new search category
-            const searchCategory = document.createElement('div');
-            searchCategory.className = 'scratchCategoryMenuItem scratch-search-category';
-            searchCategory.setAttribute('role', 'treeitem');
-            searchCategory.setAttribute('data-search-injected', 'true');
-            searchCategory.style.cssText = `
-                padding: 8px 1px;
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                background: transparent;
-                color: gray;
-                font-weight: bold;
-                user-select: none;
-                text-align: center;
-                border-bottom: 1px solid rgba(0,0,0,0.08);
-                height: 64px;
-                transition: all 0.2s;
-            `;
-
-            searchCategory.addEventListener('mouseenter', () => {
-                searchCategory.style.backgroundColor = 'rgba(255,255,255,0.1)';
-            });
-            searchCategory.addEventListener('mouseleave', () => {
-                searchCategory.style.backgroundColor = 'transparent';
-            });
-
-            const icon = document.createElement('span');
-            icon.textContent = '🔍';
-            icon.style.cssText = 'font-size: 20px; line-height: 20px; margin: 0;';
-
-            const label = document.createElement('span');
-            label.textContent = 'Search';
-            label.style.cssText = 'font-size: 12px; margin: 0; display: block;';
-
-            searchCategory.appendChild(icon);
-            searchCategory.appendChild(label);
-
-            searchCategory.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.currentCategory = 'search';
-                this.handleCategorySwitch('search');
-                this.toggleSearchBar();
-            });
-
-            targetMenu.insertBefore(searchCategory, targetMenu.firstChild);
-            return true;
-        } catch (err) {
-            console.error('Error in ensureSearchCategory:', err);
-            return false;
-        }
-    };
-
-    // Initial injection with retry
-    const tryInject = (attempts = 0) => {
-        if (attempts > 10) {
-            console.warn('Failed to inject search category after 10 attempts');
             return;
         }
-        
-        if (!ensureSearchCategory()) {
-            setTimeout(() => tryInject(attempts + 1), 200);
-        }
+        return orig(isSelected);
     };
-    
-    tryInject();
-
-    // Watch for toolbox changes using MutationObserver
-    const observeToolbox = () => {
-        const toolboxContainer = document.querySelector('.blocklyToolboxDiv') || 
-                                document.querySelector('[class*="blocks_blocks"]') ||
-                                document.body;
-
-        const observer = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                // Check if category menu was added/modified
-                if (mutation.addedNodes.length > 0) {
-                    for (const node of mutation.addedNodes) {
-                        if (node.classList && 
-                            (node.classList.contains('scratchCategoryMenu') ||
-                             node.querySelector && node.querySelector('.scratchCategoryMenu'))) {
-                            setTimeout(() => ensureSearchCategory(), 100);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        observer.observe(toolboxContainer, {
-            childList: true,
-            subtree: true
-        });
-
-        this._searchCategoryObserver = observer;
-    };
-
-    observeToolbox();
-
-    // Safety interval to catch any missed injections
-    this._searchCategoryInterval = setInterval(() => {
-        const menu = document.querySelector('.scratchCategoryMenu');
-        if (menu && !menu.querySelector('.scratch-search-category')) {
-            ensureSearchCategory();
-        }
-    }, 1000);
-
-    // Hide search UI initially
-    if (this.searchContainer) {
-        this.searchContainer.style.display = 'none';
-        this.isSearchVisible = false;
-    }
 }
 
-
-
-toggleSearchBar() {
-    this.isSearchVisible = !this.isSearchVisible;
-    
-    if (this.isSearchVisible) {
-        this.searchContainer.style.display = 'block';
-        // Focus the input
-        setTimeout(() => this.searchInput.focus(), 100);
-    } else {
-        this.searchContainer.style.display = 'none';
-        this.resultsContainer.style.display = 'none';
-        this.searchInput.value = '';
+    _toggle() {
+        this._active ? this._hide() : this._show();
     }
-}
 
-    createSearchUI() {
-        // Create search container
-        this.searchContainer = document.createElement('div');
-        this.searchContainer.className = 'block-search-container';
-        this.searchContainer.style.cssText = `
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            z-index: 10000;
-            padding: 8px;
-            background: #2d2d2d;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    _show() {
+        this._active = true;
+        if (this._wrap) { this._wrap.remove(); this._wrap = null; }
+        this._buildUI();
+        this._buildMeta();
+        setTimeout(() => this._input && this._input.focus(), 80);
+    }
+
+    _hide() {
+        this._active = false;
+        if (this._wrap) { this._wrap.remove(); this._wrap = null; }
+    }
+
+    _buildUI() {
+        const { flyoutBg, textColor } = getThemeColors();
+
+        // Position to match the flyout exactly
+        const flyoutEl = document.querySelector('.blocklyFlyout') ||
+                         document.querySelector('[class*="blocklyFlyout"]');
+        let left = '60px', top = '56px', width = '250px', height = 'calc(100vh - 56px)';
+        if (flyoutEl) {
+            const rect = flyoutEl.getBoundingClientRect();
+            left = rect.left + 'px';
+            top = rect.top + 'px';
+            width = rect.width + 'px';
+            height = rect.height + 'px';
+        }
+
+        this._wrap = document.createElement('div');
+        this._wrap.className = 'bs-wrap';
+        this._wrap.style.cssText = `
+            position:fixed;left:${left};top:${top};width:${width};height:${height};
+            z-index:99999;display:flex;flex-direction:column;padding:8px;
+            box-sizing:border-box;background:${flyoutBg};color:${textColor};
         `;
+        document.body.appendChild(this._wrap);
 
-        // Create search input
-        this.searchInput = document.createElement('input');
-        this.searchInput.type = 'text';
-        this.searchInput.placeholder = 'Search blocks...';
-        this.searchInput.className = 'block-search-input';
-        this.searchInput.style.cssText = `
-            width: 100%;
-            padding: 6px 10px;
-            border: 1px solid #444;
-            border-radius: 4px;
-            font-size: 13px;
-            box-sizing: border-box;
-            background: #1e1e1e;
-            color: #fff;
-        `;
+        this._wrap.innerHTML = `
+            <div class="bs-row">
+                <label class="bs-input-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${textColor}" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input class="bs-input" type="text" placeholder="Search blocks…" autocomplete="off" spellcheck="false" style="background:${flyoutBg === '#f9f9f9' ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.08)'};color:${textColor};"/>
+                </label>
+                <button class="bs-clear" aria-label="Clear" style="color:${textColor}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${textColor}" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="bs-results" style="color:${textColor}"></div>`;
 
-        // Create results container
-        this.resultsContainer = document.createElement('div');
-        this.resultsContainer.className = 'block-search-results';
-        this.resultsContainer.style.cssText = `
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 8px;
-            display: none;
-            background: #1e1e1e;
-            border-radius: 4px;
-        `;
+        this._input = this._wrap.querySelector('.bs-input');
+        this._results = this._wrap.querySelector('.bs-results');
+        this._clear = this._wrap.querySelector('.bs-clear');
 
-        this.searchContainer.appendChild(this.searchInput);
-        this.searchContainer.appendChild(this.resultsContainer);
-
-        // Event listeners
-        this.searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
-        this.searchInput.addEventListener('focus', () => {
-            if (this.searchInput.value.trim()) {
-                this.resultsContainer.style.display = 'block';
-            }
+        this._input.addEventListener('input', () => {
+            const q = this._input.value;
+            this._clear.classList.toggle('on', q.length > 0);
+            q.trim() ? this._search(q.trim()) : this._showEmpty();
         });
-
-        // Close results when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!this.searchContainer.contains(e.target)) {
-                this.resultsContainer.style.display = 'none';
-            }
+        this._clear.addEventListener('click', () => {
+            this._input.value = '';
+            this._clear.classList.remove('on');
+            this._showEmpty();
+            this._input.focus();
         });
+        this._showEmpty();
     }
 
-    attachToToolbox() {
-        
-        // Find the blocks wrapper specifically
-        let targetDiv = document.querySelector('[class*="blocks_blocks"]') ||
-                        document.querySelector('.injectionDiv');
-        
-        
-        if (targetDiv) {
-            
-            // Make sure parent can contain positioned elements
-            const currentPosition = window.getComputedStyle(targetDiv).position;
-            if (currentPosition === 'static') {
-                targetDiv.style.position = 'relative';
-            }
-            
-            // Position at top-left of blocks area, below tabs
-            this.searchContainer.style.cssText = `
-                margin-left: 60px;
-                position: absolute;
-                top: 5px;
-                left: 5px;
-                width: 240px;
-                z-index: 99999;
-                padding: 8px;
-                background: #2d2d2d;
-                border: 2px solid #4C97FF;
-                border-radius: 6px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-                pointer-events: auto;
-            `;
-            
-            targetDiv.appendChild(this.searchContainer);
-        }
-    }
+_getAllToolboxBlockTypes() {
+    const toolbox = this.workspace && this.workspace.getToolbox();
+    if (!toolbox || !toolbox.categoryMenu_) return new Map();
 
-    handleSearch(query) {
-        if (!query.trim()) {
-            this.resultsContainer.style.display = 'none';
-            this.resultsContainer.innerHTML = '';
-            return;
-        }
+    // Map of blockType -> { category, color }
+    const blockMap = new Map();
 
-        const results = this.searchBlocks(query);
-        this.displayResults(results);
-    }
+    for (const cat of toolbox.categoryMenu_.categories_) {
+        if (cat.id_ === 'search') continue;
 
-    searchBlocks(query) {
-        query = query.toLowerCase();
-        const results = [];
+        const color = cat.colour_ || '#888';
+        const catId = cat.id_;
 
-        const metadata = this.dynamicBlockMetadata;
-
-        for (const [blockType, meta] of Object.entries(metadata)) {
-            // Search by name
-            if (meta.name.toLowerCase().includes(query)) {
-                results.push({ blockType, ...meta });
-                continue;
-            }
-            
-            // Search by block type
-            if (blockType.toLowerCase().includes(query)) {
-                results.push({ blockType, ...meta });
-                continue;
-            }
-            
-            // Search by category
-            if (meta.category.toLowerCase().includes(query)) {
-                results.push({ blockType, ...meta });
-            }
-        }
-
-        return results.slice(0, 10);
-    }
-
-    displayResults(results) {
-        if (results.length === 0) {
-            this.resultsContainer.innerHTML = '<div style="padding:8px;color:#999;">No blocks found</div>';
-            this.resultsContainer.style.display = 'block';
-            return;
-        }
-
-        this.resultsContainer.innerHTML = '';
-        this.resultsContainer.style.display = 'block';
-
-        results.forEach(result => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'block-search-result-item';
-            resultItem.style.cssText = `
-                padding: 8px 12px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                border-radius: 4px;
-                color: white;
-            `;
-
-            // Category color circle
-            const colorCircle = document.createElement('div');
-            colorCircle.style.cssText = `
-                width: 16px;
-                height: 16px;
-                border-radius: 50%;
-                background-color: ${result.color};
-                flex-shrink: 0;
-            `;
-
-            // Block name
-            const blockName = document.createElement('span');
-            blockName.textContent = result.name;
-            blockName.style.cssText = `
-                flex: 1;
-                font-size: 13px;
-            `;
-
-            resultItem.appendChild(colorCircle);
-            resultItem.appendChild(blockName);
-
-            // Hover effect
-            resultItem.addEventListener('mouseenter', () => {
-                resultItem.style.backgroundColor = '#f0f0f054';
-            });
-            resultItem.addEventListener('mouseleave', () => {
-                resultItem.style.backgroundColor = 'transparent';
-            });
-
-            // Click to add block
-            resultItem.addEventListener('click', () => {
-                this.addBlockToWorkspace(result.blockType);
-                this.searchInput.value = '';
-                this.resultsContainer.style.display = 'none';
-            });
-
-            this.resultsContainer.appendChild(resultItem);
-        });
-    }
-addBlockToWorkspace(blockType) {
-    if (!this.workspace || !LazyScratchBlocks.isLoaded()) return;
-
-    const ScratchBlocks = LazyScratchBlocks.get();
-    const metadata = this.dynamicBlockMetadata[blockType] || BLOCK_METADATA[blockType];
-    
-    if (!metadata) {
-        console.warn('No metadata for block:', blockType);
-        return;
-    }
-    
-    if (blockType.startsWith('extension_')) {
-        console.warn('Invalid block type (extension_ prefix):', blockType);
-        return;
-    }
-    
-    // Helper to get safe center position
-    const getSafeCenterPosition = () => {
-        try {
-            const metrics = this.workspace.getMetrics();
-            const scale = this.workspace.scale || 1;
-            
-            // Calculate visible center
-            const viewLeft = metrics.viewLeft || 0;
-            const viewTop = metrics.viewTop || 0;
-            const viewWidth = metrics.viewWidth || 400;
-            const viewHeight = metrics.viewHeight || 300;
-            
-            // Position in center of visible area
-            const centerX = viewLeft + (viewWidth / 2 / scale);
-            const centerY = viewTop + (viewHeight / 2 / scale);
-            
-            // Clamp to reasonable bounds
-            const safeX = Math.max(50, Math.min(centerX, 5000));
-            const safeY = Math.max(50, Math.min(centerY, 5000));
-            
-            return { x: safeX, y: safeY };
-        } catch (e) {
-            console.warn('Error getting center position, using defaults:', e);
-            return { x: 200, y: 200 };
-        }
-    };
-    
-    try {
-        const toolbox = this.workspace.getToolbox();
-            if (!toolbox || !toolbox.flyout_) {
-                console.warn('No toolbox or flyout available');
-                return;
-            }
-            
+        if (cat.custom_ === 'VARIABLE' || cat.custom_ === 'LIST') {
+            // Variable/List blocks are in the flyout as data_ prefix
             const flyout = toolbox.flyout_;
-            
-            const switchToCategory = () => {
-                if (!toolbox.tree_) return false;
-                
-                const findCategory = (node, targetName) => {
-                    if (!node || !node.getChildren) return null;
-                    
-                    const children = node.getChildren();
-                    for (const child of children) {
-                        const name = child.rowDiv_?.textContent?.trim().toLowerCase();
-                        if (name === targetName) {
-                            return child;
-                        }
-                        const found = findCategory(child, targetName);
-                        if (found) return found;
+            if (flyout && flyout.workspace_) {
+                for (const b of flyout.workspace_.getAllBlocks(false)) {
+                    if (!b.type) continue;
+                    const isShadow = typeof b.isShadow === 'function' ? b.isShadow() : b.isShadow;
+                    if (isShadow) continue;
+                    const prefix = cat.custom_ === 'VARIABLE' ? 'data_' : 'data_';
+                    const listTypes = new Set(['data_addtolist','data_deleteoflist','data_deletealloflist','data_insertatlist','data_replaceitemoflist','data_itemoflist','data_itemnumoflist','data_lengthoflist','data_listcontainsitem','data_showlist','data_hidelist','data_listcontents']);
+                    const varTypes = new Set(['data_variable','data_setvariableto','data_changevariableby','data_showvariable','data_hidevariable']);
+                    const isVar = cat.custom_ === 'VARIABLE' && varTypes.has(b.type);
+                    const isList = cat.custom_ === 'LIST' && listTypes.has(b.type);
+                    if (isVar || isList) {
+                        blockMap.set(b.type, { category: catId, color: b.colour_ || b.getColour?.() || color });
                     }
-                    return null;
-                };
-                
-                const category = findCategory(toolbox.tree_, metadata.category);
-                if (category && category.onClick) {
-                    category.onClick();
-                    return true;
                 }
-                return false;
-            };
-            
-            const createFromFlyout = () => {
-                try {
-                    if (!flyout.workspace_) {
-                        return false;
-                    }
-                    
-                    const flyoutBlocks = flyout.workspace_.getTopBlocks(false);
-                    
-                    let sourceBlock = null;
-                    for (const block of flyoutBlocks) {
-                        if (block.type === blockType) {
-                            const isShadow = (typeof block.isShadow === 'function') ? block.isShadow() : block.isShadow;
-                            const isMarker = (typeof block.isInsertionMarker === 'function') ? 
-                                block.isInsertionMarker() : block.isInsertionMarker;
-                            
-                            if (!isShadow && !isMarker) {
-                                sourceBlock = block;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (!sourceBlock) {
-                        console.warn(`Block ${blockType} not found in flyout`);
-                        return false;
-                    }
-                    
-                    const newBlock = flyout.createBlock(sourceBlock);
-                    
-                    if (!newBlock) {
-                        return false;
-                    }
-                    
-setTimeout(() => {
-                        try {
-                            const position = getSafeCenterPosition();
-                            
-                            // Get block's current position
-                            const currentPos = newBlock.getRelativeToSurfaceXY();
-                            
-                            // Calculate offset to center
-                            const offsetX = position.x - currentPos.x;
-                            const offsetY = position.y - currentPos.y;
-                            
-                            // Move block to center
-                            newBlock.moveBy(offsetX, offsetY);
-                            
-                            // Ensure block is rendered
-                            if (newBlock.render) {
-                                newBlock.render();
-                            }
-                            
-                            // Select and bring to front
-                            if (newBlock.select) {
-                                newBlock.select();
-                            }
-                            
-                            // Scroll to block if needed
-                            this.workspace.centerOnBlock(newBlock.id);
-                            
+            }
+            continue;
+        }
 
-                        } catch (e) {
-                            console.warn('Error positioning block:', e);
-                        }
-                    }, 50);
-                    
-                    return true;
-                    
-                } catch (err) {
-                    console.error('Error in createFromFlyout:', err);
-                    return false;
-                }
-            };
-            
-            switchToCategory();
-            
-            setTimeout(() => {
-                createFromFlyout();
-                this.searchInput.value = '';
-                this.resultsContainer.style.display = 'none';
-            }, 200);
-            
-        } catch (err) {
-            console.error('Error adding block:', err);
+        if (cat.custom_ === 'PROCEDURE') {
+            // My Blocks — procedures_call etc handled separately, skip for now
+            continue;
+        }
+
+        // Normal category — read block types from contents_ DOM elements
+        if (cat.contents_) {
+            for (const el of cat.contents_) {
+                const type = el.getAttribute && el.getAttribute('type');
+                if (!type) continue;
+                // Get color from the actual rendered block if possible
+                const flyoutBlock = toolbox.flyout_?.workspace_?.getAllBlocks(false)
+                    .find(b => b.type === type && !(typeof b.isShadow === 'function' ? b.isShadow() : b.isShadow));
+                const blockColor = flyoutBlock?.colour_ || flyoutBlock?.getColour?.() || color;
+                blockMap.set(type, { category: catId, color: blockColor });
+            }
         }
     }
 
-// Helper method to remove all IDs from XML tree
-removeAllIds(xmlElement) {
-    xmlElement.removeAttribute('id');
-    xmlElement.removeAttribute('disabled');
-    
-    // Recursively remove from children
-    const children = xmlElement.children;
-    for (let i = 0; i < children.length; i++) {
-        this.removeAllIds(children[i]);
-    }
+    return blockMap;
 }
 
-// Helper to clone a block's full structure including shadows
-cloneBlockWithShadows(sourceBlock) {
-    const ScratchBlocks = LazyScratchBlocks.get();
-    
-    try {
-        // Get the block's XML representation with all children
-        const blockXml = ScratchBlocks.Xml.blockToDom(sourceBlock);
-        
-        // Deep clone the XML
-        const clonedXml = blockXml.cloneNode(true);
-        
-        // Remove all IDs so new blocks are created
-        this.removeAllIds(clonedXml);
-        
-        return clonedXml;
-    } catch (e) {
-        console.error('Error cloning block:', e);
-        return null;
+_search(query) {
+    const blockMap = this._getAllToolboxBlockTypes();
+    if (blockMap.size === 0) return;
+
+    const results = [];
+    const SB = LazyScratchBlocks.isLoaded() ? LazyScratchBlocks.get() : null;
+    const toolbox = this.workspace && this.workspace.getToolbox();
+    let order = 0;
+
+    for (const [type, { category, color }] of blockMap) {
+        let name = '';
+        const flyoutBlock = toolbox.flyout_?.workspace_?.getAllBlocks(false)
+            .find(b => b.type === type && !(typeof b.isShadow === 'function' ? b.isShadow() : b.isShadow));
+
+        if (flyoutBlock && flyoutBlock.inputList) {
+            const parts = [];
+            for (const input of flyoutBlock.inputList) {
+                for (const field of (input.fieldRow || [])) {
+                    if (field.EDITABLE) {
+                        // Dropdowns show as [], editable text/number inputs show as ()
+                        if (field.constructor && field.constructor.name && field.constructor.name.includes('Dropdown')) {
+                            parts.push('[]');
+                        } else {
+                            parts.push('()');
+                        }
+                    } else if (field.getText && typeof field.getText === 'function') {
+                        const txt = field.getText().trim();
+                        if (txt && txt !== '▼') parts.push(txt);
+                    }
+                }
+                // Value inputs (block slots) show as ()
+                if (input.type === 1) parts.push('()');
+                // Statement inputs (C-blocks) show as {}
+                if (input.type === 3) parts.push('{}');
+            }
+            name = parts.join(' ').toLowerCase().trim();
+        }
+
+        if (!name && SB && SB.Blocks[type] && SB.Blocks[type].json?.message0) {
+            let msg = SB.Blocks[type].json.message0;
+            (SB.Blocks[type].json.args0 || []).forEach((arg, i) => {
+                msg = msg.replace(`%${i + 1}`, '');
+            });
+            name = msg.replace(/\s+/g, ' ').trim().toLowerCase();
+        }
+
+        if (!name) name = type.replace(/^[a-z]+_/, '').replace(/_/g, ' ').toLowerCase();
+
+        const s = Math.max(
+            score(query, name),
+            score(query, type.replace(/^[a-z]+_/, '').replace(/_/g, ' ')) * 0.8,
+            score(query, category) * 0.5,
+            score(query, (CAT_LABELS[category] || category)) * 0.5
+        );
+        if (s >= 20) results.push({ type, name, color, category, score: s, order: order++ });
     }
+
+    results.sort((a, b) => {
+        const diff = b.score - a.score;
+        if (Math.abs(diff) > 5) return diff;
+        return a.order - b.order;
+    });
+    this._renderResults(results.slice(0, 15), query);
 }
 
-// Add fallback method to create blocks directly when flyout method fails
-createBlockDirectly(blockType) {
-    try {
-        const ScratchBlocks = LazyScratchBlocks.get();
-        
-        // Check if block definition exists
-        if (!ScratchBlocks.Blocks[blockType]) {
-            console.warn('Block definition not found:', blockType);
+    _renderResults(results, query) {
+        this._results.innerHTML = '';
+        if (!results.length) {
+            this._results.innerHTML = `<div class="bs-empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div>No results for <strong>"${esc(query)}"</strong></div></div>`;
             return;
         }
-        
-        // Disable events temporarily to prevent unwanted side effects
-        const eventsEnabled = ScratchBlocks.Events.isEnabled();
-        ScratchBlocks.Events.disable();
-        
-        try {
-            // Create basic XML
-            const blockXml = ScratchBlocks.Xml.textToDom(
-                `<block type="${blockType}"></block>`
-            );
-            
-            // Create the block
-            const newBlock = ScratchBlocks.Xml.domToBlock(blockXml, this.workspace);
-            
-            if (!newBlock) {
-                console.error('Failed to create block directly');
-                return;
-            }
-            
-            // Initialize the block properly
-            if (newBlock.initSvg) newBlock.initSvg();
-            if (newBlock.render) newBlock.render(false);
-            
-// Position in center using safe positioning
-            const position = getSafeCenterPosition();
-            const currentPos = newBlock.getRelativeToSurfaceXY();
-            const offsetX = position.x - currentPos.x;
-            const offsetY = position.y - currentPos.y;
-            
-            newBlock.moveBy(offsetX, offsetY);
-            
-            // Scroll to make sure it's visible
-            this.workspace.centerOnBlock(newBlock.id);
-            
-            // Select the block
-            if (newBlock.select) {
-                newBlock.select();
-            }
-            
-            console.log('Block created directly:', blockType);
-        } finally {
-            // Re-enable events
-            if (eventsEnabled) {
-                ScratchBlocks.Events.enable();
-            }
+        const primary = results.filter(r => r.score >= 60);
+        const similar = results.filter(r => r.score < 60);
+        if (primary.length) {
+            this._results.appendChild(this._hint('Best matches'));
+            primary.forEach(r => this._results.appendChild(this._item(r)));
         }
-        
-    } catch (err) {
-        console.error('Error creating block directly:', err);
+        if (similar.length) {
+            this._results.appendChild(this._hint('Similar blocks'));
+            similar.forEach(r => this._results.appendChild(this._item(r)));
+        }
     }
+
+    _hint(text) {
+        const d = document.createElement('div');
+        d.className = 'bs-hint';
+        d.textContent = text;
+        return d;
+    }
+
+    _item(result) {
+        const d = document.createElement('div');
+        d.className = 'bs-item';
+        d.setAttribute('role', 'button');
+        d.setAttribute('tabindex', '0');
+        const label = CAT_LABELS[result.category] || result.category;
+        d.innerHTML = `<div class="bs-dot" style="background:${result.color}"></div><span class="bs-name">${esc(result.name)}</span><span class="bs-badge" style="background:${result.color}">${esc(label)}</span>`;
+        const go = () => this._navigate(result.type, result.category);
+        d.addEventListener('click', go);
+        d.addEventListener('keydown', e => (e.key === 'Enter' || e.key === ' ') && go());
+        return d;
+    }
+
+    _showEmpty() {
+        if (!this._results) return;
+        this._results.innerHTML = `<div class="bs-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div>Search for any block</div><div>This is NOT meant to find things like Specific Variables and Lists</div></div>`;
+    }
+
+
+_navigate(blockType, category) {
+    const toolbox = this.workspace && this.workspace.getToolbox();
+    if (!toolbox) return;
+    this._hide();
+    this._switchCategory(category);
+    this._waitForBlockAndFlash(blockType);
 }
 
-// Fallback method to show block in toolbox
-showBlockInToolbox(blockType) {
-    console.log('Block selected:', blockType);
-    
-    const result = this.dynamicBlockMetadata[blockType] || BLOCK_METADATA[blockType];
-    if (!result) return;
-    
-    // Try to switch to the appropriate category
+_switchCategory(catId) {
+    const toolbox = this.workspace.getToolbox();
+    if (!toolbox || !toolbox.categoryMenu_) return;
+    const aliases = { events: 'event', event: 'events', operators: 'operator', operator: 'operators' };
+    const cat = toolbox.categoryMenu_.categories_.find(c => {
+        const id = (c.id_ || '').toLowerCase();
+        return id === catId.toLowerCase() || id === (aliases[catId] || '').toLowerCase();
+    });
+    if (!cat) return;
+    this._navigating = true;
+    toolbox.setSelectedItem(cat);
+    this._navigating = false;
+}
+
+
+_waitForBlockAndFlash(blockType, attempts = 0) {
+    if (attempts > 20) return;
+    const toolbox = this.workspace && this.workspace.getToolbox();
+    if (!toolbox || !toolbox.flyout_ || !toolbox.flyout_.workspace_) return;
+
+    const allBlocks = toolbox.flyout_.workspace_.getAllBlocks(false).filter(b => {
+        if (b.type !== blockType) return false;
+        return !(typeof b.isShadow === 'function' ? b.isShadow() : b.isShadow);
+    });
+
+    const block = allBlocks[allBlocks.length - 1];
+
+    if (!block || !block.svgGroup_) {
+        return setTimeout(() => this._waitForBlockAndFlash(blockType, attempts + 1), 50);
+    }
+
     try {
-        const toolbox = this.workspace.getToolbox();
-        if (toolbox && toolbox.tree_) {
-            const findCategory = (node, targetName) => {
-                if (!node || !node.getChildren) return null;
-                
-                const children = node.getChildren();
-                for (const child of children) {
-                    const name = child.rowDiv_?.textContent?.trim().toLowerCase();
-                    if (name === targetName) {
-                        return child;
-                    }
-                    const found = findCategory(child, targetName);
-                    if (found) return found;
-                }
-                return null;
-            };
-            
-            const category = findCategory(toolbox.tree_, result.category);
-            if (category && category.onClick) {
-                category.onClick();
+        const xy = block.getRelativeToSurfaceXY();
+        if (toolbox.flyout_.workspace_.scrollbar) {
+            toolbox.flyout_.workspace_.scrollbar.set(Math.max(0, xy.y - 80));
+        }
+    } catch (_) {}
+
+    const svg = block.svgGroup_;
+    let flashInterval = setInterval(() => {
+        svg.classList.add('bs-flash');
+        setTimeout(() => svg.classList.remove('bs-flash'), 650);
+    }, 1400);
+
+    const stopFlash = () => {
+        clearInterval(flashInterval);
+        svg.classList.remove('bs-flash');
+        svg.removeEventListener('mouseenter', stopFlash);
+    };
+
+    svg.addEventListener('mouseenter', stopFlash);
+
+    setTimeout(() => {
+        clearInterval(flashInterval);
+        svg.classList.remove('bs-flash');
+        svg.removeEventListener('mouseenter', stopFlash);
+    }, 30000);
+}
+
+    _resolveCatId(blockType, category) {
+        if (this.vm && this.vm.runtime && this.vm.runtime._blockInfo) {
+            const extId = blockType.split('_')[0];
+            const cores = new Set(['motion','looks','sound','event','control','sensing','operator','data','procedures','argument']);
+            if (!cores.has(extId)) {
+                const info = this.vm.runtime._blockInfo.find(i => i.id === extId);
+                if (info) return info.id;
             }
         }
-    } catch (e) {
-        console.warn('Could not switch category:', e);
+        return category;
     }
+
+    _flash(blockType) {
+        const toolbox = this.workspace && this.workspace.getToolbox();
+        if (!toolbox || !toolbox.flyout_ || !toolbox.flyout_.workspace_) return;
+        const block = toolbox.flyout_.workspace_.getAllBlocks(false).find(b => {
+            if (b.type !== blockType) return false;
+            return !(typeof b.isShadow === 'function' ? b.isShadow() : b.isShadow);
+        });
+        if (!block || !block.svgGroup_) return;
+        try {
+            const xy = block.getRelativeToSurfaceXY();
+            if (toolbox.flyout_.workspace_.scrollbar) {
+                toolbox.flyout_.workspace_.scrollbar.set(Math.max(0, xy.y - 80));
+            }
+        } catch (_) {}
+        block.svgGroup_.classList.add('bs-flash');
+        setTimeout(() => block.svgGroup_.classList.remove('bs-flash'), 1400);
     }
+
+    _buildMeta() {
+        if (!LazyScratchBlocks.isLoaded()) return;
+        const SB = LazyScratchBlocks.get();
+        for (const type of Object.keys(SB.Blocks || {})) {
+            if (SKIP_TYPES.has(type) || this._meta[type] || type.startsWith('extension_')) continue;
+            const def = SB.Blocks[type];
+            if (!def) continue;
+            let category = 'extension', color = '#0FBD8C';
+            for (const [prefix, info] of Object.entries(PREFIX_MAP)) {
+                if (type.startsWith(prefix)) { category = info.category; color = info.color; break; }
+            }
+            if (category === 'extension' && this.vm && this.vm.runtime._blockInfo) {
+                const extId = type.split('_')[0];
+                const ext = this.vm.runtime._blockInfo.find(i => i.id === extId);
+                if (ext) { category = ext.id; color = ext.color1 || ext.colour || color; }
+            }
+            let name = '';
+            if (def.json && def.json.message0) {
+                let msg = def.json.message0;
+                (def.json.args0 || []).forEach((arg, i) => {
+                    msg = msg.replace(`%${i + 1}`, arg.type === 'input_value' ? '()' : arg.type === 'input_statement' ? '{}' : arg.type.startsWith('field_') ? '[]' : '');
+                });
+                name = msg.replace(/\s+/g, ' ').trim().toLowerCase();
+            }
+            if (!name) name = type.replace(/^[a-z]+_/, '').replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').toLowerCase().trim();
+            this._meta[type] = { name, category, color };
+        }
+    }
+reapply() {
+    this._patchToolbox();
+    const searchItem = document.querySelector('.scratchCategoryId-search');
+    if (!searchItem) return;
+    const bubble = searchItem.querySelector('.scratchCategoryItemBubble');
+    if (bubble && bubble.textContent !== '🔍') {
+        bubble.style.cssText = 'background:none!important;border:none!important;font-size:18px;display:flex;align-items:center;justify-content:center;';
+        bubble.textContent = '🔍';
+    }
+}
 }
 
 export default new BlockSearch();

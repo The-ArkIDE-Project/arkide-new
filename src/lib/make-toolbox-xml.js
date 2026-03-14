@@ -6,6 +6,14 @@ const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 
 import { getPinnedBlocks, cleanupPinnedBlocks } from './pinned-blocks-storage';
 
+const search = function () {
+    return `
+    <category name="" id="search" colour="#4C97FF" secondaryColour="#3373CC">
+        <label text=" "></label>
+    </category>
+    `;
+};
+
 const pinned = function (loadedExtensions = []) {
     cleanupPinnedBlocks();
     const pinnedBlocks = getPinnedBlocks();
@@ -1612,11 +1620,13 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
     const variablesXML = moveCategory('variables') || variables(isInitialSetup, isStage, targetId);
     const listsXML = moveCategory('lists') || lists(isInitialSetup, isStage, targetId);
     const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
+    const searchXML = moveCategory('search') || search();
     const liveTestsXML = moveCategory('liveTests') || liveTests(isLiveTest);
     const pinnedXML = pinned(categoriesXML); // Pass the loaded extensions
 
     const everything = [
         xmlOpen,
+        searchXML,
         pinnedXML,
         motionXML,
         looksXML,

@@ -39,7 +39,6 @@ import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 import vmManagerHOC from '../lib/vm-manager-hoc.jsx';
 import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 import TWFullScreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
-import BlockSearch from '../lib/block-search';
 
 import GUIComponent from '../components/gui/gui.jsx';
 import HomeCommunication from './home-communication.jsx';
@@ -50,9 +49,7 @@ class GUI extends React.Component {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
-        
-        // Initialize block search immediately
-        this.initializeBlockSearch();
+       
     }
     componentDidUpdate (prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
@@ -63,33 +60,6 @@ class GUI extends React.Component {
         }
     }
 
-    initializeBlockSearch() {
-        
-        const tryInit = () => {
-            
-            try {
-                const workspace = this.props.vm?.runtime?.getEditingTarget?.()?.blocks?._workspace || 
-                                window.Blockly?.getMainWorkspace?.();
-                
-                if (workspace) {
-                    BlockSearch.init(workspace, vm);
-                    return true;
-                }
-            } catch (err) {
-                console.error('Block search init error:', err);
-            }
-            return false;
-        };
-
-        if (!tryInit()) {
-            let attempts = 0;
-            const retry = setInterval(() => {
-                if (tryInit() || attempts++ > 10) {
-                    clearInterval(retry);
-                }
-            }, 200);
-        }
-    }
     render () {
         if (this.props.isError) {
             console.log('the below error was caught by the gui');
