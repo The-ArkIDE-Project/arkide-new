@@ -208,7 +208,7 @@ const PromptComponent = props => props.isCustom ? (
                                     rel="noopener noreferrer"
                                 >
                                     {/* Should not be translated */}
-                                    {'PenguinMod Packager'}
+                                    {'ArkIDE Packager'}
                                 </a>
                             )
                         }}

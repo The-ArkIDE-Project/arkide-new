@@ -73,7 +73,7 @@ class TWRestorePointManager extends React.Component {
         RestorePointAPI.deleteLegacyRestorePoint();
     }
 
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
         if (nextProps.isModalVisible && !this.props.isModalVisible) {
             this.refreshState();
         } else if (!nextProps.isModalVisible && this.props.isModalVisible) {

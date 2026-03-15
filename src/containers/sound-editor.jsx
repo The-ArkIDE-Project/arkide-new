@@ -69,7 +69,7 @@ class SoundEditor extends React.Component {
 
         document.addEventListener('keydown', this.handleKeyPress);
     }
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.waveformChunkSize !== this.props.waveformChunkSize) {
             this.setState({
                 chunkLevels: computeChunkedRMS(newProps.samples, newProps.waveformChunkSize),

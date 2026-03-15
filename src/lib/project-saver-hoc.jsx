@@ -53,7 +53,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 'tryToAutoSave'
             ]);
         }
-        componentWillMount () {
+        UNSAFE_componentWillMount () {
             if (typeof window === 'object') {
                 // Note: it might be better to use a listener instead of assigning onbeforeunload;
                 // but then it'd be hard to turn this listening off in our tests
@@ -193,32 +193,10 @@ const ProjectSaverHOC = function (WrappedComponent) {
         storeProject (projectId, requestParams) {
             requestParams = requestParams || {};
             this.clearAutoSaveTimeout();
-            // Serialize VM state now before embarking on
-            // the asynchronous journey of storing assets to
-            // the server. This ensures that assets don't update
-            // while in the process of saving a project (e.g. the
-            // serialized project refers to a newer asset than what
-            // we just finished saving).
             const savedVMState = this.props.vm.toJSON();
-            return Promise.all(this.props.vm.assets
-                .filter(asset => !asset.clean)
-                .map(
-                    asset => storage.store(
-                        asset.assetType,
-                        asset.dataFormat,
-                        asset.data,
-                        asset.assetId
-                    ).then(response => {
-                        // Asset servers respond with {status: ok} for successful POSTs
-                        if (response.status !== 'ok') {
-                            // Errors include a `code` property, e.g. "Forbidden"
-                            return Promise.reject(response.code);
-                        }
-                        asset.clean = true;
-                    })
-                )
-            )
-                .then(() => this.props.onUpdateProjectData(projectId, savedVMState, requestParams))
+            
+            // tw: skip asset storage, we don't have a web store in the editor
+            return this.props.onUpdateProjectData(projectId, savedVMState, requestParams)
                 .then(response => {
                     this.props.onSetProjectUnchanged();
                     const id = response.id.toString();
@@ -230,7 +208,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 })
                 .catch(err => {
                     log.error(err);
-                    throw err; // pass the error up the chain
+                    throw err;
                 });
         }
 
