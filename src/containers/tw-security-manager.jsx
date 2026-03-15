@@ -28,6 +28,7 @@ const isTrustedExtensionOrigin = url => (
     url.startsWith('https://extensions.arkide.site/') ||
     url.startsWith('https://penguinmod-extensions-gallery.vercel.app/') ||
     url.startsWith('https://arkfs.arc360hub.com/') ||
+    url.startsWith('https://arc360hub.com/') ||
 
     //'https://arkfs.arc360hub.com/',
 
@@ -103,7 +104,13 @@ const isAlwaysTrustedForFetching = parsed => (
     parsed.origin === 'https://httpbin.org' ||
 
     // ScratchDB
-    parsed.origin === 'https://scratchdb.lefty.one'
+    parsed.origin === 'https://scratchdb.lefty.one' ||
+    
+    // arc360hub
+    parsed.origin === 'https://arc360hub.com' ||
+    parsed.origin.endsWith('.arc360hub.com') ||
+    parsed.origin.endsWith('.arkide.site') ||
+    parsed.origin === 'https://projstorage.arkide.site'
 );
 
 const FETCHABLE_PROTOCOLS = [
