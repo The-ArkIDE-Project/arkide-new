@@ -12,7 +12,7 @@ $ui-white-transparent: hsla(0, 100%, 100%, 0.25);
 $ui-transparent: hsla(0, 100%, 100%, 0);
 
 $ui-black-transparent-default: hsla(0, 0%, 0%, 0.15);
-$ui-black-transparent: var(--ui-black-transparent, $ui-black-transparent-default);
+$ui-black-transparent: hsla(0, 0%, 0%, 0.15);
 
 $text-primary: var(--text-primary, hsla(225, 15%, 40%, 1)); /* #575E75 */
 $text-primary-transparent: hsla(225, 15%, 40%, 0.75);

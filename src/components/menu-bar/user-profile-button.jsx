@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import styles from './user-profile-button.css';
+import styles from './menu-bar.css';
+
+import MenuBarMenu from './menu-bar-menu.jsx';
+import {MenuItem} from '../menu/menu.jsx';
 
 class UserProfileButton extends React.Component {
     constructor(props) {
@@ -11,33 +14,18 @@ class UserProfileButton extends React.Component {
             profilePicUrl: null,
             dropdownOpen: false
         };
-        this.dropdownRef = React.createRef();
     }
 
     componentDidMount() {
         this.loadUserProfile();
-        document.addEventListener('mousedown', this.handleClickOutside);
     }
 
-    componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleClickOutside);
-    }
-
-    handleClickOutside = (event) => {
-        if (this.dropdownRef.current && !this.dropdownRef.current.contains(event.target)) {
-            this.setState({ dropdownOpen: false });
-        }
-    }
-
-    // Helper to read a cookie by name
     getCookie(name) {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
             cookie = cookie.trim();
             if (cookie.startsWith(name)) {
-                // Get everything after the cookie name
                 const value = cookie.substring(name.length).trim();
-                // Remove the first character (= or :) and any quotes
                 return value.substring(1).replace(/^"|"$/g, '');
             }
         }
@@ -48,7 +36,6 @@ class UserProfileButton extends React.Component {
         // const username = "ark"
         const username = this.getCookie('arkide_username');
         if (username) {
-            // Update state so render shows profile instead of login
             this.setState({
                 username: username,
                 profilePicUrl: `https://arkideapi.arc360hub.com/api/v1/users/getpfp?username=${encodeURIComponent(username)}`
@@ -65,71 +52,68 @@ class UserProfileButton extends React.Component {
     }
 
     handleMenuItemClick = (url) => {
-        window.open(url, "_blank");
-        this.setState({ dropdownOpen: false });
+        window.open(url, '_blank');
+        this.setState({dropdownOpen: false});
     }
 
     handleLoginClick = () => {
-        window.open('https://arkide.site/signin', "_blank");
+        window.open('https://arkide.site/signin', '_blank');
     }
 
     render() {
-        const { username, profilePicUrl, dropdownOpen } = this.state;
+        const {username, profilePicUrl, dropdownOpen} = this.state;
 
         if (!username) {
-            // Show login button if not logged in
             return (
-                <span
-                    className={styles.outlinedButton}
-                    role="button"
-                    onClick={this.handleLoginClick}
+                <div
+                    className={classNames(styles.menuBarItem, styles.hoverable)}
+                    onMouseUp={this.handleLoginClick}
                 >
-                    <div className={styles.content}>Login</div>
-                </span>
+                    <div>Login</div>
+                </div>
             );
         }
 
-        // Show user profile if logged in
         return (
-            <div className={styles.dropdownContainer} ref={this.dropdownRef}>
-                <span
-                    className={styles.outlinedButton}
-                    role="button"
-                    onClick={this.handleProfileClick}
+            <div
+                className={classNames(styles.menuBarItem, styles.hoverable, {
+                    [styles.active]: dropdownOpen
+                })}
+                onMouseUp={this.handleProfileClick}
+            >
+                <img
+                    src={profilePicUrl}
+                    height="40"
+                    width="40"
+                    draggable={false}
+                    style={{borderRadius: '20%', marginRight: '8px'}}
+                    alt={username}
+                />
+                <div style={{fontSize: '14px'}}>{username}</div>
+                <MenuBarMenu
+                    className={classNames(styles.menuBarMenu)}
+                    open={dropdownOpen}
+                    place="left"
+                    onRequestClose={() => this.setState({dropdownOpen: false})}
                 >
-                    <img
-                        className={classNames(styles.icon, styles.userProfilePic)}
-                        draggable={false}
-                        src={profilePicUrl}
-                        height="24"
-                        width="24"
-                        alt={username}
-                    />
-                    <div className={styles.content}>{username}</div>
-                </span>
-
-                {dropdownOpen && (
-                    <div className={styles.dropdownMenu}>
-                        <div 
-                            className={styles.dropdownItem}
-                            onClick={() => this.handleMenuItemClick(`https://arkide.site/profile/?user=${encodeURIComponent(username)}`)}
-                        >
-                            Go to Profile
-                        </div>
-                        <div 
-                            className={styles.dropdownItem}
-                            onClick={() => this.handleMenuItemClick('https://arkide.site/mystuff/')}
-                        >
-                            My Stuff
-                        </div>
-                        <div 
-                            className={styles.dropdownItem}
-                            onClick={() => this.handleMenuItemClick('https://arkide.site/settings/')}
-                        >
-                            Settings
-                        </div>
-                    </div>
-                )}
+                    <MenuItem
+                        onClick={() => this.handleMenuItemClick(
+                            `https://arkide.site/profile/?user=${encodeURIComponent(username)}`
+                        )}
+                    >
+                        Go to Profile
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => this.handleMenuItemClick('https://arkide.site/mystuff/')}
+                    >
+                        My Stuff
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => this.handleMenuItemClick('https://arkide.site/settings/')}
+                    >
+                        Settings
+                    </MenuItem>
+                </MenuBarMenu>
             </div>
         );
     }

@@ -14,7 +14,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     padding: 1.5rem 2.25rem;
-    min-height: 900px; /* Add minimum height */
+    min-height: 520px; /* Add minimum height */
     max-height: calc(100vh - 250px);
     overflow: hidden; /* Change from auto to hidden since tab-content will handle scrolling */
 }
