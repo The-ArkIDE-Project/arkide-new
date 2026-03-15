@@ -9,7 +9,7 @@ import {APP_NAME} from '../../lib/brand';
 const hosts = [
     {
         name: 'US East',
-        cloudHost: 'wss://clouddata.turbowarp.org'
+        cloudHost: 'wss://clouddata.arkide.site'
     },
     {
         name: 'EU',
@@ -83,7 +83,7 @@ const CloudVariableBadge = props => {
                 <FormattedMessage
                     defaultMessage="Using a custom cloud variable server: {server}"
                     // eslint-disable-next-line max-len
-                    description="Appears when using a non-TurboWarp provided cloud variable server. {server} is replaced with the server's URL, eg. wss://clouddata.turbowarp.org"
+                    description="Appears when using a non-TurboWarp provided cloud variable server. {server} is replaced with the server's URL, eg. wss://clouddata.arkide.site"
                     id="tw.customCloudServer"
                     values={{
                         server: props.cloudHost

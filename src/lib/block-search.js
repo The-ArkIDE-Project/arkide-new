@@ -231,9 +231,10 @@ class BlockSearch {
             if (proto._bsPopulatePatched) return;
             proto._bsPopulatePatched = true;
             const origPopulate = proto.populate_;
-            proto.populate_ = (...args) => {
-                const result = origPopulate.apply(toolbox, args);
-                setTimeout(() => this.reapply(), 100);
+            const self = this;  // capture BlockSearch instance
+            proto.populate_ = function(...args) {  // regular function so `this` = toolbox
+                const result = origPopulate.apply(this, args);  // this = current toolbox
+                setTimeout(() => self.reapply(), 100);
                 return result;
             };
         }, 600);

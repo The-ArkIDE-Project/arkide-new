@@ -7,7 +7,8 @@ import VM from 'scratch-vm';
 import CloudProvider from '../lib/cloud-provider';
 
 import {
-    getIsShowingWithId
+    getIsShowingWithId,
+    getIsShowingWithoutId
 } from '../reducers/project-state';
 
 import {
@@ -105,11 +106,15 @@ const cloudManagerHOC = function (WrappedComponent) {
             return this.cloudProvider && !!this.cloudProvider.connection;
         }
         connectToCloud () {
+            const roomId = this.props.vm.runtime.getOrCreateCloudRoomId();
+            if (!roomId) return; // stage not ready yet
+            
             this.cloudProvider = new CloudProvider(
                 this.props.reduxCloudHost,
                 this.props.vm,
                 this.props.username,
-                this.props.projectId);
+                roomId 
+            );
             this.cloudProvider.onInvalidUsername = this.onInvalidUsername;
             this.props.vm.setCloudProvider(this.cloudProvider);
         }
@@ -182,7 +187,7 @@ const cloudManagerHOC = function (WrappedComponent) {
         const loadingState = state.scratchGui.projectState.loadingState;
         return {
             reduxCloudHost: state.scratchGui.tw.cloudHost,
-            isShowingWithId: getIsShowingWithId(loadingState),
+            isShowingWithId: getIsShowingWithId(loadingState) || getIsShowingWithoutId(loadingState),
             projectId: state.scratchGui.projectState.projectId,
             hasCloudPermission: state.scratchGui.tw.cloud,
             username: state.scratchGui.tw.username,

@@ -504,7 +504,7 @@ Interface.propTypes = {
     extraProjectInfo: PropTypes.shape({
         accepted: PropTypes.bool,
         isRemix: PropTypes.bool,
-        remixId: PropTypes.string,
+        remixId: PropTypes.number,
         tooLarge: PropTypes.bool,
         author: PropTypes.string,
         releaseDate: PropTypes.shape(Date),

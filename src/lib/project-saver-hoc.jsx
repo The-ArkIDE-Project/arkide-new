@@ -153,6 +153,10 @@ const ProjectSaverHOC = function (WrappedComponent) {
             return props.canCreateNew && props.isShowingWithoutId;
         }
         updateProjectToStorage () {
+            // tw: no server storage in standalone editor, only file handle saves are supported
+            if (!this.props.reduxProjectId || this.props.reduxProjectId === '0') {
+                return Promise.resolve();
+            }
             this.props.onShowSavingAlert();
             return this.storeProject(this.props.reduxProjectId)
                 .then(() => {
@@ -169,46 +173,16 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 });
         }
         createNewProjectToStorage () {
-            return this.storeProject(null)
-                .then(response => {
-                    this.props.onCreatedProject(response.id.toString(), this.props.loadingState);
-                })
-                .catch(err => {
-                    this.props.onShowAlert('creatingError');
-                    this.props.onProjectError(err);
-                });
+            // tw: no server storage in standalone editor
+            return Promise.resolve();
         }
         createCopyToStorage () {
-            this.props.onShowCreatingCopyAlert();
-            return this.storeProject(null, {
-                originalId: this.props.reduxProjectId,
-                isCopy: 1,
-                title: this.props.reduxProjectTitle
-            })
-                .then(response => {
-                    this.props.onCreatedProject(response.id.toString(), this.props.loadingState);
-                    this.props.onShowCopySuccessAlert();
-                })
-                .catch(err => {
-                    this.props.onShowAlert('creatingError');
-                    this.props.onProjectError(err);
-                });
+            // tw: no server storage in standalone editor
+            return Promise.resolve();
         }
         createRemixToStorage () {
-            this.props.onShowCreatingRemixAlert();
-            return this.storeProject(null, {
-                originalId: this.props.reduxProjectId,
-                isRemix: 1,
-                title: this.props.reduxProjectTitle
-            })
-                .then(response => {
-                    this.props.onCreatedProject(response.id.toString(), this.props.loadingState);
-                    this.props.onShowRemixSuccessAlert();
-                })
-                .catch(err => {
-                    this.props.onShowAlert('creatingError');
-                    this.props.onProjectError(err);
-                });
+            // tw: no server storage in standalone editor
+            return Promise.resolve();
         }
         /**
          * storeProject:
@@ -402,7 +376,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
         onRemixing: () => {},
         onSetProjectThumbnailer: () => {},
         onSetProjectSaver: () => {},
-        onUpdateProjectData: saveProjectToServer
+        onUpdateProjectData: () => Promise.resolve({id: '0'})
     };
     const mapStateToProps = (state, ownProps) => {
         const loadingState = state.scratchGui.projectState.loadingState;

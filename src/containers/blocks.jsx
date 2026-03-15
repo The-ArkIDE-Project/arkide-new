@@ -342,8 +342,13 @@ this.menuBlurObserver = observer;
 
 setTimeout(applyFlyoutBlur, 200);
 
-setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.updateToolboxState);
-blockSearch.init(this.workspace, this.props.vm);
+if (!this.ScratchBlocks.BlockSvg.prototype._pinUnpinPatched) {
+    this.ScratchBlocks.BlockSvg.prototype._pinUnpinPatched = true;
+    setupPinUnpin(this.ScratchBlocks, this.getToolboxXML.bind(this), this.props.updateToolboxState);
+}
+if (window.location.pathname.endsWith('/editor.html')) {
+    blockSearch.init(this.workspace, this.props.vm);
+}
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (
@@ -450,8 +455,9 @@ updateToolbox () {
     const queue = this.toolboxUpdateQueue;
     this.toolboxUpdateQueue = [];
     queue.forEach(fn => fn());
-
-    setTimeout(() => blockSearch.reapply(), 100); // <-- add this line
+    if (window.location.pathname.endsWith('/editor.html')) {
+        setTimeout(() => blockSearch.reapply(), 100); 
+    }
 }
 
     withToolboxUpdates (fn) {
