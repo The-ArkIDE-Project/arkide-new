@@ -599,9 +599,9 @@ updateToolbox () {
         }
     }
     onWorkspaceUpdate (data) {
-        // When we change sprites, update the toolbox to have the new sprite's blocks
+        // tw: only update toolbox if the xml actually changed, not on every sprite switch
         const toolboxXML = this.getToolboxXML();
-        if (toolboxXML) {
+        if (toolboxXML && toolboxXML !== this._renderedToolboxXML) {
             this.props.updateToolboxState(toolboxXML);
         }
 
