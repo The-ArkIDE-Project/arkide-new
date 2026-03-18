@@ -8,16 +8,8 @@ import {APP_NAME} from '../../lib/brand';
 
 const hosts = [
     {
-        name: 'US East',
+        name: 'Cloudflare Worldwide',
         cloudHost: 'wss://clouddata.arkide.site'
-    },
-    {
-        name: 'EU',
-        cloudHost: 'wss://clouddata-eu.turbowarp.org',
-        provider: {
-            name: '9gr',
-            href: 'https://scratch.mit.edu/users/9gr/'
-        }
     }
 ];
 
