@@ -155,6 +155,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
         updateProjectToStorage () {
             // tw: no server storage in standalone editor, only file handle saves are supported
             if (!this.props.reduxProjectId || this.props.reduxProjectId === '0') {
+                this.props.onUpdatedProject(this.props.loadingState);
                 return Promise.resolve();
             }
             this.props.onShowSavingAlert();
