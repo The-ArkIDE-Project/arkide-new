@@ -9,6 +9,8 @@ import Button from '../button/button.jsx';
 import loadingIcon from './share-loading.svg';
 import styles from './share-button.css';
 
+const isDesktopMode = () => new URLSearchParams(window.location.search).get('desktop') === 'true';
+
 const getProjectThumbnail = () => new Promise(resolve => {
     window.vm.renderer.requestSnapshot(uri => {
         resolve(uri);
@@ -155,6 +157,7 @@ class ShareButton extends React.Component {
         const isRemix = this.props.extraProjectInfo?.isRemix;
         const isEdit = this.props.usernameLoggedIn
             && this.props.extraProjectInfo?.author === this.props.username;
+    if (isDesktopMode()) return null;
         return (
             <Button
                 className={classNames(

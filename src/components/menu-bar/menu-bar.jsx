@@ -90,6 +90,8 @@ import { notScratchDesktop } from '../../lib/isScratchDesktop.js';
 
 import { downloadLogs } from '../../lib/pm-log-capture.js';
 
+const isDesktopMode = () => new URLSearchParams(window.location.search).get('desktop') === 'true';
+
 const ariaMessages = defineMessages({
     language: {
         id: 'gui.menuBar.LanguageSelector',
@@ -933,7 +935,7 @@ class MenuBar extends React.Component {
                     <div className={classNames(styles.menuBarItem)}>
                         {this.props.canRemix ? remixButton : []}
                     </div>
-                {!window.location.href.includes('fromprojectpage') && (
+                {!window.location.href.includes('fromprojectpage') && !isDesktopMode() && (
                     <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>
                         {this.props.enableCommunity ? (
                             (this.props.isShowingProject || this.props.isUpdating) && (
@@ -972,6 +974,7 @@ class MenuBar extends React.Component {
                             />)
                             : (null)}
                     </div>
+                {!isDesktopMode() && (
                     <div className={styles.menuBarItem}>
                         <a
                             className={styles.feedbackLink}
@@ -988,13 +991,16 @@ class MenuBar extends React.Component {
                             </Button>
                         </a>
                     </div>
+                    )}
                 </div>
 
                 <div className={styles.accountInfoGroup}>
+                    {!isDesktopMode() && (
                     <div className={styles.menuBarItem}>
                         <TWSaveStatus />
                     </div>
-                    <UserProfileButton />
+                    )}
+                    {!isDesktopMode() && <UserProfileButton />}
                 </div>
 
                 {aboutButton}
