@@ -106,6 +106,7 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
                     if (
                         rawData.public === true
                     ) {
+                        /*
                         this.props.onSetExtraProjectInfo(
                             !rawData.softRejected,
                             String(rawData.remix) !== '0',
@@ -115,6 +116,7 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
                             new Date(rawData.lastUpdate),
                             rawData.lastUpdate !== rawData.date
                         );
+                        */
 
                         if (String(rawData.remix) !== '0') {
                             // this is a remix, find the original project
